@@ -1,0 +1,112 @@
+% chapter03.tex
+
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ %                                                                           %
+ %    META-B documentation                                                   %
+ %    Copyright (C) 2005-6 Vladimir Likic                                    %
+ %                                                                           %
+ %    The files in this directory provided under the Creative Commons        %
+ %    Attribution-NonCommercial-NoDerivs 2.1 Australia license               %
+ %    http://creativecommons.org/licenses/by-nc-nd/2.1/au/                   %
+ %    See the file license.txt                                               %
+ %                                                                           %
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Algorithms}
+
+\section{Minmax peak detector}
+
+Many peak detection algorithms are used in practice to process GC/LC-MS data,
+but only a few are fully documented, most notable those of open source
+projects MZmine \cite{katajamaa06} and XCMS \cite{smith06}.  MZmine detects
+peaks by finding local maxima of a certain width \cite{katajamaa06}. In XCMS
+peaks are detected by using an empirical signal-to-noise cutoff after matched
+filtration with a second-derivative Gaussian \cite{smith06}. meta-b peak
+detection procedure was developed in-house, and relies on finding local
+maxima and local minima in the signal, followed by a subsequent refinement
+of peak left and right boundaries. Peak detection depends on two input
+parameters: window width over which a peak is expected to be a global maximum,
+and the scaling factor $S$ used to calculate the intensity threshold $S
+\sigma$ which must be exceeded at the peak apex. The noise level $\sigma$
+is estimated prior to peak detection by repeatedly calculating median
+absolute deviation (MAD -- a robust estimate of the average deviation) over
+randomly placed windows and taking the minimum. A detailed description of
+procedures for peak detection follows. 
+
+\begin{enumerate}
+\item {\bf Extracting local maxima}. Initially, an ordered list of
+local maxima in the signal with an intensity larger than a threshold
+is compiled. Two input parameters are specified by the user: the
+width of a window over which the peak is required to be a global
+maximum ($W$); and (2) the scaling factor $S$ used to calculate intensity
+threshold $S \sigma$, where $S$ is the noise level estimated previously
+(defaults: $W = 2$ data points, $S = 10$).  User specified window is
+centered on each point of the signal, and the point is deemed
+to be a local maximum if the following is satisfied:
+
+   \begin{enumerate}
+   \item It is equal or greater than all of the points within
+         the window W.
+   \item It is greater than at least one point in the half-window
+         interval to the left, and at least one point in the
+         half-window interval to the right.\footnote{This is
+         to reject points within intervals of uniform intensity}
+   \item Any point closer to the edge of the signal than half-window
+         is rejected.
+   \end{enumerate}
+
+Intensity at each local maxima is tested, and those that have the
+intensity below the threshold N*S are rejected. Accepted local
+maxima are compiled into a list.
+
+\item {\bf Determination of peak left/right boundaries}. For each
+local maxima (base maximum) the stretch of the signal between itself
+and the next local maximum on either side is extracted.  These
+two signal slices are searched for the first local minimum in
+the direction away from the base maximum point itself. The local
+maxima are defined in a very similar manner as the local maxima
+in the previous step.  A point is deemed to be a local maximum if:
+
+   \begin{enumerate}
+   \item It is equal or smaller than all the points within the
+        window W.
+   \item It is smaller than at least one point in the half-window
+        interval to the left, and at least one point in the
+        half-window interval on the right.
+   \item Any point closer to the edge of the slice than half-window
+        is rejected. This has the effect that the boundary point
+        cannot approach next peak's apex closer than half-window.
+   \item If no minimum point is found, set the boundary point to
+        the point furtherest away from the base maximum, but
+        outside to the half-window range of the adjacent peak.
+   \end{enumerate}
+
+\item {\bf Elimination of peak overlaps}. In spectra dense with
+peaks peak boundaries as found in the step (2) may overlap due to
+the effect of user supplied window. The list of pre-peaks is
+searched for overlapping peaks. In overlapping peaks the right
+boundary of the lower retention time peak overlaps with the
+left boundary of the higher retention time peak. The overlapping
+boundaries are resolved by finding the point of minimum intensity
+between the two peaks (the split point). The peak boundaries are
+set to one point to the left from the split point for the right
+boundary of the lower retention time peak, and to one point to
+the right from the split point for the left boundary of the
+higher retention time peak.
+
+\item {\bf Correction for long tails}.  In this step peak boundaries
+are adjusted to remove stretches of near-uniform intensities
+(i.e. long tails). Each peak is divided at the apex into two
+halves, and each half is processed individually in the
+boundary-to-apex direction. A line is fitted through $M$ points
+from the boundary in the least-squares sense. Prior to calculating
+the angle between the line and the retention time axis, the
+rise in intensity is normalized with the intensity at the peak
+apex.  If this angle is below the user specified cutoff ($Q$)
+the boundary point is dropped, and the process is repeated.
+This adjustment is repeated until the best fit through $M$ points
+from the boundary gives an angle greater than the cutoff. The
+parameters $M$ and $Q$ are user specified (defaults: $M = 3$,
+$Q = 1.0^\circ$).
+
+\end{enumerate}
