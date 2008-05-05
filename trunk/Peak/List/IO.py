@@ -5,8 +5,8 @@
 
  #############################################################################
  #                                                                           #
- #    META-B software for processing of metabolomic mass-spectrometry data   #
- #    Copyright (C) 2005-6 Vladimir Likic                                    #
+ #    PyMS software for processing of metabolomic mass-spectrometry data     #
+ #    Copyright (C) 2005-8 Vladimir Likic                                    #
  #                                                                           #
  #    This program is free software; you can redistribute it and/or modify   #
  #    it under the terms of the GNU General Public License version 2 as      #
@@ -43,7 +43,7 @@ def read(file_name):
 
     """read(file_name)
 
-    Reads meta-b peak list.
+    Reads PyMS peak list.
 
     @param fle_name A string. Peak list file name.
     @return Returns list of Peak objects.
@@ -235,7 +235,7 @@ def write(peaks, file_name, minutes=False, verbose_level=0):
 
     fp = open_for_writing(file_name)
 
-    fp.write("# meta-b peak list file\n")
+    fp.write("# PyMS peak list file\n")
     fp.write("%s\n" % (level_string))
     fp.write("%s\n" % (time_string))
 
