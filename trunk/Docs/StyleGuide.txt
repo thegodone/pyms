@@ -1,5 +1,5 @@
 
-   META-B coding Style Guide
+   PyMS coding Style Guide
    =========================
 
    This basis for this document documents was PEP-8 "Style Guide for
