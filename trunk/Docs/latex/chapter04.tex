@@ -2,8 +2,8 @@
 
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  %                                                                           %
- %    META-B documentation                                                   %
- %    Copyright (C) 2005-6 Vladimir Likic                                    %
+ %    PyMS documentation                                                   %
+ %    Copyright (C) 2005-8 Vladimir Likic                                    %
  %                                                                           %
  %    The files in this directory provided under the Creative Commons        %
  %    Attribution-NonCommercial-NoDerivs 2.1 Australia license               %
@@ -12,20 +12,20 @@
  %                                                                           %
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{meta-b Installation}
+\chapter{PyMS Installation}
 
 The instructions below refer to installation under Linux, and assume
 a reasonably savvy Linux user.  Python is however fully cross-platform
-compatible, and meta-b should work equally well under other operating
+compatible, and PyMS should work equally well under other operating
 systems as long as the dependencies can be satisfied.
 
 \section{Installing core dependencies}
 
 \subsection{Preparing the environment for a local installation}
 
-There are two methods of installing meta-b's dependencies. The first is
+There are two methods of installing PyMS dependencies. The first is
 {\it system-wide}, when root access is available. The second is {\it locally},
-when write access to the system directories is unavailable, or when meta-b is
+when write access to the system directories is unavailable, or when PyMS is
 only used by one user. In this case, the dependencies are installed into a
 user's home directory.
 
@@ -46,7 +46,7 @@ required.
 \subsection{Python}
 
 Python is a general purpose object oriented programming language, which
-meta-b is written in.  Python is open source and freely available
+PyMS is written in.  Python is open source and freely available
 from \url{http://www.python.org/download}.
 
 The instructions below refer to the installation of Python version
@@ -179,7 +179,7 @@ details.
 \section{Installing optional dependencies}
 
 Optional dependencies are packages which are not required for the
-core functionality of meta-b, but may be required for some extra
+core functionality of PyMS, but may be required for some extra
 functionality, or are highly recommended (such as IPython, interactive
 Python shell). 
 
@@ -233,7 +233,7 @@ details.
 
 Pycluster is a Python extension module to the clustering routines
 in the C Clustering Library by Michiel de Hoon.  Most people will
-not use this meta-b, and the installation is highly optional. 
+not use this PyMS, and the installation is highly optional. 
 
 Pycluster is available from
 \url{http://bonsai.ims.u-tokyo.ac.jp/~mdehoon/software/cluster/software.htm}.
@@ -251,11 +251,11 @@ The description below refers to the installation of Pycluster version
   \end{enumerate}
 \end{description}
 
-\section{meta-b}
+\section{PyMS}
 
-\subsection{Downloading meta-b source code}
+\subsection{Downloading PyMS source code}
 
-meta-b source code resides on Google Code servers, and can be accessed
+PyMS source code resides on Google Code servers, and can be accessed
 from the following URL: http://code.google.com/p/metab/. Under the
 section "Source" one can find the instructions for downloading the
 source code. The same page provides the link under "This project's
@@ -272,11 +272,11 @@ example, on Linux CentOS 4 we have installed the RPM package
 client 'svn'.}, for more information see http://subversion.tigris.org/.
 The book about subversion is freely available on-line at
 http://svnbook.red-bean.com/. Subversion has extensive functionality
-however only the very basic functionality is needed to download meta-b
+however only the very basic functionality is needed to download PyMS
 source code.
 
 If the computer is connected to the internet and the subversion client
-is installed, the following command will download the latest meta-b 
+is installed, the following command will download the latest PyMS 
 source code in the current directory:
 
 \begin{verbatim}
@@ -293,7 +293,7 @@ metab/
 $
 \end{verbatim}
 
-\subsection{meta-b installation}
+\subsection{PyMS installation}
 
 The process described above shows the installation of netCDF, numarray,
 and pycdf within the Python standard distribution. This is typically
@@ -308,14 +308,14 @@ pycdf/ numarray/
 $ 
 \end{verbatim}
 
-To install meta-b one needs to copy meta-b source directory to
+To install PyMS one needs to copy PyMS source directory to
 the site-packages directory:
 
 \begin{verbatim}
 $ cp -r metab /usr/local/lib/python2.4/site-packages
 \end{verbatim}
 
-The easiest way to test if meta-b has been installed properly is 
+The easiest way to test if PyMS has been installed properly is 
 to attempt to import the package within the Python environment:
 
 \begin{verbatim}
@@ -328,16 +328,16 @@ Type "help", "copyright", "credits" or "license" for more information.
 \end{verbatim}
 
 It there are no feedback messaged to the import command, Python
-was able to load meta-b. 
+was able to load PyMS. 
 
-\subsection{Installing meta-b elsewhere}
+\subsection{Installing PyMS elsewhere}
 
-Installing meta-b in the python standard directory may require
+Installing PyMS in the python standard directory may require
 super-user password. The alternative installation is to install
-meta-b somewhere locally. For example, the directory metab/ with
-meta-b source code could be placed in the directory /home/projects/.
-To make Python aware of meta-b the following commands are required
-before any part of meta-b is called:
+PyMS somewhere locally. For example, the directory metab/ with
+PyMS source code could be placed in the directory /home/projects/.
+To make Python aware of PyMS the following commands are required
+before any part of PyMS is called:
 
 \begin{verbatim}
 import sys
@@ -358,7 +358,7 @@ to find in Python documentation.
 
 IPython is a substitute for the stock Python interactive shell. It
 provides several features which enhances the day-to-day workflow of
-using meta-b, but is not required for its operation.
+using PyMS, but is not required for its operation.
 
 Its improvements include:
 \begin{enumerate}

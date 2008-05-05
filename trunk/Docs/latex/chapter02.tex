@@ -2,8 +2,8 @@
 
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  %                                                                           %
- %    META-B documentation                                                   %
- %    Copyright (C) 2005-6 Vladimir Likic                                    %
+ %    PyMS documentation                                                     %
+ %    Copyright (C) 2005-8 Vladimir Likic                                    %
  %                                                                           %
  %    The files in this directory provided under the Creative Commons        %
  %    Attribution-NonCommercial-NoDerivs 2.1 Australia license               %
@@ -12,23 +12,23 @@
  %                                                                           %
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Using meta-b}
+\chapter{Using PyMS}
 
-\section{Running meta-b}
+\section{Running PyMS}
 
-meta-b can be run either interactively or from the script. When run
+PyMS can be run either interactively or from the script. When run
 in an interactive session commands are issued interactively through
 a Python shell. When run in the script mode the commands are collected
 into a file which is then passed to python for processing.
 
-It is possible to run meta-b under the default Python shell. However
+It is possible to run PyMS under the default Python shell. However
 we recommend using IPython, enhanced python shell \cite{ipython},
-for interactive work with meta-b. IPython has a number of features
+for interactive work with PyMS. IPython has a number of features
 that make interactive work easier.
 
-\section{meta-b components}
+\section{PyMS components}
 
-meta-b is a Python package which contains a number of sub-packages,
+PyMS is a Python package which contains a number of sub-packages,
 each of which provides certain functionality. This includes for
 example, 
 
@@ -41,10 +41,10 @@ example,
 lists).
 \end{itemize}
 
-meta-b is a collection of loosely coupled sub-packages. It is possible
-to load only one or a few sub-packages in Python (i.e. a part of meta-b),
+PyMS is a collection of loosely coupled sub-packages. It is possible
+to load only one or a few sub-packages in Python (i.e. a part of PyMS),
 if a limited functionality is required. For example, it is possible
-to read experimental data without having other parts of meta-b
+to read experimental data without having other parts of PyMS
 available. Reading experimental data in the ANDI/MS format requires
 that the sub-package metab.IO is loaded in the Python environment,
 and this can be done independently from loading other sub-packages,
@@ -69,7 +69,7 @@ provided by the metab.IO subpackage is IO.ANDI.ChemStation(). The
 name is a reminder that this function has been reasonably tested
 only on the data exported from Agilent ChemStation software.
 In fact, IO.ANDI.ChemStation() was implemented based on comparisons
-with ChemStation, i.e. data read by meta-b was compared to the
+with ChemStation, i.e. data read by PyMS was compared to the
 the original data in ChemStation to confirm that IO.ANDI.ChemStation()
 reads the data properly.
 
