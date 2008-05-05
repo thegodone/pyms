@@ -1,5 +1,5 @@
 """IO.py
- Module IO in metab.Peak.List
+ Module IO in pyms.Peak.List
  Provides IO functions for peak lists.
 """
 
@@ -25,12 +25,12 @@
 
 import os, string, cPickle
 
-from metab.Peak import Class
-from metab.Utils.Error import error
-from metab.Utils.IO import file_lines, open_for_writing, close_for_writing
-from metab.Peak.List.Utils import is_peak_list 
-from metab.Utils.Utils import *
-from metab.IO.ANDI.Class import ChemStation
+from pyms.Peak import Class
+from pyms.Utils.Error import error
+from pyms.Utils.IO import file_lines, open_for_writing, close_for_writing
+from pyms.Peak.List.Utils import is_peak_list 
+from pyms.Utils.Utils import *
+from pyms.IO.ANDI.Class import ChemStation
 
 _VERBOSE_LEVEL = "verbose_level"
 _DEFINED_VERBOSE_LEVELS = [0, 1, 7]

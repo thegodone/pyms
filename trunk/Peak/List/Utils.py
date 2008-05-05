@@ -1,5 +1,5 @@
 """Utils.py
- Module Utils in metab.Peak.List
+ Module Utils in pyms.Peak.List
  Utilities for peak lists.
 """
 
@@ -25,9 +25,9 @@
 
 import math
 
-from metab.Peak import Class
-from metab.Utils.Error import error
-from metab.Utils.Utils import *
+from pyms.Peak import Class
+from pyms.Utils.Error import error
+from pyms.Utils.Utils import *
 
 def is_peak_list(peaks):
 

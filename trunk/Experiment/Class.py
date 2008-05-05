@@ -1,5 +1,5 @@
 """Class.py
- Module Class in metab.Experiment
+ Module Class in pyms.Experiment
  Provides class Experiment.
 """
 
@@ -23,10 +23,10 @@
  #                                                                           #
  #############################################################################
 
-from metab.Utils.Error import error
-from metab.Utils.Utils import * 
+from pyms.Utils.Error import error
+from pyms.Utils.Utils import * 
 
-from metab import Peak
+from pyms import Peak
 
 def cmp_peak_area(peak1, peak2):
 

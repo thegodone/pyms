@@ -1,5 +1,5 @@
 """Integrate.py
- Module Integrate in metab.Peak.Detection
+ Module Integrate in pyms.Peak.Detection
  Provides functions common to peak detectors.
 """
 
@@ -23,7 +23,7 @@
  #                                                                           #
  #############################################################################
 
-from metab.Peak import Class
+from pyms.Peak import Class
 from Constants import *
 
 def generate_peaks(ic, peak_list):

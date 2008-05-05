@@ -9,7 +9,7 @@
   ------------
 
     This document gives coding conventions for the Python code that
-    is a part of the Bioinformatics Toolkit for Metabolomics (metab)
+    is a part of the Bioinformatics Toolkit for Metabolomics (pyms)
     package.
 
   Code lay-out
@@ -75,18 +75,18 @@
 
       1. Standard library imports
       2. External module imports
-      2. Other metab subpackage imports
+      2. Other pyms subpackage imports
       3. This subpackage imports
 
       Each group of imports should be separated by a blank line. For
-      example, in a module metab.PeakList.Functions:
+      example, in a module pyms.PeakList.Functions:
 
       -- Functions.py: begin --
       import os
       import copy
 
-      from metab.Utils.Utils import error 
-      from metab.Utils.Lists import init_mat
+      from pyms.Utils.Utils import error 
+      from pyms.Utils.Lists import init_mat
       -- Functions.py: end --
 
 
@@ -279,7 +279,7 @@
     Exception Names
 
       Exceptions should be handled via the function
-      metab.Utils.Error.error() 
+      pyms.Utils.Error.error() 
 
     Function Names
 

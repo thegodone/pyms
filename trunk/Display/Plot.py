@@ -1,5 +1,5 @@
 """Plot.py
- Module Plot in metab.Display.
+ Module Plot in pyms.Display.
  Provides plotting functions.
 """
 
@@ -23,8 +23,8 @@
  #                                                                           #
  #############################################################################
 
-from metab.Utils.Utils import *
-from metab import IO, Peak
+from pyms.Utils.Utils import *
+from pyms import IO, Peak
 
 import pylab
 import numpy

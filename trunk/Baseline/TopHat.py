@@ -1,5 +1,5 @@
 """TopHat.py
- Module TopHat in metab.Baseline
+ Module TopHat in pyms.Baseline
  Provides top-hat baseline corrector. 
 """
 
@@ -27,9 +27,9 @@ import sys, copy, math
 import numpy
 import scipy
 
-from metab.IO import Class
-from metab.Utils.Error import error
-from metab.Utils.Utils import window_sele_points 
+from pyms.IO import Class
+from pyms.Utils.Error import error
+from pyms.Utils.Utils import window_sele_points 
 from scipy import ndimage
 
 # default structural element as a fraction of total number of points

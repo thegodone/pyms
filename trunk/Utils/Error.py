@@ -1,5 +1,5 @@
 """Error.py
- Module Error in metab.Utils
+ Module Error in pyms.Utils
  Provides function error()
 """
 

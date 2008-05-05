@@ -46,9 +46,9 @@ to load only one or a few sub-packages in Python (i.e. a part of PyMS),
 if a limited functionality is required. For example, it is possible
 to read experimental data without having other parts of PyMS
 available. Reading experimental data in the ANDI/MS format requires
-that the sub-package metab.IO is loaded in the Python environment,
+that the sub-package pyms.IO is loaded in the Python environment,
 and this can be done independently from loading other sub-packages,
-such as metab.Baseline (provide baseline correction) or metab.Display
+such as pyms.Baseline (provide baseline correction) or pyms.Display
 (provides visualisation).
 
 \section{Reading ANDI/MS data}
@@ -63,9 +63,9 @@ implement ANDI/MS specification properly. Because of these limitations
 it is difficult to be certain that one can properly read ANDI/MS
 files from a particular vendor without testing this.
 
-The sub-package metab.IO provides capabilities to read the raw GC-MS
+The sub-package pyms.IO provides capabilities to read the raw GC-MS
 data in the ANDI/MS format. The basic function to read ANDI/MS data
-provided by the metab.IO subpackage is IO.ANDI.ChemStation(). The
+provided by the pyms.IO subpackage is IO.ANDI.ChemStation(). The
 name is a reminder that this function has been reasonably tested
 only on the data exported from Agilent ChemStation software.
 In fact, IO.ANDI.ChemStation() was implemented based on comparisons
@@ -84,7 +84,7 @@ In an interactive session from IPython, the ANDI/MS file can be loaded
 in the memory as follows:
 
 \begin{verbatim}
-In [1]: from metab import IO
+In [1]: from pyms import IO
 
 In [2]: data = IO.ANDI.ChemStation("CHEMSTATION.CDF")
  -> Processing netCDF file 'CHEMSTATION.CDF'

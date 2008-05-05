@@ -1,5 +1,5 @@
 """R.py
- Module R in metab.Utils
+ Module R in pyms.Utils
  Provides link to R statistical package.
 """
 
@@ -25,7 +25,7 @@
 
 from rpy import *
 
-from metab.Utils.Error import error
+from pyms.Utils.Error import error
 
 def t_two_sample(a, b, equal_variance=True):
 

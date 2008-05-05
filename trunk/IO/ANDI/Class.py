@@ -1,5 +1,5 @@
 """Class.py
- Module Class in metab.IO.ANDI
+ Module Class in pyms.IO.ANDI
  Contains the classes and functions that are used to read 
  ANDI/MS NetCDF files.
 """
@@ -30,9 +30,9 @@ import sys, types
 import numpy
 from pycdf import CDF, CDFError
 
-from metab.IO import Class
-from metab.Utils.Error import error
-from metab.Utils.Utils import *
+from pyms.IO import Class
+from pyms.Utils.Error import error
+from pyms.Utils.Utils import *
 
 class ChemStation:
 

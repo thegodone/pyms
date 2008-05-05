@@ -1,5 +1,5 @@
 """Minmax.py
- Module Minmax in metab.Peak.Detection
+ Module Minmax in pyms.Peak.Detection
  Provides minmax peak detector.
 """
 
@@ -28,10 +28,10 @@ import sys, copy, math
 import numpy
 from numpy import linalg
 
-from metab.IO import Class
-from metab.Utils.Error import error
-from metab.Utils.Utils import *
-from metab.Utils.Array import amin
+from pyms.IO import Class
+from pyms.Utils.Error import error
+from pyms.Utils.Utils import *
+from pyms.Utils.Array import amin
 
 import Integrate
 from Constants import *

@@ -1,5 +1,5 @@
 """Window.py
- Module Window in metab.Noise
+ Module Window in pyms.Noise
  Provides noise smoothing via moving window averaging.
 """
 
@@ -27,10 +27,10 @@ import sys
 import copy
 import numpy
 
-from metab.IO import Class
-from metab.Utils.Error import error
-from metab.Utils.Utils import window_sele_points 
-from metab.Utils.Array import amedian
+from pyms.IO import Class
+from pyms.Utils.Error import error
+from pyms.Utils.Utils import window_sele_points 
+from pyms.Utils.Array import amedian
 
 _DEFAULT_WINDOW = 3
 

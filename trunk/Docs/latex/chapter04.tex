@@ -35,11 +35,11 @@ required.
 \begin{description}
   \item [Directory structure:] \
         Create a directory for the dependencies to install into. For this
-        guide, we choose \~{}/metab-deps.
+        guide, we choose \~{}/pyms-deps.
   \item [Environment variables:] \
         The \$PATH variable needs to be configured for the target installation
         directory. In the case of the bash shell, add
-        {\tt PATH=\$HOME/metab-deps/bin:\$PATH} to your .bash\_profile file,
+        {\tt PATH=\$HOME/pyms-deps/bin:\$PATH} to your .bash\_profile file,
         then reopen the terminal.
 \end{description}
 
@@ -59,7 +59,7 @@ The instructions below refer to the installation of Python version
   \item {\tt tar -zxvf Python-2.5.tgz}
   \item {\tt cd Python-2.5}
   \item {\tt ./configure} {\it if installing system-wide, or}\newline
-        {\tt ./configure --prefix=\$HOME/metab-deps} {\it if installing locally}
+        {\tt ./configure --prefix=\$HOME/pyms-deps} {\it if installing locally}
   \item {\tt make}
   \item {\tt make install}
   \end{enumerate}
@@ -87,7 +87,7 @@ The description below refers to the installation of netCDF version
   \item {\tt tar -zxvf netcdf-3.6.1.tar.gz}
   \item {\tt cd netcdf-3.6.1/src}
   \item {\tt ./configure} {\it if installing system-wide, or}\newline
-        {\tt ./configure --prefix=\$HOME/metab-deps} {\it if installing locally}
+        {\tt ./configure --prefix=\$HOME/pyms-deps} {\it if installing locally}
   \item {\tt make}
   \item {\tt make install}
   \end{enumerate}
@@ -147,7 +147,7 @@ Please refer to the file {\tt pycdf-0.6-2-rc1/INSTALL} for more details.
 
 \subsection{matplotlib}
 
-matplotlib is a python 2D plotting library.  It is used by metab for 
+matplotlib is a python 2D plotting library.  It is used by pyms for 
 visualizations of data.
 
 matplotlib is available from \url{http://matplotlib.sourceforge.net/}.
@@ -256,7 +256,7 @@ The description below refers to the installation of Pycluster version
 \subsection{Downloading PyMS source code}
 
 PyMS source code resides on Google Code servers, and can be accessed
-from the following URL: http://code.google.com/p/metab/. Under the
+from the following URL: http://code.google.com/p/pyms/. Under the
 section "Source" one can find the instructions for downloading the
 source code. The same page provides the link under "This project's
 Subversion repository can be viewed in your web browser" which allows
@@ -280,16 +280,16 @@ is installed, the following command will download the latest PyMS
 source code in the current directory:
 
 \begin{verbatim}
-$ svn checkout http://metab.googlecode.com/svn/trunk/ metab
-A    metab/Peak
-A    metab/Peak/__init__.py
-A    metab/Peak/List
-A    metab/Peak/List/__init__.py
+$ svn checkout http://pyms.googlecode.com/svn/trunk/ pyms
+A    pyms/Peak
+A    pyms/Peak/__init__.py
+A    pyms/Peak/List
+A    pyms/Peak/List/__init__.py
 .....
-A    metab/Noise/Window.py
+A    pyms/Noise/Window.py
 Checked out revision 30.
 $ ls -CF
-metab/
+pyms/
 $
 \end{verbatim}
 
@@ -312,7 +312,7 @@ To install PyMS one needs to copy PyMS source directory to
 the site-packages directory:
 
 \begin{verbatim}
-$ cp -r metab /usr/local/lib/python2.4/site-packages
+$ cp -r pyms /usr/local/lib/python2.4/site-packages
 \end{verbatim}
 
 The easiest way to test if PyMS has been installed properly is 
@@ -323,7 +323,7 @@ $ python
 Python 2.4.1 (#1, Jun 27 2005, 12:53:02) 
 [GCC 3.4.3 20041212 (Red Hat 3.4.3-9.EL4)] on linux2
 Type "help", "copyright", "credits" or "license" for more information.
->>> import metab
+>>> import pyms
 >>>
 \end{verbatim}
 
@@ -334,7 +334,7 @@ was able to load PyMS.
 
 Installing PyMS in the python standard directory may require
 super-user password. The alternative installation is to install
-PyMS somewhere locally. For example, the directory metab/ with
+PyMS somewhere locally. For example, the directory pyms/ with
 PyMS source code could be placed in the directory /home/projects/.
 To make Python aware of PyMS the following commands are required
 before any part of PyMS is called:

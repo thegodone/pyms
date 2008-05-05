@@ -1,5 +1,5 @@
 """Array.py
- Module Array in metab.Utils
+ Module Array in pyms.Utils
  Provides some convenience functions for lists/numpy
  arrays.
 """

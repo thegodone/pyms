@@ -1,5 +1,5 @@
 """Utils.py
- Module Utils in metab.Utils
+ Module Utils in pyms.Utils
  Provides general convenience functions.
 """
 

@@ -1,5 +1,5 @@
 """IO.py
- Module IO in metab.Analysis
+ Module IO in pyms.Analysis
 """
 
  #############################################################################
@@ -24,10 +24,10 @@
 
 import string
 
-from metab.Utils.Error import error, stop
-from metab.Utils.Utils import * 
-from metab.Utils import IO
-from metab.Utils import Array 
+from pyms.Utils.Error import error, stop
+from pyms.Utils.Utils import * 
+from pyms.Utils import IO
+from pyms.Utils import Array 
 
 def split_two_groups(data_list, groups):
 

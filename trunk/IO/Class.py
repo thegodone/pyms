@@ -1,5 +1,5 @@
 """Class.py
- Module Class in metab.IO
+ Module Class in pyms.IO
  Contains classes used in reading raw data.
 """
 
@@ -23,9 +23,9 @@
  #                                                                           #
  #############################################################################
 
-from metab.Utils.Error import error
-from metab.Utils.Utils import * 
-from metab.Utils.IO import open_for_writing, close_for_writing 
+from pyms.Utils.Error import error
+from pyms.Utils.Utils import * 
+from pyms.Utils.IO import open_for_writing, close_for_writing 
 
 class IonChromatogram:
 

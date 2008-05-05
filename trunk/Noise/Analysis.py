@@ -1,5 +1,5 @@
 """Analysis.py
- Module Window in metab.Noise
+ Module Window in pyms.Noise
  Noise estimator based on randomly placed windows.
 """
 
@@ -27,10 +27,10 @@ import sys, random, copy, math
 
 import numpy
 
-from metab.IO import Class 
-from metab.Utils.Error import error
-from metab.Utils.Array import amad
-from metab.Utils.Utils import window_sele_points 
+from pyms.IO import Class 
+from pyms.Utils.Error import error
+from pyms.Utils.Array import amad
+from pyms.Utils.Utils import window_sele_points 
 
 _DEFAULT_WINDOW = 256
 _DEFAULT_N_WINDOWS = 1024

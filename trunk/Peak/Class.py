@@ -1,5 +1,5 @@
 """Class.py
- Module Class in metab.Peak
+ Module Class in pyms.Peak
  Contains Peak-related classes.
 """
 
@@ -26,8 +26,8 @@
 import sys, types, math
 import numpy
 
-from metab.Utils.Error import error
-from metab.Utils.Utils import *
+from pyms.Utils.Error import error
+from pyms.Utils.Utils import *
 
 class Peak:
 

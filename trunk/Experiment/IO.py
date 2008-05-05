@@ -1,5 +1,5 @@
 """IO.py
- Module IO in metab.Experiment
+ Module IO in pyms.Experiment
  Provides function for reading experiments.
 """
 
@@ -25,9 +25,9 @@
 
 import string, cPickle
 
-from metab.Experiment import Class
-from metab.Utils.Utils import *
-from metab.Utils.Error import *
+from pyms.Experiment import Class
+from pyms.Utils.Utils import *
+from pyms.Utils.Error import *
 
 def load(file_name):
 

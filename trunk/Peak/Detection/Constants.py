@@ -1,5 +1,5 @@
 """Constants.py
- Module Constants in metab.Peak.Detection
+ Module Constants in pyms.Peak.Detection
  Provides constants common to all integrators.
 """
 

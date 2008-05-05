@@ -1,5 +1,5 @@
 """IO.py
- Module IO in metab.Utils
+ Module IO in pyms.Utils
  Provides general I/O functions.
 """
 
