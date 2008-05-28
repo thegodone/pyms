@@ -32,7 +32,7 @@ from pycdf import CDF, CDFError
 
 from pyms.IO import Class
 from pyms.Utils.Error import error
-from pyms.Utils.Utils import *
+from pyms.Utils.Utils import is_int,  is_float, is_number
 
 class ChemStation:
 
@@ -232,7 +232,7 @@ class ChemStation:
         @return An IonChromatogram object.
         """
 
-        if not is_int(index):
+        if not inti(index):
             error("'index' must be an integer")
         try:
             intensity_array = self.__intensity_matrix[:,index]
