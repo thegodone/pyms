@@ -86,3 +86,4 @@ def stop(message=None):
         print message 
 
     raise RuntimeError
+
