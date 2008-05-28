@@ -23,8 +23,10 @@
  #                                                                           #
  #############################################################################
 
+import numpy
+
 from pyms.Utils.Error import error
-from pyms.Utils.Utils import * 
+from pyms.Utils.Utils import is_str, is_int, is_array
 from pyms.Utils.IO import open_for_writing, close_for_writing 
 
 class IonChromatogram:
