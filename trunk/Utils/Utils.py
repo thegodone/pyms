@@ -30,6 +30,8 @@ import numpy
 from Error import error
 from types import *
 
+# is_str, is_int, is_float, is_array,  is_number
+
 def is_str(arg):
 
     """is_str(arg)
@@ -53,7 +55,6 @@ def is_int(arg):
         return True
     else:
         return False
-
 
 def is_float(arg):
 
@@ -104,125 +105,4 @@ def is_array(arg):
         return True 
     else:
         return False
-
-def list_or_array(arg):
-
-    """list_or_array(arg)
-
-    Returns True is argument is list or numpy, False otherwise. 
-    """
-
-    if is_list(arg) or is_array(arg):
-        return True 
-    else:
-        return False
-
-def is_string_number(arg):
-
-    """is_string_number(arg)
-
-    This function determines if its argument, x, is in the format of a
-    number. It can be number can be in integer, floating point,
-    scientific, or engineering format. The function returns True if
-    the argument is formattted like a number, and False otherwise.
-    (by gyro funch from Active State Python Cookbook.)
-    """
-
-    NUM_RE = re.compile(r'^[-+]?([0-9]+\.?[0-9]*|\.[0-9]+)([eE][-+]?[0-9]+)?$')
-
-    if NUM_RE.match(str(arg)):
-        return True
-    else:
-        return False
-
-def window_sele_points(ic, window_sele, half_window=False):
-
-    """window_sele_points(ic, window_sele, half_window)
-
-    Converts 'window_sele' to points based on the times step in IC.
-
-    @param ic An IonChromatogram object.
-    @param window_sele An integer or a string. The window specification. 
-        if integer, taken as the number of points. If a string, must 
-        of the form "<NUMBER>s" or "<NUMBER>m", specifying a time
-        in seconds or minutes, respectively.
-    @param half_window  A boolean. If True, half-window (window wing)
-       is returned.
-    """
-
-    if not is_int(window_sele) and not is_str(window_sele):
-        error("'window' must be an integer or a string")
-
-    if is_int(window_sele):
-
-        if half_window:
-            if window_sele % 2 == 0: 
-                error("window must be an odd number of points")
-            else: 
-                points = int(math.floor(window_sele*0.5))
-        else:
-            points = window_sele
-    else:
-        time = time_str_seconds(window_sele)
-
-        time_step = ic.get_time_step()
-
-        if half_window: time = time*0.5
-
-        points = int(math.floor(time/time_step))
-
-    if half_window:
-        if points < 1: error("window too small (half window=%d)" % (points))
-    else:
-        if points < 2: error("window too small (window=%d)" % (points))
-
-    return points
-
-def time_str_seconds(time_str):
-
-    """time_str_seconds(time_str)
-
-    Resolves time string of the form "<NUMBER>s" or "<NUMBER>m",
-    returns time in seconds.
-
-    @param time_str A string. Must be of the form "<NUMBER>s" or
-        "<NUMBER>m" where "<NUMBER>" is a valid number.
-    @return A number. Time in seconds.
-    """
-
-    if not is_str(time_str):
-        error("time string not a string")
-
-    time_number = time_str[:-1]
-    time_spec = time_str[-1].lower()
-
-    if not is_string_number(time_number):
-       print " --> received time string '%s'" % (time_number)
-       error("improper time string")
-
-    if not time_spec == "s" and not time_spec == "m":
-        error("time string must end with either 's' or 'm'")
-
-    time = float(time_number)
-
-    if time_spec == "m":
-        time = time*60.0
-    
-    return time
-
-def time_secs_to_mins(secs):
-
-    """time_secs_to_mins(secs)
-
-    Converts numeric seconds to minutes string, to .1s precision. For example,
-    381.32s = '6:21.3'
-
-    @param secs Seconds, numeric argument.
-    @return A string. Time in seconds.
-    """
-
-    if not is_number(secs):
-        error("seconds is not a numeric argument")
-
-    return '%d:%02d.%d' % (secs / 60, secs % 60, secs % 60 % 1.0 * 10)
 
