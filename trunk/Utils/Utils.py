@@ -36,7 +36,7 @@ def is_str(arg):
 
     @type arg: arbitrary 
     @param arg: The argument to be evaluated as a string. 
-    @trype: boolean
+    @trype: BooleanType
     @return: A boolean indicator True or False.
     """
 
@@ -52,7 +52,7 @@ def is_int(arg):
 
     @type arg: arbitrary 
     @param arg: The argument to be evaluated as an integer.
-    @trype: boolean
+    @trype: BooleanType 
     @return: A boolean indicator True or False.
     """
 
@@ -68,7 +68,7 @@ def is_float(arg):
 
     @type arg: arbitrary 
     @param arg: The argument to be evaluated as a float.
-    @trype: boolean
+    @trype: BooleanType 
     @return: A boolean indicator True or False.
     """
 
@@ -85,7 +85,7 @@ def is_number(arg):
    
     @type arg: arbitrary
     @param arg: The argument to be evaluated as a number.
-    @trype: boolean
+    @trype: BooleanType 
     @return: A boolean indicator True or False.
     """
 
@@ -102,7 +102,7 @@ def is_list(arg):
 
     @type arg: arbitrary
     @param arg: The argument to be evaluated as a list.
-    @trype: boolean
+    @trype: BooleanType 
     @return: A boolean indicator True or False.
     """
 
@@ -119,7 +119,7 @@ def is_array(arg):
 
     @type arg: arbitrary 
     @param arg: The argument to be evaluated as a numpy array. 
-    @trype: boolean
+    @trype: BooleanType 
     @return: A boolean indicator True or False.
     """
 
