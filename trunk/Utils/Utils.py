@@ -97,7 +97,7 @@ def is_number(arg):
 def is_list(arg):
 
     """
-    Returns True if the argument is a list, tupe, or numpy array,
+    Returns True if the argument is a list, tuple, or numpy array,
     False otherwise.
 
     @type arg: arbitrary
