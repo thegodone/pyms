@@ -35,11 +35,10 @@ from pyms.Utils.Utils import is_int,  is_float, is_number
 class ChemStation:
 
     """
-    ANDI-MS reader for Agilent ChemStation NetCDF files.
+    ANDI-MS reader for Agilent ChemStation NetCDF files
     """
 
-    # The keys used to retrieve a certain set of data from
-    # the NetCDF file.
+    # the keys used to retrieve certain data from the NetCDF file
     __MASS_STRING = "mass_values"
     __INTENSITY_STRING = "intensity_values"
     __TIME_STRING = "scan_acquisition_time"
@@ -47,7 +46,7 @@ class ChemStation:
     def __init__(self, file_name):
 
         """
-        @param file_name: The name of the ANDI-MS file.
+        @param file_name: The name of the ANDI-MS file
         @type file_name: StringType
         """
 
@@ -87,19 +86,19 @@ class ChemStation:
         intensity_elem = int(round(intensity_list[0]))
 
         # Calculate the index in the scan where the intensity value will
-        # be inserted.
+        # be inserted
         i = mass_elem - offset
         # If the calculated index is valid, add the intensity value to
-        # the existing value at the specified index. 
+        # the existing value at the specified index
         if 0 <= i and i < len(scan):
             scan[i] = scan[i] + intensity_elem
 
         # The next iteration of the data processing procedure will
-        # depend on the length of the data lists.
+        # depend on the length of the data lists
         if len(mass_list) != 1 and len(intensity_list) != 1:
             # Initialise the list index.  Since the first element (at
             # index 0) has already been retrieved, the index is
-            # initialised to 1 rather than 0.
+            # initialised to 1 rather than 0
             index = 1
 
             while index < len(mass_list) and index < len(intensity_list):
@@ -110,15 +109,15 @@ class ChemStation:
                 # If the previous mass value is larger than the current
                 # mass value, the current scan has ended.  As such,
                 # append the current scan into the data list and create
-                # a new scan.
+                # a new scan
                 if mass_elem_prev > mass_elem:
                     intensity_matrix.append(scan)
                     scan = numpy.repeat([0], max_mass - min_mass + 1)
                 # Calculate the index in the scan to insert the
-                # intensity value into.
+                # intensity value into
                 i = mass_elem - offset
                 # If the calculated index is valid, add the intensity
-                # value to the existing value at the specified index.
+                # value to the existing value at the specified index
                 if 0 <= i and i < len(scan):
                     scan[i] = scan[i] + intensity_elem
                 index = index + 1
@@ -127,7 +126,7 @@ class ChemStation:
         intensity_matrix.append(scan)
 
         # Fix any differences in scan sizes between the time values'
-        # array and the intensity values' matrix.
+        # array and the intensity values' matrix
         scan_size = len(intensity_matrix)
         if len(intensity_matrix) > len(time_list):
             scan_size = len(time_list)
