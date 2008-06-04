@@ -1,7 +1,6 @@
 """Class.py
  Module Class in pyms.IO.ANDI
- Contains the classes and functions that are used to read 
- ANDI/MS NetCDF files.
+ Contains manufacturer specific classes for reading ANDI/MS NetCDF files.
 """
 
  #############################################################################
@@ -36,14 +35,8 @@ from pyms.Utils.Utils import is_int,  is_float, is_number
 
 class ChemStation:
 
-    """class ChemStation
-
-    Models the features of the ANDI/MS NetCDF data files.
-
-    __init__(self, filename)
-
-    @param filename A string representing the name of the NetCDF
-        file to be processed.
+    """
+    ANDI-MS reader for Agilent ChemStation NetCDF files.
     """
 
     # The keys used to retrieve a certain set of data from
@@ -52,15 +45,20 @@ class ChemStation:
     __INTENSITY_STRING = "intensity_values"
     __TIME_STRING = "scan_acquisition_time"
 
-    def __init__(self, filename):
+    def __init__(self, file_name):
+
+        """
+        @param file_name: The name of the ANDI-MS file.
+        @type file_name: StringType
+        """
 
         try:
-            file = CDF(filename)
-            self.__filename = filename
+            file = CDF(file_name)
+            self.__file_name = file_name
         except CDFError:
-            error("Cannot open file '%s'" % filename) 
+            error("Cannot open file '%s'" % file_name) 
 
-        print " -> Processing netCDF file '%s'" % (self.__filename)
+        print " -> Processing netCDF file '%s'" % (self.__file_name)
 
         time = file.var(self.__TIME_STRING)
         mass = file.var(self.__MASS_STRING)
@@ -168,10 +166,10 @@ class ChemStation:
         Returns the name of the ANDI/MS NetCDF file used to construct
         this object.
 
-        @return A string.
+        return A string.
         """
 
-        return self.__filename
+        return self.__file_name
 
     def get_intensity_matrix(self):
 
@@ -179,7 +177,7 @@ class ChemStation:
 
         Returns the full intensity matrix.
 
-        @return A numpy object.
+        return A numpy object.
         """ 
 
         return self.__intensity_matrix
@@ -191,7 +189,7 @@ class ChemStation:
         Returns the array of time values. Time is given in
         seconds.
 
-        @return A numpy object.
+        return A numpy object.
         """ 
 
         return self.__time_array
@@ -202,7 +200,7 @@ class ChemStation:
 
         Returns the total ion chromatogram.
 
-        @return An IonChromatogram object.
+        return An IonChromatogram object.
         """
 
         ia = numpy.sum(self.__intensity_matrix, 1)
@@ -217,7 +215,7 @@ class ChemStation:
 
         Returns the minimum and the maximum mass from the mass range.
 
-        @return A tuple
+        return A tuple
         """
         return (self.__min_mass, self.__max_mass)
 
@@ -227,9 +225,9 @@ class ChemStation:
 
         Returns the ion chromatogram at the specified index.
 
-        @param index An integer. The index of an ion chromatogram in the
+        param index An integer. The index of an ion chromatogram in the
             intensity data matrix.
-        @return An IonChromatogram object.
+        return An IonChromatogram object.
         """
 
         if not int(index):
@@ -250,8 +248,8 @@ class ChemStation:
         If no mass value is given, the function returns the total
         ion chromatogram.
 
-        @param mass An integer. The mass value of an ion chromatogram
-        @return An IonChromatogram object.
+        param mass An integer. The mass value of an ion chromatogram
+        return An IonChromatogram object.
         """
 
         if not is_int(mass):
@@ -268,7 +266,7 @@ class ChemStation:
 
         Returns mass spectrum at given index.
 
-        @return A numpy object.
+        return A numpy object.
         """
 
         if not is_int(index):
@@ -289,7 +287,7 @@ class ChemStation:
 
         Returns the list of m/z.
 
-        @return A numpy object.
+        return A numpy object.
         """
 
         return self.__mass_list
@@ -300,7 +298,7 @@ class ChemStation:
 
         Returns the index corresponding to given time.
 
-        @return An integer. 
+        return An integer. 
         """
 
         if not is_number(time):
@@ -321,7 +319,7 @@ class ChemStation:
         Sets the values of given mass to 0 across entire time in this
         data.
 
-        @param mass An integer. The mass value of an ion chromatogram
+        param mass An integer. The mass value of an ion chromatogram
         """
 
         if not is_int(mass):
