@@ -232,7 +232,7 @@ class ChemStation:
         @return An IonChromatogram object.
         """
 
-        if not inti(index):
+        if not int(index):
             error("'index' must be an integer")
         try:
             intensity_array = self.__intensity_matrix[:,index]
