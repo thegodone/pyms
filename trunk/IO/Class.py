@@ -1,6 +1,5 @@
-"""Class.py
- Module Class in pyms.IO
- Contains classes used in reading raw data.
+"""
+Provides classes for pyms.IO wide use
 """
 
  #############################################################################

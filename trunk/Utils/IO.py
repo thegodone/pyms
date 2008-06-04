@@ -1,6 +1,5 @@
-"""IO.py
- Module IO in pyms.Utils
- Provides general I/O functions.
+"""
+General I/O functions
 """
 
  #############################################################################
@@ -30,28 +29,31 @@ from Utils import is_number, is_str, is_list
 
 def open_for_reading(file_name):
 
-    """open_for_reading(file_name)
-
-    Opens file for reading, returns file pointer.
-
-    @param file_name A string.
     """
+    Opens file for reading, returns file pointer
+
+    @param file_name: Name of the file to be opened for reading
+    @type file_name: StringType
+    @return: Pointer to the opened file
+    @rtype: FileType
+    """
+
     if not is_str(file_name):
         error("'file_name' is not a string")
-    
     try:
         fp = open(file_name)
     except IOError:
         error("'%s' does not exist" % (file_name))
+
     return fp
 
 def open_for_writing(file_name):
 
     """open_for_writing(file_name)
 
-    Opens file for writing, returns file pointer.
+    Opens file for writing, returns file pointer
 
-    @param file_name A string.
+    param file_name A string
     """
 
     if not is_str(file_name):
@@ -67,9 +69,9 @@ def close_for_reading(fp):
 
     """close_for_reading(fp)
 
-    Closes file pointer open for reading.
+    Closes file pointer open for reading
 
-    @param fp A file pointer.
+    param fp A file pointer
     """
 
     fp.close()
@@ -78,9 +80,9 @@ def close_for_writing(fp):
 
     """close_for_writing(fp)
 
-    Closes file pointer open for writing.
+    Closes file pointer open for writing
 
-    @param fp A file pointer.
+    param fp A file pointer
     """
 
     fp.close()
@@ -89,10 +91,10 @@ def file_lines(file_name):
 
     """file_lines(file_name)
 
-    Returns lines from a file, as a list.
+    Returns lines from a file, as a list
 
-    @param file_name A string.
-    @return A list of lines.
+    param file_name A string
+    return A list of lines
     """
 
     if not is_str(file_name):
@@ -107,18 +109,16 @@ def file_lines(file_name):
 def save_data(file_name, data, format_str="%.6f", prepend="", sep=" ",
 	compressed=False):
 
-    """save_data(file_name, data, format_str="%.6f", pre="", sep=" ",
-	compressed=False)
-
+    """
     Saves a list of numbers or a list of lists of numbers to a file
     with specific formatting.
 
-    @param file_name A string.
-    @param data A list of numbers, or a list of lists.
-    @param format_str A format string for individual entries.
-    @param prepend A string, printed before each row.
-    @param sep A string, printed after each number.
-    @param compressed A boolean. If True, the output will be gzipped.
+    param file_name A string
+    param data A list of numbers, or a list of lists
+    param format_str A format string for individual entries
+    param prepend A string, printed before each row
+    param sep A string, printed after each number
+    param compressed A boolean. If True, the output will be gzipped
     """
 
     if not is_str(file_name):

@@ -1,6 +1,5 @@
-"""Utils.py
- Module Utils in pyms.Utils
- Provides general utility functions.
+"""
+General utility functions
 """
 
  #############################################################################
@@ -32,12 +31,12 @@ from Error import error
 def is_str(arg):
 
     """
-    Returns True if the argument is a string, False otherwise. 
+    Returns True if the argument is a string, False otherwise
 
-    @type arg: arbitrary 
-    @param arg: The argument to be evaluated as a string. 
-    @trype: BooleanType
-    @return: A boolean indicator True or False.
+    @param arg: The argument to be evaluated as a string
+    @type arg: arbitrary
+    @return: A boolean indicator True or False
+    @rtype: BooleanType
     """
 
     if isinstance(arg,types.StringType):
@@ -48,12 +47,12 @@ def is_str(arg):
 def is_int(arg):
 
     """
-    Returns True if the argument is an integer, False otherwise. 
+    Returns True if the argument is an integer, False otherwise
 
-    @type arg: arbitrary 
-    @param arg: The argument to be evaluated as an integer.
-    @trype: BooleanType 
-    @return: A boolean indicator True or False.
+    @param arg: The argument to be evaluated as an integer
+    @type arg: arbitrary
+    @return: A boolean indicator True or False
+    @rtype: BooleanType
     """
 
     if isinstance(arg,types.IntType) or isinstance(arg,types.LongType):
@@ -64,12 +63,12 @@ def is_int(arg):
 def is_float(arg):
 
     """
-    Returns True if the argument is a float, False otherwise. 
+    Returns True if the argument is a float, False otherwise
 
-    @type arg: arbitrary 
-    @param arg: The argument to be evaluated as a float.
-    @trype: BooleanType 
-    @return: A boolean indicator True or False.
+    @param arg: The argument to be evaluated as a float
+    @type arg: arbitrary
+    @return: A boolean indicator True or False
+    @rtype: BooleanType
     """
 
     if isinstance(arg,types.FloatType):
@@ -81,12 +80,12 @@ def is_number(arg):
 
     """
     Returns True if the argument is a number (integer or float),
-    False otherwise. 
+    False otherwise
    
+    @param arg: The argument to be evaluated as a number
     @type arg: arbitrary
-    @param arg: The argument to be evaluated as a number.
-    @trype: BooleanType 
-    @return: A boolean indicator True or False.
+    @return: A boolean indicator True or False
+    @rtype: BooleanType
     """
 
     if is_int(arg) or is_float(arg):
@@ -98,12 +97,12 @@ def is_list(arg):
 
     """
     Returns True if the argument is a list, tuple, or numpy array,
-    False otherwise.
+    False otherwise
 
+    @param arg: The argument to be evaluated as a list
     @type arg: arbitrary
-    @param arg: The argument to be evaluated as a list.
-    @trype: BooleanType 
-    @return: A boolean indicator True or False.
+    @return: A boolean indicator True or False
+    @rtype: BooleanType
     """
 
     if isinstance(arg,types.ListType) or isinstance(arg,types.TupleType) \
@@ -115,12 +114,12 @@ def is_list(arg):
 def is_array(arg):
 
     """
-    Returns True if the argument is a numpy array, False otherwise. 
+    Returns True if the argument is a numpy array, False otherwise
 
-    @type arg: arbitrary 
-    @param arg: The argument to be evaluated as a numpy array. 
-    @trype: BooleanType 
-    @return: A boolean indicator True or False.
+    @param arg: The argument to be evaluated as a numpy array
+    @type arg: arbitrary
+    @return: A boolean indicator True or False
+    @rtype: BooleanType 
     """
 
     if isinstance(arg, numpy.core.ndarray):

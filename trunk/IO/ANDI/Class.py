@@ -1,6 +1,5 @@
-"""Class.py
- Module Class in pyms.IO.ANDI
- Contains manufacturer specific classes for reading ANDI/MS NetCDF files.
+"""
+Manufacturer specific classes for reading ANDI-MS files
 """
 
  #############################################################################

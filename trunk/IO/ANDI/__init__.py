@@ -1,4 +1,5 @@
-"""pyms.IO.ANDI __init__.py
+"""
+Provides classes for reading of ANDI-MS files
 """
 
  #############################################################################

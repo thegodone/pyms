@@ -1,6 +1,5 @@
-"""Error.py
- Module Error in pyms.Utils
- Provides function error()
+"""
+Defines function error()
 """
 
  #############################################################################
@@ -29,12 +28,12 @@ def error(message=None):
 
     """
     PyMS wide error function.  Prints out the error message (if supplied) 
-    and terminates execution with sys.exit(1).
+    and terminates execution with sys.exit(1)
 
-    @type message: string
     @param message: The error message to be printed
-    @trype: none
+    @type message: string
     @return: none
+    @rtype: none
     """
 
     sys.stdout = sys.__stderr__
@@ -83,10 +82,10 @@ def stop(message=None):
     """
     A simple termination of execution.
 
-    @type message: string
     @param message: The message to be printed
-    @trype: none
+    @type message: string
     @return: none
+    @rtype: none
     """
 
     if message != None:
