@@ -1,5 +1,5 @@
 """
-Manufacturer specific classes for reading ANDI-MS files
+Classes for reading manufacturer specific ANDI-MS data files
 """
 
  #############################################################################
@@ -29,8 +29,8 @@ import numpy
 from pycdf import CDF, CDFError
 
 from pyms.IO import Class
-from pyms.Utils.Error import error
-from pyms.Utils.Utils import is_int,  is_float, is_number
+from pyms.Utils.Error import error, stop
+from pyms.Utils.Utils import is_str, is_int, is_float, is_number
 
 class ChemStation:
 
@@ -49,6 +49,9 @@ class ChemStation:
         @param file_name: The name of the ANDI-MS file
         @type file_name: StringType
         """
+
+        if not is_str(file_name):
+            error("'file_name' must be a string")
 
         try:
             file = CDF(file_name)
@@ -79,6 +82,7 @@ class ChemStation:
         if is_float(max_mass): max_mass = int(round(max_mass))
 
         intensity_matrix = []
+
         scan = numpy.repeat([0], max_mass - min_mass + 1)
 
         offset = min_mass
@@ -145,6 +149,7 @@ class ChemStation:
         self.__max_mass = max_mass
 
         self.__mass_list = []
+
         for mass in range(min_mass, max_mass+1):
             self.__mass_list.append(mass)
 
