@@ -49,11 +49,13 @@ def open_for_reading(file_name):
 
 def open_for_writing(file_name):
 
-    """open_for_writing(file_name)
-
+    """
     Opens file for writing, returns file pointer
 
-    param file_name A string
+    @param file_name: Name of the file to be opened for writing
+    @type file_name: StringType
+    @return: Pointer to the opened file
+    @rtype: FileType
     """
 
     if not is_str(file_name):
@@ -67,34 +69,39 @@ def open_for_writing(file_name):
 
 def close_for_reading(fp):
 
-    """close_for_reading(fp)
-
+    """
     Closes file pointer open for reading
 
-    param fp A file pointer
+    @param fp: A file pointer, previously opened for reading
+    @type fp: FileType
+    @return: none
+    @rtype: NoneType
     """
 
     fp.close()
 
 def close_for_writing(fp):
 
-    """close_for_writing(fp)
-
+    """
     Closes file pointer open for writing
 
-    param fp A file pointer
+    @param fp: A file pointer, previously opened for writing
+    @type fp: FileType
+    @return: none
+    @rtype: NoneType
     """
 
     fp.close()
 
 def file_lines(file_name):
 
-    """file_lines(file_name)
-
+    """
     Returns lines from a file, as a list
 
-    param file_name A string
-    return A list of lines
+    @param file_name: Name of a file
+    @type: StringType
+    @return: A list of lines
+    @rtype: ListType
     """
 
     if not is_str(file_name):
@@ -113,12 +120,20 @@ def save_data(file_name, data, format_str="%.6f", prepend="", sep=" ",
     Saves a list of numbers or a list of lists of numbers to a file
     with specific formatting.
 
-    param file_name A string
-    param data A list of numbers, or a list of lists
-    param format_str A format string for individual entries
-    param prepend A string, printed before each row
-    param sep A string, printed after each number
-    param compressed A boolean. If True, the output will be gzipped
+    @param file_name: Name of a file
+    @type: StringType
+    @param data: A list of numbers, or a list of lists
+    @type: ListType
+    @param format_str: A format string for individual entries
+    @type: StringType
+    @param prepend: A string, printed before each row
+    @type: StringType
+    @param sep: A string, printed after each number
+    @type: StringType
+    @param compressed: A boolean. If True, the output will be gzipped
+    @type: BooleanType
+    @return: none
+    @rtype: NoneType
     """
 
     if not is_str(file_name):
