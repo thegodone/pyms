@@ -60,7 +60,6 @@ def open_for_writing(file_name):
 
     if not is_str(file_name):
         error("'file_name' is not a string")
-
     try:
         fp = open(file_name, "w")
     except IOError:
