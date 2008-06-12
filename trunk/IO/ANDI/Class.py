@@ -164,46 +164,45 @@ class ChemStation:
 
     def get_filename(self):
 
-        """get_filename()
-
+        """
         Returns the name of the ANDI/MS NetCDF file used to construct
-        this object.
+        this object
 
-        return A string.
+        @return: Name of a file used to construct the object
+        @rtype: StringType
         """
 
         return self.__file_name
 
     def get_intensity_matrix(self):
 
-        """get_intensity_matrix()
+        """
+        Returns the full intensity matrix
 
-        Returns the full intensity matrix.
-
-        return A numpy object.
+        @return: Intensity matrix
+        @rtype: numpy.ndarray
         """ 
 
         return self.__intensity_matrix
 
     def get_time(self):
 
-        """get_time()
+        """
+        Returns the array of time values
 
-        Returns the array of time values. Time is given in
-        seconds.
-
-        return A numpy object.
+        @return: Array of time values in seconds
+        @rtype: numpy.ndarray
         """ 
 
         return self.__time_array
 
     def get_tic(self):
 
-        """get_tic()
+        """
+        Returns the total ion chromatogram
 
-        Returns the total ion chromatogram.
-
-        return An IonChromatogram object.
+        @return: Total ion chromatogram
+        @rtype: IonChromatogram
         """
 
         ia = numpy.sum(self.__intensity_matrix, 1)
@@ -214,23 +213,24 @@ class ChemStation:
 
     def get_mass_range(self):
 
-        """get_mass_range()
+        """
+        Returns the minimum and the maximum mass from the mass range
 
-        Returns the minimum and the maximum mass from the mass range.
-
-        return A tuple
+        @return: Minimum and maximum mass from the mass range
+        @rtype: TupleType
         """
         return (self.__min_mass, self.__max_mass)
 
     def get_ic_at_index(self, index):
 
-        """get_ic_at_index(index)
+        """
+        Returns the ion chromatogram at the specified index
 
-        Returns the ion chromatogram at the specified index.
-
-        param index An integer. The index of an ion chromatogram in the
-            intensity data matrix.
-        return An IonChromatogram object.
+        @param index: Index of an ion chromatogram in the
+            intensity data matrix
+        @type index: IntType 
+        @return: Ion chromatogram at given index
+        @rtype: IonChromatogram
         """
 
         if not int(index):
@@ -245,14 +245,17 @@ class ChemStation:
 
     def get_ic_at_mass(self, mass):
 
-        """get_ic_at_mass(mass)
+        """
+        Returns the ion chromatogram for the specified mass
 
-        Returns the ion chromatogram for the specified mass.
         If no mass value is given, the function returns the total
         ion chromatogram.
 
-        param mass An integer. The mass value of an ion chromatogram
-        return An IonChromatogram object.
+        @param mass: Mass value of an ion chromatogram
+        @type mass: IntType
+        @return: Ion chromatogram for given mass, or, if no mass
+            is given, total ion chromatogram
+        @rtype: IonChromatogram
         """
 
         if not is_int(mass):
@@ -265,11 +268,13 @@ class ChemStation:
 
     def get_mass_spectrum_at_index(self, index):
 
-        """get_mass_spectrum_at_index(index)
+        """
+        Returns mass spectrum at given index
 
-        Returns mass spectrum at given index.
-
-        return A numpy object.
+        @param index: Index of an ion chromatogram
+        @type index: IntType
+        @return: Mass spectrum at given index
+        @rtype: numpy.ndarray
         """
 
         if not is_int(index):
@@ -286,22 +291,24 @@ class ChemStation:
 
     def get_mass_list(self):
 
-        """get_mass_list(self)
+        """
+        Returns the list of m/z
 
-        Returns the list of m/z.
-
-        return A numpy object.
+        @return: List of m/z
+        @rtype: numpy.ndarray
         """
 
         return self.__mass_list
 
     def get_index_at_time(self, time):
 
-        """get_index_at_time(time)
+        """
+        Returns the index corresponding to given time
 
-        Returns the index corresponding to given time.
-
-        return An integer. 
+        @param time: Time in seconds
+        @type time: FloatType
+        @return: Index corresponding to given time
+        @rtype: IntType
         """
 
         if not is_number(time):
@@ -317,12 +324,13 @@ class ChemStation:
 
     def null_mass(self, mass):
 
-        """null_mass(mass)
+        """
+        Sets the values of given mass to 0 across entire time range
 
-        Sets the values of given mass to 0 across entire time in this
-        data.
-
-        param mass An integer. The mass value of an ion chromatogram
+        @param mass: The mass value of an ion chromatogram
+        @type mass: IntType
+        @return: none
+        @rtype: NoneType
         """
 
         if not is_int(mass):
