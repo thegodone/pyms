@@ -31,19 +31,19 @@ from pyms.Utils.IO import open_for_writing, close_for_writing
 class IonChromatogram:
 
     """
-    Models IonChromatogram
+    Models ion chromatogram
     """
 
     def __init__(self, ia, time_array, mass=None):
 
         """
-        @param ia: A numpy object representing an 
-            array of intensity values (i.e. ion chromatogram)
+        @param ia: A numpy object representing an array of intensity
+            values (i.e. ion chromatogram intensity values)
         @type ia: numpy.ndarray
-        @param time_array: A numpy object representing an array
-            of retention times
+        @param time_array: A numpy object representing an array of
+            retention times
         @type time_array: numpy.ndarray
-        @param mass: Mass of ion chromatogram
+        @param mass: Mass of ion chromatogram (Null if TIC)
         @type mass: IntType
         """
 
@@ -67,7 +67,7 @@ class IonChromatogram:
     def __len__(self):
 
         """
-        Returns the length of IonChromatogram
+        Returns the length of the IonChromatogram object
 
         @return: Length of ion chromatogram
         @rtype: IntType
@@ -78,10 +78,9 @@ class IonChromatogram:
     def __calc_time_step(self, time_array):
 
         """
-        Calculates the time step
+        Calculates the time step of the IonChromatogram
 
-        @param time_array: A numpy object, an array of retention
-            times
+        @param time_array: An array of retention times
         @type time_array: numpy.ndarray
         @return: Time step value 
         @rtype: FloatType
@@ -160,7 +159,7 @@ class IonChromatogram:
     def set_intensity_array(self, ia):
 
         """
-        Set the value of intensity array
+        Sets the value of intensity array
 
         @param ia: An array of intensity values
         @type ia: numpy.ndarray
@@ -185,7 +184,7 @@ class IonChromatogram:
 
         """
         Returns True if the ion chromatogram is a total ion
-        chromatogram, or False otherwise
+        chromatogram (TIC), or False otherwise
 
         @return: A boolean value indicating if the ion chromatogram
             is a total ion chromatogram (True) or not (False)
@@ -202,8 +201,8 @@ class IonChromatogram:
         """
         Writes the ion chromatogram to the specified file
 
-        @param file_name: A string representing the file name to write the ion
-            chromatogram to
+        @param file_name: A string representing the file name to write
+            the ion chromatogram to
         @type file_name: StringType
         @param minutes: A boolean value indicating whether time is in
             minutes (True) or seconds (False)
