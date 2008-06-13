@@ -30,21 +30,22 @@ from pyms.Utils.IO import open_for_writing, close_for_writing
 
 class IonChromatogram:
 
-    """class IonChromatogram
-
-    Models IonChromatogram.
-
-    __init__(self, ia, time_array, mass=None)
-
-    @param ia A numpy object representing an
-        array of intensity values (i.e. ion chromatogram).
-    @param time_array A numpy object representing an array of the
-        retention times.
-    @param mass An integer value representing the mass of the
-        ion chromatogram.
+    """
+    Models IonChromatogram
     """
 
     def __init__(self, ia, time_array, mass=None):
+
+        """
+        @param ia: A numpy object representing an 
+            array of intensity values (i.e. ion chromatogram)
+        @type ia: numpy.ndarray
+        @param time_array: A numpy object representing an array
+            of retention times
+        @type time_array: numpy.ndarray
+        @param mass: Mass of ion chromatogram
+        @type mass: IntType
+        """
 
         if not is_array(ia):
             error("'ia' must be a numpy.")
@@ -65,21 +66,25 @@ class IonChromatogram:
 
     def __len__(self):
 
-        """__len__()
+        """
+        Returns the length of IonChromatogram
 
-        Returns the length of an IonChromatogram.
+        @return: Length of ion chromatogram
+        @rtype: IntType
         """
 
         return self._ia.size
 
     def __calc_time_step(self, time_array):
 
-        """__calc_time_step(time_array)
+        """
+        Calculates the time step
 
-        Calculates the time step.
-
-        @param time_array A numpy object, an array of the retention
-        times. 
+        @param time_array: A numpy object, an array of retention
+            times
+        @type time_array: numpy.ndarray
+        @return: Time step value 
+        @rtype: FloatType
         """
 
         td_list = []
@@ -94,12 +99,13 @@ class IonChromatogram:
 
     def get_intensity_at_index(self, ix):
 
-        """get_intensity_at_index(ix)
+        """
+        Returns intensity at given index
 
-        Returns intensity at given index.
-
-        @param ix An integer.
-        @return A number.
+        @param ix: An index
+        @type ix: IntType
+        @return: Intensity value
+        @rtype: FloatType
         """
 
         if not is_int(ix):
@@ -112,23 +118,24 @@ class IonChromatogram:
 
     def get_intensity_array(self):
 
-        """get_intensity_array()
+        """
+        Returns the entire intensity array
 
-        Returns the entire intensity array.
-
-        @return An array.
+        @return: Intensity array
+        @rtype: numpy.ndarray
         """
 
         return self._ia
 
     def get_time_at_index(self, ix):
 
-        """get_time_at_index(ix)
+        """
+        Returns time at given index
 
-        Returns time at given index.
-
-        @param ix An integer.
-        @return A number.
+        @param ix: An index
+        @type ix: IntType
+        @return: Time value
+        @rtype: FloatType
         """
 
         if not is_int(ix):
@@ -141,44 +148,48 @@ class IonChromatogram:
 
     def get_time_array(self):
 
-        """get_time_array()
+        """
+        Returns the entire time array
 
-        Returns the entire time array.
-
-        @return An array.
+        @return: Time array
+        @rtype: numpy.ndarray
         """
 
         return self._time_array
 
     def set_intensity_array(self, ia):
 
-        """set_intensity_array()
+        """
+        Set the value of intensity array
 
-        Set the value of intensity array.
-
-        @param ia An array
-        @return No value
+        @param ia: An array of intensity values
+        @type ia: numpy.ndarray
+        @return: none
+        @rtype: NoneType
         """
 
         self._ia = ia
 
     def get_time_step(self):
 
-        """get_time_step()
+        """
+        Returns time step
 
-        Returns time step.
+        @return: Time step
+        @rtype: FloatType
         """
 
         return self._time_step
 
     def is_tic(self):
 
-        """is_tic()
-
+        """
         Returns True if the ion chromatogram is a total ion
-        chromatogram or False otherwise.
+        chromatogram, or False otherwise
 
-        @return A boolean value.
+        @return: A boolean value indicating if the ion chromatogram
+            is a total ion chromatogram (True) or not (False)
+        @rtype: BooleanType
         """
 
         if self._mass == None:
@@ -188,12 +199,17 @@ class IonChromatogram:
 
     def write(self, file_name, minutes=False):
 
-        """write(self, file_name, minutes=False)
+        """
+        Writes the ion chromatogram to the specified file
 
-        Writes the ion chromatogram to the specified file.
-
-        @param A string representing the file_name to write the ion
-            chromatogram to.
+        @param file_name: A string representing the file name to write the ion
+            chromatogram to
+        @type file_name: StringType
+        @param minutes: A boolean value indicating whether time is in
+            minutes (True) or seconds (False)
+        @type minutes: BooleanType
+        @return: none
+        @rtype: NoneType
         """
 
         if not is_str(file_name):
