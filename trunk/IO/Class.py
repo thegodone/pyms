@@ -31,7 +31,7 @@ from pyms.Utils.IO import open_for_writing, close_for_writing
 class IonChromatogram:
 
     """
-    Models ion chromatogram
+    @summary: Models ion chromatogram
 
     @author: Lewis Lee
     @author: Vladimir Likic
@@ -70,7 +70,7 @@ class IonChromatogram:
     def __len__(self):
 
         """
-        Returns the length of the IonChromatogram object
+        @summary: Returns the length of the IonChromatogram object
 
         @return: Length of ion chromatogram
         @rtype: IntType
@@ -81,7 +81,7 @@ class IonChromatogram:
     def __calc_time_step(self, time_array):
 
         """
-        Calculates the time step of the IonChromatogram
+        @summary: Calculates the time step of the IonChromatogram
 
         @param time_array: An array of retention times
         @type time_array: numpy.ndarray
@@ -102,7 +102,7 @@ class IonChromatogram:
     def get_intensity_at_index(self, ix):
 
         """
-        Returns intensity at given index
+        @summary: Returns intensity at given index
 
         @param ix: An index
         @type ix: IntType
@@ -121,7 +121,7 @@ class IonChromatogram:
     def get_intensity_array(self):
 
         """
-        Returns the entire intensity array
+        @summary: Returns the entire intensity array
 
         @return: Intensity array
         @rtype: numpy.ndarray
@@ -132,7 +132,7 @@ class IonChromatogram:
     def get_time_at_index(self, ix):
 
         """
-        Returns time at given index
+        @summary: Returns time at given index
 
         @param ix: An index
         @type ix: IntType
@@ -151,7 +151,7 @@ class IonChromatogram:
     def get_time_array(self):
 
         """
-        Returns the entire time array
+        @summary: Returns the entire time array
 
         @return: Time array
         @rtype: numpy.ndarray
@@ -162,7 +162,7 @@ class IonChromatogram:
     def set_intensity_array(self, ia):
 
         """
-        Sets the value of intensity array
+        @summary: Sets the value of intensity array
 
         @param ia: An array of intensity values
         @type ia: numpy.ndarray
@@ -175,7 +175,7 @@ class IonChromatogram:
     def get_time_step(self):
 
         """
-        Returns time step
+        @summary: Returns time step
 
         @return: Time step
         @rtype: FloatType
@@ -186,8 +186,8 @@ class IonChromatogram:
     def is_tic(self):
 
         """
-        Returns True if the ion chromatogram is a total ion
-        chromatogram (TIC), or False otherwise
+        @summary: Returns True if the ion chromatogram is a total
+            ion chromatogram (TIC), or False otherwise
 
         @return: A boolean value indicating if the ion chromatogram
             is a total ion chromatogram (True) or not (False)
@@ -202,7 +202,7 @@ class IonChromatogram:
     def write(self, file_name, minutes=False):
 
         """
-        Writes the ion chromatogram to the specified file
+        @summary: Writes the ion chromatogram to the specified file
 
         @param file_name: A string representing the file name to write
             the ion chromatogram to

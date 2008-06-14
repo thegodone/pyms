@@ -31,7 +31,7 @@ from Error import error
 def is_str(arg):
 
     """
-    Returns True if the argument is a string, False otherwise
+    @summary: Returns True if the argument is a string, False otherwise
 
     @param arg: The argument to be evaluated as a string
     @type arg: arbitrary
@@ -48,7 +48,8 @@ def is_str(arg):
 def is_int(arg):
 
     """
-    Returns True if the argument is an integer, False otherwise
+    @summary: Returns True if the argument is an integer, False
+        otherwise
 
     @param arg: The argument to be evaluated as an integer
     @type arg: arbitrary
@@ -65,7 +66,7 @@ def is_int(arg):
 def is_float(arg):
 
     """
-    Returns True if the argument is a float, False otherwise
+    @summary: Returns True if the argument is a float, False otherwise
 
     @param arg: The argument to be evaluated as a float
     @type arg: arbitrary
@@ -82,8 +83,8 @@ def is_float(arg):
 def is_number(arg):
 
     """
-    Returns True if the argument is a number (integer or float),
-    False otherwise
+    @summary: Returns True if the argument is a number (integer or
+        float), False otherwise
    
     @param arg: The argument to be evaluated as a number
     @type arg: arbitrary
@@ -100,8 +101,8 @@ def is_number(arg):
 def is_list(arg):
 
     """
-    Returns True if the argument is a list, tuple, or numpy array,
-    False otherwise
+    @summary: Returns True if the argument is a list, tuple, or numpy
+        array, False otherwise
 
     @param arg: The argument to be evaluated as a list
     @type arg: arbitrary
@@ -119,7 +120,8 @@ def is_list(arg):
 def is_array(arg):
 
     """
-    Returns True if the argument is a numpy array, False otherwise
+    @summary: Returns True if the argument is a numpy array, False
+        otherwise
 
     @param arg: The argument to be evaluated as a numpy array
     @type arg: arbitrary

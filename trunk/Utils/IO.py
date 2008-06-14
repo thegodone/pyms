@@ -30,7 +30,7 @@ from Utils import is_number, is_str, is_list
 def open_for_reading(file_name):
 
     """
-    Opens file for reading, returns file pointer
+    @summary: Opens file for reading, returns file pointer
 
     @param file_name: Name of the file to be opened for reading
     @type file_name: StringType
@@ -51,7 +51,7 @@ def open_for_reading(file_name):
 def open_for_writing(file_name):
 
     """
-    Opens file for writing, returns file pointer
+    @summary: Opens file for writing, returns file pointer
 
     @param file_name: Name of the file to be opened for writing
     @type file_name: StringType
@@ -71,7 +71,7 @@ def open_for_writing(file_name):
 def close_for_reading(fp):
 
     """
-    Closes file pointer open for reading
+    @summary: Closes file pointer open for reading
 
     @param fp: A file pointer, previously opened for reading
     @type fp: FileType
@@ -85,7 +85,7 @@ def close_for_reading(fp):
 def close_for_writing(fp):
 
     """
-    Closes file pointer open for writing
+    @summary: Closes file pointer open for writing
 
     @param fp: A file pointer, previously opened for writing
     @type fp: FileType
@@ -99,7 +99,7 @@ def close_for_writing(fp):
 def file_lines(file_name):
 
     """
-    Returns lines from a file, as a list
+    @summary: Returns lines from a file, as a list
 
     @param file_name: Name of a file
     @type: StringType
@@ -121,8 +121,8 @@ def save_data(file_name, data, format_str="%.6f", prepend="", sep=" ",
 	compressed=False):
 
     """
-    Saves a list of numbers or a list of lists of numbers to a file
-    with specific formatting.
+    @summary: Saves a list of numbers or a list of lists of numbers
+        to a file with specific formatting
 
     @param file_name: Name of a file
     @type: StringType

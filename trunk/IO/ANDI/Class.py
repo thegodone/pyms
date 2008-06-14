@@ -35,7 +35,7 @@ from pyms.Utils.Utils import is_str, is_int, is_float, is_number
 class ChemStation:
 
     """
-    ANDI-MS reader for Agilent ChemStation NetCDF files
+    @summary: ANDI-MS reader for Agilent ChemStation NetCDF files
 
     @author: Lewis Lee
     @author: Vladimir Likic
@@ -168,8 +168,8 @@ class ChemStation:
     def get_filename(self):
 
         """
-        Returns the name of the ANDI/MS NetCDF file used to construct
-        this object
+        @summary: Returns the name of the ANDI/MS NetCDF file used to
+            construct this object
 
         @return: Name of a file used to construct the object
         @rtype: StringType
@@ -180,7 +180,7 @@ class ChemStation:
     def get_intensity_matrix(self):
 
         """
-        Returns the full intensity matrix
+        @summary: Returns the full intensity matrix
 
         @return: Intensity matrix
         @rtype: numpy.ndarray
@@ -191,7 +191,7 @@ class ChemStation:
     def get_time(self):
 
         """
-        Returns the array of time values
+        @summary: Returns the array of time values
 
         @return: Array of time values in seconds
         @rtype: numpy.ndarray
@@ -202,7 +202,7 @@ class ChemStation:
     def get_tic(self):
 
         """
-        Returns the total ion chromatogram
+        @summary: Returns the total ion chromatogram
 
         @return: Total ion chromatogram
         @rtype: IonChromatogram
@@ -217,7 +217,8 @@ class ChemStation:
     def get_mass_range(self):
 
         """
-        Returns the minimum and the maximum mass from the mass range
+        @summary: Returns the minimum and the maximum mass from the
+            mass range
 
         @return: Minimum and maximum mass from the mass range
         @rtype: TupleType
@@ -227,7 +228,7 @@ class ChemStation:
     def get_ic_at_index(self, index):
 
         """
-        Returns the ion chromatogram at the specified index
+        @summary: Returns the ion chromatogram at the specified index
 
         @param index: Index of an ion chromatogram in the
             intensity data matrix
@@ -249,7 +250,7 @@ class ChemStation:
     def get_ic_at_mass(self, mass):
 
         """
-        Returns the ion chromatogram for the specified mass
+        @summary: Returns the ion chromatogram for the specified mass
 
         If no mass value is given, the function returns the total
         ion chromatogram.
@@ -272,7 +273,7 @@ class ChemStation:
     def get_mass_spectrum_at_index(self, index):
 
         """
-        Returns mass spectrum at given index
+        @summary: Returns mass spectrum at given index
 
         @param index: Index of an ion chromatogram
         @type index: IntType
@@ -295,7 +296,7 @@ class ChemStation:
     def get_mass_list(self):
 
         """
-        Returns the list of m/z
+        @summary: Returns the m/z list
 
         @return: List of m/z
         @rtype: numpy.ndarray
@@ -306,7 +307,7 @@ class ChemStation:
     def get_index_at_time(self, time):
 
         """
-        Returns the index corresponding to given time
+        @summary: Returns the index corresponding to given time
 
         @param time: Time in seconds
         @type time: FloatType
@@ -328,7 +329,8 @@ class ChemStation:
     def null_mass(self, mass):
 
         """
-        Sets the values of given mass to 0 across entire time range
+        @summary: Sets the values of given mass to 0 across entire
+            time range
 
         @param mass: The mass value of an ion chromatogram
         @type mass: IntType

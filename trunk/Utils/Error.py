@@ -27,7 +27,7 @@ import sys
 def error(message=None):
 
     """
-    PyMS wide error function
+    @summary: PyMS wide error function
 
     Prints out the error message (if supplied) and terminates execution
     with sys.exit(1).
@@ -84,7 +84,7 @@ def error(message=None):
 def stop(message=None):
 
     """
-    A simple termination of execution
+    @summary: A simple termination of execution
 
     @param message: The message to be printed
     @type message: StringType
