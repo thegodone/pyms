@@ -36,6 +36,8 @@ def error(message=None):
     @type message: StringType
     @return: none
     @rtype: NoneType
+    @author: Lewis Lee
+    @author: Vladimir Likic
     """
 
     sys.stdout = sys.__stderr__

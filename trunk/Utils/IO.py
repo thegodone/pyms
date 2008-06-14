@@ -36,6 +36,7 @@ def open_for_reading(file_name):
     @type file_name: StringType
     @return: Pointer to the opened file
     @rtype: FileType
+    @author: Vladimir Likic
     """
 
     if not is_str(file_name):
@@ -56,6 +57,7 @@ def open_for_writing(file_name):
     @type file_name: StringType
     @return: Pointer to the opened file
     @rtype: FileType
+    @author: Vladimir Likic
     """
 
     if not is_str(file_name):
@@ -75,6 +77,7 @@ def close_for_reading(fp):
     @type fp: FileType
     @return: none
     @rtype: NoneType
+    @author: Vladimir Likic
     """
 
     fp.close()
@@ -88,6 +91,7 @@ def close_for_writing(fp):
     @type fp: FileType
     @return: none
     @rtype: NoneType
+    @author: Vladimir Likic
     """
 
     fp.close()
@@ -101,6 +105,7 @@ def file_lines(file_name):
     @type: StringType
     @return: A list of lines
     @rtype: ListType
+    @author: Vladimir Likic
     """
 
     if not is_str(file_name):
@@ -133,6 +138,7 @@ def save_data(file_name, data, format_str="%.6f", prepend="", sep=" ",
     @type: BooleanType
     @return: none
     @rtype: NoneType
+    @author: Vladimir Likic
     """
 
     if not is_str(file_name):

@@ -37,6 +37,7 @@ def is_str(arg):
     @type arg: arbitrary
     @return: A boolean indicator True or False
     @rtype: BooleanType
+    @author: Vladimir Likic
     """
 
     if isinstance(arg,types.StringType):
@@ -53,6 +54,7 @@ def is_int(arg):
     @type arg: arbitrary
     @return: A boolean indicator True or False
     @rtype: BooleanType
+    @author: Vladimir Likic
     """
 
     if isinstance(arg,types.IntType) or isinstance(arg,types.LongType):
@@ -69,6 +71,7 @@ def is_float(arg):
     @type arg: arbitrary
     @return: A boolean indicator True or False
     @rtype: BooleanType
+    @author: Vladimir Likic
     """
 
     if isinstance(arg,types.FloatType):
@@ -86,6 +89,7 @@ def is_number(arg):
     @type arg: arbitrary
     @return: A boolean indicator True or False
     @rtype: BooleanType
+    @author: Vladimir Likic
     """
 
     if is_int(arg) or is_float(arg):
@@ -103,6 +107,7 @@ def is_list(arg):
     @type arg: arbitrary
     @return: A boolean indicator True or False
     @rtype: BooleanType
+    @author: Vladimir Likic
     """
 
     if isinstance(arg,types.ListType) or isinstance(arg,types.TupleType) \
@@ -120,6 +125,7 @@ def is_array(arg):
     @type arg: arbitrary
     @return: A boolean indicator True or False
     @rtype: BooleanType 
+    @author: Vladimir Likic
     """
 
     if isinstance(arg, numpy.core.ndarray):

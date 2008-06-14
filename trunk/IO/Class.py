@@ -32,6 +32,9 @@ class IonChromatogram:
 
     """
     Models ion chromatogram
+
+    @author: Lewis Lee
+    @author: Vladimir Likic
     """
 
     def __init__(self, ia, time_array, mass=None):

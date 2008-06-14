@@ -36,6 +36,9 @@ class ChemStation:
 
     """
     ANDI-MS reader for Agilent ChemStation NetCDF files
+
+    @author: Lewis Lee
+    @author: Vladimir Likic
     """
 
     # the keys used to retrieve certain data from the NetCDF file
