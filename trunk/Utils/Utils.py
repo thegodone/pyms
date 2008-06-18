@@ -22,7 +22,7 @@ General utility functions
  #                                                                           #
  #############################################################################
 
-import types
+import types, re
 
 import numpy
 
@@ -132,6 +132,28 @@ def is_array(arg):
 
     if isinstance(arg, numpy.core.ndarray):
         return True 
+    else:
+        return False
+
+def is_str_num(arg):
+
+    """
+    @summary: determines if the argument is a string in the format of a number
+
+    The number can be an integer, or floating point in scientific or engineering
+    format.
+
+    @param arg: A string to be evaluate as a number
+    @type arg: StringType
+    @return: A boolean indicator True or False
+    @rtype:  BooleanType
+    @author: Gyro Funch (from Active State Python Cookbook)
+    """
+
+    NUM_RE = re.compile(r'^[-+]?([0-9]+\.?[0-9]*|\.[0-9]+)([eE][-+]?[0-9]+)?$')
+
+    if NUM_RE.match(str(arg)):
+        return True
     else:
         return False
 
