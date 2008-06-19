@@ -1,4 +1,6 @@
-"""pyms.Peak.List __init__.py
+"""
+Peak alignment by dynamic programming described in Robinson et al. BMC
+Bioinformatics 8:419 (2007)
 """
 
  #############################################################################

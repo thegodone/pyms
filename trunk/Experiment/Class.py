@@ -1,6 +1,5 @@
-"""Class.py
- Module Class in pyms.Experiment
- Provides class Experiment.
+"""
+Models an experiment which may consist of one or more replicate runs 
 """
 
  #############################################################################
@@ -24,21 +23,11 @@
  #############################################################################
 
 from pyms.Utils.Error import error
-from pyms.Utils.Utils import * 
+from pyms.Utils.Utils import *
+
+from Utils import cmp_peak_area
 
 from pyms import Peak
-
-def cmp_peak_area(peak1, peak2):
-
-    """cmp_peak_area(peak1, peak2)
-
-    Compares peak normalised area.
-
-    @param peak1 A peak object.
-    @param peak2 A peak object.
-    """
-
-    return cmp(peak1.norm_area, peak2.norm_area)
 
 class Experiment:
 

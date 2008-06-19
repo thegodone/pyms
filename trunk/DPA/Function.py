@@ -65,6 +65,7 @@ def align(A1, A2, D, gap, sim_method="new"):
     """
 
     if (isinstance(A1, Experiment.Class.Experiment)):
+        print "HELLO"
         A1 = Class.Alignment(A1)
 
     if (isinstance(A2, Experiment.Class.Experiment)):
