@@ -22,5 +22,3 @@ Provides classes for reading of ANDI-MS files
  #                                                                           #
  #############################################################################
 
-import Class
-

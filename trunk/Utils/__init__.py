@@ -22,7 +22,3 @@ Utility functions for PyMS wide use
  #                                                                           #
  #############################################################################
 
-import Error
-import Utils
-import IO
-
