@@ -96,7 +96,7 @@ def read_expr(file_name):
     for exprfile in exprfiles:
 
         exprfile = string.strip(exprfile)
-        expr = load(exprfile)
+        expr = load_expr(exprfile)
 
         exprs.append(expr)
 
