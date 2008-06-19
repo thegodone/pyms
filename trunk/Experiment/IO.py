@@ -29,9 +29,9 @@ from pyms.Experiment import Class
 from pyms.Utils.Utils import *
 from pyms.Utils.Error import *
 
-def load(file_name):
+def load_expr(file_name):
 
-    """load(file_name)
+    """load_expr(file_name)
 
     Loads experiment saved with 'dump'.
  
@@ -50,9 +50,9 @@ def load(file_name):
 
     return expr
 
-def dump(expr, file_name):
+def dump_expr(expr, file_name):
 
-    """dump(expr, file_name)
+    """dump_expr(expr, file_name)
 
     Dumps an expriment to a file.
  
