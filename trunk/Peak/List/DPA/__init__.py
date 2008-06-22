@@ -1,6 +1,6 @@
 """
-Peak alignment by dynamic programming described in Robinson et al. BMC
-Bioinformatics 8:419 (2007)
+Alignment of peak lists by dynamic programming described in Robinson et al.
+BMC Bioinformatics 8:419 (2007)
 """
 
  #############################################################################
