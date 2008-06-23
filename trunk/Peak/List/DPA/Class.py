@@ -155,11 +155,9 @@ class Alignment:
 class Tree:
 
     """
-    @summary: Models pairwise alignment on the set of experiments, and builds
-    a guide tree
+    @summary: Models pairwise alignment and builds a guide tree
 
-    This class expects a set of experiments (ie. the 'Experiment' objects) given
-    as a list, and the alignment parameters.
+    This class can operate on the set of experiments or on the set of alignments.
 
     @author: Woon Wai Keen
     @author: Vladimir Likic
@@ -168,8 +166,8 @@ class Tree:
     def __init__(self, reps, D, gap):
         
         """
-        @param reps: A set of experiments 
-        @type reps: A list of Experiment instances
+        @param reps: A set of experiments or alignments 
+        @type reps: ListType
         @param D: Retention time tolerance parameter for pairwise alignments
         @type D: FloatType
         @param gap: Gap parameter for pairwise alignments
@@ -179,10 +177,7 @@ class Tree:
         @author: Vladimir Likic
         """
 
-        self.D = D
-        self.gap = gap
-
-        self.sim_matrix = self._sim_matrix(self.D, self.gap, reps)
+        self.sim_matrix = self._sim_matrix(D, gap, reps)
 
         if self.sim_matrix == None:
             self.dist_matrix = None
@@ -191,18 +186,22 @@ class Tree:
             self.dist_matrix = self._dist_matrix(self.sim_matrix)
             self.tree = self._guide_tree(self.dist_matrix)
 
+        self.reps = reps
+        self.D = D
+        self.gap = gap
+
     def _sim_matrix(self, D, gap, reps):
 
         """
-        @summary: Calculates the similarity matrix for the set of replicate
-        experiments
+        @summary: Calculates the similarity matrix for the set of experiments
+        or alignments 
 
         @param D: Retention time tolerance parameter for pairwise alignments
         @type D: FloatType
         @param gap: Gap parameter for pairwise alignments
         @type gap: FloatType
-        @param reps: A list of experiments 
-        @type reps: A list of Experiment instances
+        @param reps: A list of experiments or alignments
+        @type reps: ListType
 
         @author: Woon Wai Keen
         @author: Vladimir Likic
