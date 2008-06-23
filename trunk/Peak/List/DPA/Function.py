@@ -1,5 +1,27 @@
-"""Function.py
 """
+Functions for peak alignment by dynamic programming
+"""
+
+ #############################################################################
+ #                                                                           #
+ #    PyMS software for processing of metabolomic mass-spectrometry data     #
+ #    Copyright (C) 2005-8 Vladimir Likic                                    #
+ #                                                                           #
+ #    This program is free software; you can redistribute it and/or modify   #
+ #    it under the terms of the GNU General Public License version 2 as      #
+ #    published by the Free Software Foundation.                             #
+ #                                                                           #
+ #    This program is distributed in the hope that it will be useful,        #
+ #    but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+ #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          #
+ #    GNU General Public License for more details.                           #
+ #                                                                           #
+ #    You should have received a copy of the GNU General Public License      #
+ #    along with this program; if not, write to the Free Software            #
+ #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.              #
+ #                                                                           #
+ #############################################################################
+
 
 import numpy
 import Pycluster
@@ -7,28 +29,34 @@ import Pycluster
 from pyms.Utils.Error import error 
 from pyms.Utils.DP import dp 
 
-from pyms import Experiment
+from pyms.Experiment.Class import Experiment
 
 import Class
 
 def align_with_tree(As, T, min_peaks=1):
 
-    """ Aligns a list of alignments/experiments As using a guide tree T.
+    """
+    @summary: Aligns a list of alignments/experiments using the supplied
+    guide tree
 
-    @return Merged alignments
+    @param As: The list of experiments or alignments to be aligned
+    @type As: ListType
+    @param T: The Pycluster guide tree matchnig 'As'
+    @type: Pycluster.cluster.Tree
+    @return: The final alignment consisting of aligned input experiments
+        or alignments
+    @rtype: pyms.Peak.List.DPA.Class.Alignment
     """
 
-    print " Aligning %d replicates with guide tree (D=%.2f, gap=%.2f)" % (len(As), T.D, T.gap)
+    print " Aligning %d items with guide tree (D=%.2f, gap=%.2f)" % \
+            (len(As), T.D, T.gap)
 
     # handle trivial cases of length 0 and 1
-    if len(As) == 0:
-        return []
-
-    if len(As) == 1:
-        return As
+    if len(As) == 0: return []
+    if len(As) == 1: return As
 
     # For everything else, we align according to the guide tree provided by
-    # Pycluster. Quote documentation:
+    # Pycluster. From Pycluster documentation:
     #   Each item and subnode is represented by an integer. For hierarchical
     #   clustering of n items, we number the original items {0, ... , n-1},
     #   nodes are numbered {-1, ... , -(n-1)}. Note that the number of nodes
@@ -37,38 +65,36 @@ def align_with_tree(As, T, min_peaks=1):
     # extend As to length 2n to hold the n items, n-1 nodes, and 1 root
     As = As + [ None for _ in range(len(As)) ]
 
-    # now align the alignments into positions -1, ... ,-(n-1)
+    # align the alignments into positions -1, ... ,-(n-1)
     total = len(T.tree)
     index = 0
+
     for node in T.tree:
         index = index - 1
         As[index] = align(As[node.left], As[node.right], T.D, T.gap)
-
         total = total - 1
-        print " -> %d replicates remaining" % total
+        print " -> %d item(s) remaining" % total
 
-    # our final alignment is in the root. filter min peaks and return..
+    # the final alignment is in the root. Filter min peaks and return
     As[index].filter_min_peaks(min_peaks)
+
     return As[index]
 
-def align(A1, A2, D, gap, sim_method="new"):
+def align(A1, A2, D, gap):
 
-    """ Aligns two alignments/experiments
+    """ 
+    @summary: Aligns two alignments/experiments
 
-    @param A1 The first alignment/experiment
-    @param A2 The second alignment/experiment
-    @param D "D" parameter
-    @param gap Gap parameters
-    @param sim_method Use either "new" or "old" methods (default: new)
+    @param A1: The first alignment/experiment
+    @param A2: The second alignment/experiment
+    @param D: Retention time tolerance
+    @param gap: Gap penalty
 
     @return Merged alignments
     """
 
-    if (isinstance(A1, Experiment.Class.Experiment)):
-        A1 = Class.Alignment(A1)
-
-    if (isinstance(A2, Experiment.Class.Experiment)):
-        A2 = Class.Alignment(A2)
+    if (isinstance(A1, Experiment)): A1 = Class.Alignment(A1)
+    if (isinstance(A2, Experiment)): A2 = Class.Alignment(A2)
 
     # calculate score matrix for these two runs
     M = score_matrix(A1, A2, D)
@@ -80,19 +106,9 @@ def align(A1, A2, D, gap, sim_method="new"):
     merged = merge_alignments(A1, A2, result['trace'])
 
     # calculate similarity score
-    if sim_method == "old":
-        cost = 0.
-        for match in result['matches']:
-            cost = cost + M[match[0]][match[1]]
-        n = len(result['matches'])
-        cost = cost/n * (len(A1.alignments[0]) + len(A2.alignments[0])) / (2*n)
-        merged.similarity = cost
-    else:
-        merged.similarity = alignment_similarity(result['trace'], M, gap)
+    merged.similarity = alignment_similarity(result['trace'], M, gap)
 
     return merged
-
-########################### private functions #################################
 
 def score_matrix(A1, A2, D):
 

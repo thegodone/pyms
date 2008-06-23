@@ -1,5 +1,5 @@
 """
-Classes for peak alignment by dynamic programming 
+Classes for peak alignment by dynamic programming
 """
 
  #############################################################################
@@ -32,7 +32,7 @@ from pyms.Experiment.Class import Experiment
 
 import Function
 
-class Alignment:
+class Alignment(object):
 
     """
     @summary: Models an alignment of peak lists
@@ -152,7 +152,7 @@ class Alignment:
         fp_rt.close()
         fp_area.close()
 
-class Tree:
+class Tree(object):
 
     """
     @summary: Models pairwise alignment and builds a guide tree
@@ -232,7 +232,7 @@ class Tree:
         """
         @summary: Converts similarity matrix into a distance matrix
 
-        @param sim_matrix: the similarity matrix
+        @param sim_matrix: The similarity matrix
         @type sim_matrix: numpy.ndarray
 
         @author: Woon Wai Keen
@@ -254,8 +254,10 @@ class Tree:
         """
         @summary: Build a guide tree from the distance matrix
 
-        @param dist_matrix: the distance matrix
+        @param dist_matrix: The distance matrix
         @type sim_matrix: numpy.ndarray
+        @return: Pycluster similarity tree
+        @rtype: Pycluster.cluster.Tree
 
         @author: Woon Wai Keen
         @author: Vladimir Likic
@@ -263,7 +265,7 @@ class Tree:
 
         n = len(dist_matrix)
 
-        print " Clustering %d pairwise alignments." % (n*(n-1)),
+        print " -> Clustering %d pairwise alignments." % (n*(n-1)),
 
         tree = Pycluster.treecluster(distancematrix=dist_matrix, method='a')
 
