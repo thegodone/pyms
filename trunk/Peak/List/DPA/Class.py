@@ -1,5 +1,5 @@
 """
-Classes for alignment of peak lists by dynamic programming 
+Classes for peak alignment by dynamic programming 
 """
 
  #############################################################################
