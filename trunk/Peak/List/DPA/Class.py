@@ -47,6 +47,8 @@ class Alignment:
         @param experiment: Provide this to make a singleton alignment object from
             an experiment
         @type experiment: pyms.Experiment.Class.Experiment
+
+        @author: Woon Wai Keen
         """
 
         if experiment and isinstance(experiment, Experiment):
@@ -58,6 +60,8 @@ class Alignment:
 
         """
         @summary: Returns the length of the alignment
+
+        @author: Woon Wai Keen
         """
 
         return len(self.alignments)
@@ -190,7 +194,7 @@ class Tree:
     def _sim_matrix(self, D, gap, reps):
 
         """
-        @summary: calculates the similarity matrix for the set of replicate
+        @summary: Calculates the similarity matrix for the set of replicate
         experiments
 
         @param D: Retention time tolerance parameter for pairwise alignments
@@ -251,7 +255,7 @@ class Tree:
         """
         @summary: Build a guide tree from the distance matrix
 
-        @param dist_matrix: distance matrix
+        @param dist_matrix: the distance matrix
         @type sim_matrix: numpy.ndarray
 
         @author: Woon Wai Keen
@@ -267,5 +271,4 @@ class Tree:
         print "Done"
 
         return tree
-
 
