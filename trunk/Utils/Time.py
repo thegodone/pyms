@@ -27,14 +27,16 @@ from Utils import is_str, is_str_num
 
 def time_str_secs(time_str):
 
-    """time_str_secs(time_str)
+    """
+    @summary: Resolves time string of the form "<NUMBER>s" or "<NUMBER>m",
+        returns time in seconds
 
-    Resolves time string of the form "<NUMBER>s" or "<NUMBER>m",
-    returns time in seconds.
-
-    time_str A string. Must be of the form "<NUMBER>s" or
-        "<NUMBER>m" where "<NUMBER>" is a valid number.
-    returns time in seconds
+    @param time_str: A time string, which must be of the form
+        "<NUMBER>s" or "<NUMBER>m" where "<NUMBER>" is a valid number
+    @type time_str: StringType
+    @return: Time in seconds
+    @rtype: FloatType
+    @author: Vladimir Likic
     """
 
     if not is_str(time_str):

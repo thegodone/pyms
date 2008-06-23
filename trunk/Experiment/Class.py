@@ -31,17 +31,17 @@ from pyms import Peak
 
 class Experiment:
 
-    """class Experiment
-
-    A class representing a single experiment. 
+    """
+    @summary: A class representing a single experiment
     """
 
     def __init__(self, expr_code, peaks):
 
-        """__init__(self, expr_code, peaks)
-
-        @param expr_code A string. Code-name for the experiment
-        @param peaks A list. A list of peak objects. 
+        """
+        @param expr_code: Code-name for the experiment
+        @type expr_code: StringType
+        @param peaks: A list of peak objects
+        @type: ListType
         """
 
         self.expr_code = expr_code
@@ -50,15 +50,18 @@ class Experiment:
 
     def set_ref_peak(self, ref_peak_tag):
 
-        """set_ref_peak(self, ref_peak_tag)
-        Finds the reference peak, sets the reference peak, and removes
-        it from the list of peaks.
+        """
+        @summary: Finds the reference peak, sets the reference peak,
+            and removes it from the list of peaks.
 
-        @param ref_peak_tag A string. Tag string for the chosen reference
+        @param ref_peak_tag: Tag string for the chosen reference
             peak. For example, two potential reference peaks may be
             annotated in the peak file, "RT-SI" and "RT-NV". If the first
             is to be used as the reference peak, ref_peak_tag should be
             set to "si".
+        @type ref_peak_tag: StringType
+        @return: none
+        @rtype: NoneType
         """
 
         ref_peaks = {}
@@ -100,11 +103,14 @@ class Experiment:
 
     def remove_blank_peaks(self, peak_remove_tag):
 
-        """remove_blank_peaks(self, peak_remove_tag)
-        Removes peaks which whose tag is 'peak_remove_tag'.
+        """
+        @summary: Removes peaks which whose tag is 'peak_remove_tag'
 
-        @param peak_remove_tag A string. Peaks tagged by this tag will
+        @param peak_remove_tag: Peaks tagged by this tag will
             be discarded. Normally, peak_remove_tag equals "blank".
+        @type peak_remove_tag: StringType
+        @return: none
+        @rtype: NoneType
         """
 
         remove_list = []
@@ -122,8 +128,13 @@ class Experiment:
 
     def normalise_peaks(self, to_reference=True):
 
-        """normalise_peaks(to_reference)
-        Normalizes peak areas.
+        """
+        @summary: Normalises peak areas
+
+        @param to_reference: True if reference is used, False otherwise
+        @type to_reference: BooleanType
+        @return: none
+        @rtype: NoneType
         """
 
         if to_reference:
@@ -136,11 +147,14 @@ class Experiment:
 
     def sele_top_peaks(self, n):
 
-        """sele_top_peaks(self, n)
+        """
+        @summary: Selects n strongest peaks by normalised area
+            discrads others
 
-        Selects n strongest peaks by normalised area, discards others.
-
-        @param n integer.
+        @param n: Number of strongest peaks
+        @type n: IntType
+        @return: none
+        @rtype: NoneType
         """
 
         self.peaks.sort(cmp_peak_area)
@@ -151,13 +165,15 @@ class Experiment:
 
     def purge_peaks(self, norm_area_threshold):
 
-        """purge_peaks(self, norm_area_threshold)
+        """
+        @summary: Purge peaks which are below the threshold expressed as the
+            fraction of the _normalized_ reference peak area (i.e. this
+            is exactly a normalized peak area peak.norm_area).
 
-        Purge peaks which are below the threshold expressed as the
-        fraction of the _normalized_ reference peak area (i.e. this
-        is exactly a normalized peak area peak.norm_area).
-
-        @param norm_area_threshold A float.
+        @param norm_area_threshold: Threshold value
+        @type norm_area_threshold: IntType or FloatType
+        @return: none
+        @rtype: NoneType
         """
 
         purge_list = []
@@ -173,12 +189,15 @@ class Experiment:
 
     def scale_peaks(self, scale_factor):
 
-        """scale_peaks(self, scale_factor)
+        """
+        @summary: Scales all normalised peak areas by a factor
 
-        Scales all normalised peak areas by a factor. Typically used to
-        adjust DNA normalisation scaling. 
+        Typically used to adjust DNA normalisation scaling.
 
-        @param scale_factor A number.
+        @param scale_factor: Scale factor value
+        @type scale_factor: IntType or FloatType
+        @return: none
+        @rtype: NoneType
         """
 
         if not is_number(scale_factor):
@@ -193,12 +212,14 @@ class Experiment:
 
     def sele_rt_range(self, rt_range):
 
-        """sele_rt_range(self, rt_range)
+        """
+        @summary: Discards all peaks with retention times outside
+            the specified range
 
-        Discards all peaks with retention times outside the specified
-        range.
-
-        @param rt_range A list. Contains two numbers [rt_min, rt_max].
+        @param rt_range: Contains two numbers [rt_min, rt_max]
+        @type rt_range: ListType
+        @return: none
+        @rtype: NoneType
         """
 
         print " -> Selection by retention time (from %s to %s):" % \

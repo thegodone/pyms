@@ -1,6 +1,5 @@
-"""Class.py
- Module Class in pyms.Peak
- Contains Peak-related classes.
+"""
+Contains Peak-related classes
 """
 
  #############################################################################
@@ -31,18 +30,18 @@ from pyms.Utils.Utils import *
 
 class Peak:
 
-    """class Peak
+    """
+    @summary: A class representing a signal peak
 
-    A class representing a signal peak. A peak object is
-    initialised with retention time and raw peak area.
-
-    def __init__(self, rt, raw_area)
-
-    @param rt A number. Retention time.
-    @param raw_area A number. Raw peak area.
+    Peak object is initialised with retention time and raw peak area.
     """
 
     def __init__(self, rt, raw_area):
+
+        """
+        @param rt: Retention time
+        @type rt: FloatType
+        """
 
         # Retention time and raw_area are mandatory
         self.rt = float(rt)
@@ -60,11 +59,13 @@ class Peak:
 
     def set_intensity(self, intensity):
 
-        """set_intensity(intensity)
+        """
+        @summary: Sets peak intensity
 
-        Sets peak intensity.
-
-        @param intensity A number
+        @param intensity: Intensity value
+        @type intensity: FloatType or IntType
+        @return: none
+        @rtype: NoneType
         """
 
         if not is_number(intensity):
@@ -74,12 +75,14 @@ class Peak:
 
     def set_pt_bounds(self, pt_bounds):
 
-        """set_pt_bounds(pt_bounds)
+        """
+        @summary: Sets peak boundaries in points
 
-        Sets peak boundaries in points.
-
-        @param pt_bounds A list. Contains left, apex, and right
-            peak boundary (points).
+        @param pt_bounds: A list containing left, apex, and right
+            peak boundary (points)
+        @type pt_bounds: ListType
+        @return: none
+        @rtype: NoneType
         """
 
         if not is_list(pt_bounds):
@@ -96,12 +99,14 @@ class Peak:
 
     def set_rt_bounds(self, rt_bounds):
 
-        """set_rt_bounds(rt_bounds)
+        """
+        @summary: Sets peak retention time boundaries
 
-        Sets peak retention time boundaries.
-
-        @param rt_bounds A list. Contains left, apex, and right peak
-            boundary (retention time).
+        @param rt_bounds: A list containing left, apex, and right peak
+            boundary (retention time)
+        @type rt_bounds: ListType
+        @return: none 
+        @rtype: NoneType
         """
 
         if not is_list(rt_bounds):
@@ -121,11 +126,13 @@ class Peak:
 
     def set_norm_area(self, norm_area):
 
-        """set_norm_area(self, norm_area)
+        """
+        @summary: Sets peak normalised area
 
-        Sets peak normalised area. 
-
-        @param norm_area. A number
+        @param norm_area: Normalised area value
+        @type norm_area: IntType or FloatType
+        @return: none
+        @rtype: NoneType
         """
 
         if not is_number(norm_area):
@@ -135,11 +142,13 @@ class Peak:
 
     def set_confidence(self, confidence):
 
-        """set_confidence(self, confidence)
+        """
+        @summary: Sets peak confidence level
 
-        Sets peak confidence level.
-
-        @param confidence. A number between 0 and 1.
+        @param confidence: A number between 0 and 1
+        @type confidence: IntType or FloatType
+        @return: none
+        @rtype: NoneType
         """
 
         if not is_number(confidence):
@@ -152,11 +161,13 @@ class Peak:
 
     def set_mass_spectrum(self, andi_data):
 
-        """set_mass_spectrum(self, andi_data)
+        """
+        @summary: Sets peak mass spectrum
 
-        Sets peak mass spectrum.
-
-        @param andi_data An ANDI data object (such as IO.ANDI.ChemStation)
+        @param andi_data: An ANDI data object (such as IO.ANDI.ChemStation)
+        @type andi_data: ChemStation
+        @return: none
+        @rtype: NoneType
         """
         
         if self.pt_bounds == None:
@@ -174,7 +185,15 @@ class Peak:
 
     def crop_mass_spectrum(self, mass_min, mass_max):
 
-        """crop_mass_spectrum(self, mass_min, mass_max)
+        """
+        @summary: Crops mass spectrum
+
+        @param mass_min: Minimum mass value
+        @type mass_min: IntType or FloatType 
+        @param mass_max: Maximum mass value
+        @type mass_max: IntType or FloatType
+        @return: none
+        @rtype: NoneType
         """
         
         if self.mass_spectrum == None:
@@ -209,12 +228,14 @@ class Peak:
 
     def set_peak_tag(self, tag):
 
-        """set_peak_tag(tag)
+        """
+        @summary: Sets the peak tag
 
-        Sets the peak tag.
-
-        @param A string. The supplied peak tag is either RF- type
-            tag (such as "RF-SI") or "BLANK".
+        @param tag: The supplied peak tag is either RF- type
+            tag (such as "RF-SI") or "BLANK"
+        @type tag: StringType
+        @return: none
+        @rtype: NoneType
         """
 
         peak_tag = None

@@ -1,6 +1,5 @@
-"""Utils.py
- Module Utils in pyms.Peak.List
- Utilities for peak lists.
+"""
+ Utilities for peak lists
 """
 
  #############################################################################
@@ -32,12 +31,14 @@ from pyms.Utils.Time import time_str_secs
 
 def is_peak_list(peaks):
 
-    """is_peak_list(peaks)
+    """
+    @summary: Returns True if 'peaks' is a valid peak list,
+        False otherwise
 
-    Returns True is 'peaks' is valid peak list.
-
-    @param peaks A list of peak objects
-    @return A boolean
+    @param peaks: A list of peak objects
+    @type peaks: ListType
+    @return: A boolean indicator
+    @rtype: BooleanType
     """
 
     flag = True
@@ -53,19 +54,23 @@ def is_peak_list(peaks):
 
 def find_peak_by_rt(rt, peaks, tol_str):
 
-    """find_peak_by_rt(rt, peaks, tol_str)
+    """
+    @summary: Finds the closest peak to given retention time
 
-    Finds the closest peak to given retention time. The closest
-    peak must:
+        The closest peak must:
         1. Be closer to the target retention time than tolerance.
         2. Be the only peak which is closer to the target retention
            time than tolerance.
 
-    @param rt A number. Target retention time in seconds.
-    @param peaks A list. The list of candidate peaks.
-    @param tol_str A time string, "<NUMBER>s" or "<NUMBER>m"
-        to specify a cutoff in seconds or minutes.
-    @return A peak object
+    @param rt: Target retention time in seconds
+    @type rt: FloatType
+    @param peaks: The list of candidate peaks
+    @type peaks: ListType
+    @param tol_str: A time string, "<NUMBER>s" or "<NUMBER>m"
+        to specify a cutoff in seconds or minutes
+    @type tol_str: StringType
+    @return: A peak object
+    @rtype: Peak
     """
 
     if not is_number(rt):
@@ -97,14 +102,16 @@ def find_peak_by_rt(rt, peaks, tol_str):
 
 def sele_peaks_by_rt(peaks, rt_range):
 
-    """sele_peaks_by_rt(peaks, rt_range)
+    """
+    @summary: Selects peaks by retention time range
 
-    Selects peaks by retention time range.
-
-    @param peaks A list of peak objects
-    @param rt_range A list of two time strings, specifying lower and
+    @param peaks: A list of peak objects
+    @type peaks: ListType
+    @param rt_range: A list of two time strings, specifying lower and
            upper retention time
-    @return A list of peak objects
+    @type rt_range: ListType 
+    @return: A list of peak objects
+    @rtype: ListType
     """
 
     if not is_peak_list(peaks):
@@ -137,15 +144,17 @@ def sele_peaks_by_rt(peaks, rt_range):
 
 def cmp_by_rt(peak1, peak2):
 
-    """cmp_by_rt(peak1, peak2)
+    """
+    @summary: Compares two peak objects by retention time
 
-    Compares two peak objects by retention time.
-
-    @param peak1 A peak object
-    @param peak2 A peak object
-    @return An integer Negative, zero, or positive depending on how
-            peak1 and peak2 retention times compare (built-in cmp
-            function)
+    @param peak1: A peak object
+    @type peak1: Peak
+    @param peak2: A peak object
+    @type peak2: Peak
+    @return: Negative, zero, or positive integer depending on how
+        peak1 and peak2 retention times compare (built-in cmp
+        function)
+    @rtype: IntType
     """
 
     return cmp(peak1.rt, peak2.rt)

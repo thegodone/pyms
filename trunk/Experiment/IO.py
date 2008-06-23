@@ -1,6 +1,5 @@
-"""IO.py
- Module IO in pyms.Experiment
- Provides function for reading experiments.
+"""
+Provides function for reading experiments
 """
 
  #############################################################################
@@ -31,12 +30,13 @@ from pyms.Utils.Error import *
 
 def load_expr(file_name):
 
-    """load_expr(file_name)
-
-    Loads experiment saved with 'dump'.
+    """
+    @summary: Loads experiment saved with 'dump'
  
-    @param file_name A string. Experiment file name.
-    @return Returns no values.
+    @param file_name: Experiment file name
+    @type file_name: StringType
+    @return: none
+    @rtype: NoneType
     """
 
     if not is_str(file_name):
@@ -52,13 +52,15 @@ def load_expr(file_name):
 
 def dump_expr(expr, file_name):
 
-    """dump_expr(expr, file_name)
-
-    Dumps an expriment to a file.
+    """
+    @summary: Dumps an expriment to a file
  
-    @param expr An instance of the Class Experiment
-    @param fle_name A string. Experiment file name.
-    @return Returns no values.
+    @param expr: An instance of the Experiment class
+    @type expr: Experiment
+    @param fle_name: Experiment file name
+    @type file_name: StringType
+    @return: none
+    @rtype: NoneType
     """
 
     if not isinstance(expr, Class.Experiment):
@@ -73,12 +75,15 @@ def dump_expr(expr, file_name):
 
 def read_expr(file_name):
 
-    """read_expr(file_name)
+    """
+    @summary: Reads the experiment files into a list of
+        Experiment objects
 
-    @param file A string. The name of the file which lists
-    Experiments dump file names, one file per line.
-
-    Returns A list of 'Experiment' instances
+    @param file_name: The name of the file which lists experiment
+        dump file names, one file per line
+    @type file_name: StringType
+    @return: A list of 'Experiment' instances
+    @rtype: ListType
     """
 
     if not is_str(file_name):

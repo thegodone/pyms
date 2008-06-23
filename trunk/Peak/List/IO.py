@@ -1,6 +1,5 @@
-"""IO.py
- Module IO in pyms.Peak.List
- Provides IO functions for peak lists.
+"""
+Provides IO functions for peak lists
 """
 
  #############################################################################
@@ -41,12 +40,13 @@ _SECONDS = "seconds"
 
 def read(file_name):
 
-    """read(file_name)
+    """
+    @summary: Reads PyMS peak list
 
-    Reads PyMS peak list.
-
-    @param fle_name A string. Peak list file name.
-    @return Returns list of Peak objects.
+    @param fle_name: Peak list file name
+    @type file_name: StringType
+    @return: Returns list of Peak objects
+    @rtype: ListType
     """
 
     if not is_str(file_name):
@@ -156,12 +156,13 @@ def read(file_name):
 
 def load(file_name):
 
-    """load(file_name)
-
-    Loads peaks saved with 'dump'.
+    """
+    @summary: Loads peaks saved with 'dump'
  
-    @param fle_name A string. Peak list file name.
-    @return Returns no values.
+    @param fle_name: Peak list file name
+    @type file_name: StringType
+    @return: none
+    @rtype: NoneType
     """
 
     if not is_str(file_name):
@@ -177,13 +178,15 @@ def load(file_name):
 
 def dump(peaks, file_name):
 
-    """dump(peaks, file_name)
-
-    Dumps a peak list to a file.
+    """
+    @summary: Dumps a peak list to a file
  
-    @param peaks A list. List of Peak objects.
-    @param fle_name A string. Peak list file name.
-    @return Returns no values. 
+    @param peaks: List of Peak objects
+    @type peaks: ListType
+    @param fle_name: Peak list file name
+    @type file_name: StringType
+    @return: none
+    @rtype: NoneType
     """
 
     if not is_peak_list(peaks):
@@ -200,15 +203,19 @@ def dump(peaks, file_name):
 
 def write(peaks, file_name, minutes=False, verbose_level=0):
 
-    """write(peaks, file_name, minutes=False, verbose_level=0)
-
-    Writes a peak list to a file.
+    """
+    @summary: Writes a peak list to a file
  
-    @param peaks A list. List of Peak objects.
-    @param fle_name A string. Peak list file name.
-    @param minutes A boolean. If True, convert time to minutes. 
-    @param verbose_level An integer. Verbose level.
-    @return Returns no values. 
+    @param peaks: List of peak objects
+    @type peaks: ListType
+    @param fle_name: Peak list file name
+    @type file_name: StringType
+    @param minutes: If True, convert time to minutes
+    @type minutes: BooleanType
+    @param verbose_level: Verbose level
+    @type verbose_level: IntType
+    @return: none
+    @rtype: NoneType
     """
 
     if not is_peak_list(peaks):
@@ -337,13 +344,14 @@ def write(peaks, file_name, minutes=False, verbose_level=0):
 
 def read_chem_station(file_name):
 
-    """read_chem_station(file_name)
+    """
+    @summary: Reads ChemStation peak integration report, and returns
+        the list of peak objects.
 
-    Reads ChemStation peak integration report, and returns the list
-    of peak objects.
-
-    @param file_name A string. Peak list file name.
-    @return Returns the list of Peak objects.
+    @param file_name: Peak list file name
+    @type file_name: StringType
+    @return: Returns the list of Peak objects
+    @rtype: ListType
     """
 
     if not is_str(file_name):
