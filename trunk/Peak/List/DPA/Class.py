@@ -44,8 +44,8 @@ class Alignment:
     def __init__(self, experiment=None):
 
         """
-        @param experiment: Provide this to make a singleton alignment from an
-            Experiment
+        @param experiment: Provide this to make a singleton alignment object from
+            an experiment
         @type experiment: pyms.Experiment.Class.Experiment
         """
 
@@ -57,7 +57,7 @@ class Alignment:
     def __len__(self):
 
         """
-        @summary: Returns the length of alignment
+        @summary: Returns the length of the alignment
         """
 
         return len(self.alignments)
@@ -109,6 +109,8 @@ class Alignment:
             minutes. If False, retention time will be saved in seconds 
         @type minutes: BooleanType
         @rtype: NoneType
+
+        @author: Woon Wai Keen
         """
 
         try:
@@ -149,7 +151,11 @@ class Alignment:
 class Tree:
 
     """
-    @summary: Models a guide tree
+    @summary: Models pairwise alignment on the set of experiments, and builds a guide
+    tree
+
+    This class expects a set of experiments (ie. the 'Experiment' objects) given as
+    a list, and the alignment parameters.
 
     @author: Woon Wai Keen
     @author: Vladimir Likic
@@ -158,7 +164,7 @@ class Tree:
     def __init__(self, reps, D, gap):
         
         """
-        @param reps: A list of replicates (a list of Alignment or Experiement items)
+        @param reps: A list of replicates
         @param D: Retention time tolerance parameter
         @param gap: Gap parameter
         """
@@ -166,15 +172,24 @@ class Tree:
         self.D = D
         self.gap = gap
 
-        # Handle trivial cases of 0 and 1
-        if len(reps) in [0, 1]:
-            return
+        self.sim_matrix = self._sim_matrix(self.D, self.gap, reps)
+
+        if self.sim_matrix == None:
+            self.dist_matrix = None
+            self.tree = None
+        else:
+            self.dist_matrix = self._dist_matrix(self.sim_matrix)
+            self.tree = self._guide_tree(self.dist_matrix)
+
+    def _sim_matrix(self, D, gap, reps):
+
+        # handle trivial cases
+        if len(reps) in [0, 1]: return None
 
         n = len(reps)
         total_n = n * (n - 1) / 2
 
-        # Step 1: pairwise alignments and similarity matrix
-        print " Calculating similarity matrix for %d replicates (D=%.2f, gap=%.2f)" % \
+        print " Calculating pairwise alignments for %d replicates (D=%.2f, gap=%.2f)" % \
                 (n, D, gap)
 
         sim_matrix = numpy.zeros((n,n), dtype='f')
@@ -186,16 +201,30 @@ class Tree:
                 total_n = total_n - 1
                 print " -> %d replicate pairs remaining" % total_n
 
-        # Step 2 - change similarity matrix entries (i,j) to: max {matrix} - (i,j)
+        return sim_matrix
+
+    def _dist_matrix(self, sim_matrix):
+
+        # change similarity matrix entries (i,j) to max{matrix}-(i,j)
         sim_max = numpy.max(numpy.ravel(sim_matrix))
-        sim_matrix = sim_max - sim_matrix
+        dist_matrix = sim_max - sim_matrix
 
-        # set diagonal elements to zero
-        for i in range(n):
-            sim_matrix[i,i] = 0
+        # set diagonal elements of the similarity matrix to zero
+        for i in range(len(dist_matrix)):
+            dist_matrix[i,i] = 0
 
-        self.sim_matrix = sim_matrix
+        return dist_matrix
 
-        # Step 3 - perform hierchical clustering
-        self.tree = Pycluster.treecluster(distancematrix=sim_matrix, method='a')
+    def _guide_tree(self,sim_matrix):
+
+        n = len(sim_matrix)
+
+        print " Clustering %d pairwise alignments." % (n*(n-1)),
+
+        tree = Pycluster.treecluster(distancematrix=sim_matrix, method='a')
+
+        print "Done"
+
+        return tree
+
 
