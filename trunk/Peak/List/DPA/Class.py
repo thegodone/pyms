@@ -151,11 +151,11 @@ class Alignment:
 class Tree:
 
     """
-    @summary: Models pairwise alignment on the set of experiments, and builds a guide
-    tree
+    @summary: Models pairwise alignment on the set of experiments, and builds
+    a guide tree
 
-    This class expects a set of experiments (ie. the 'Experiment' objects) given as
-    a list, and the alignment parameters.
+    This class expects a set of experiments (ie. the 'Experiment' objects) given
+    as a list, and the alignment parameters.
 
     @author: Woon Wai Keen
     @author: Vladimir Likic
@@ -164,9 +164,15 @@ class Tree:
     def __init__(self, reps, D, gap):
         
         """
-        @param reps: A list of replicates
-        @param D: Retention time tolerance parameter
-        @param gap: Gap parameter
+        @param reps: A set of experiments 
+        @type reps: A list of Experiment instances
+        @param D: Retention time tolerance parameter for pairwise alignments
+        @type D: FloatType
+        @param gap: Gap parameter for pairwise alignments
+        @type gap: FloatType
+
+        @author: Woon Wai Keen
+        @author: Vladimir Likic
         """
 
         self.D = D
@@ -182,6 +188,21 @@ class Tree:
             self.tree = self._guide_tree(self.dist_matrix)
 
     def _sim_matrix(self, D, gap, reps):
+
+        """
+        @summary: calculates the similarity matrix for the set of replicate
+        experiments
+
+        @param D: Retention time tolerance parameter for pairwise alignments
+        @type D: FloatType
+        @param gap: Gap parameter for pairwise alignments
+        @type gap: FloatType
+        @param reps: A list of experiments 
+        @type reps: A list of Experiment instances
+
+        @author: Woon Wai Keen
+        @author: Vladimir Likic
+        """
 
         # handle trivial cases
         if len(reps) in [0, 1]: return None
@@ -205,6 +226,16 @@ class Tree:
 
     def _dist_matrix(self, sim_matrix):
 
+        """
+        @summary: Converts similarity matrix into a distance matrix
+
+        @param sim_matrix: the similarity matrix
+        @type sim_matrix: numpy.ndarray
+
+        @author: Woon Wai Keen
+        @author: Vladimir Likic
+        """
+
         # change similarity matrix entries (i,j) to max{matrix}-(i,j)
         sim_max = numpy.max(numpy.ravel(sim_matrix))
         dist_matrix = sim_max - sim_matrix
@@ -215,13 +246,23 @@ class Tree:
 
         return dist_matrix
 
-    def _guide_tree(self,sim_matrix):
+    def _guide_tree(self, dist_matrix):
 
-        n = len(sim_matrix)
+        """
+        @summary: Build a guide tree from the distance matrix
+
+        @param dist_matrix: distance matrix
+        @type sim_matrix: numpy.ndarray
+
+        @author: Woon Wai Keen
+        @author: Vladimir Likic
+        """
+
+        n = len(dist_matrix)
 
         print " Clustering %d pairwise alignments." % (n*(n-1)),
 
-        tree = Pycluster.treecluster(distancematrix=sim_matrix, method='a')
+        tree = Pycluster.treecluster(distancematrix=dist_matrix, method='a')
 
         print "Done"
 
