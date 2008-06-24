@@ -222,6 +222,7 @@ def modulate(rt1, rt2, D):
     """
 
     M = numpy.zeros(shape=(len(rt1), len(rt2)), dtype='d')
+
     for i in range(len(rt1)):
         for j in range(len(rt2)):
             M[i][j] = numpy.exp(-((rt1[i]-rt2[j]) / D)**2 / 2.)
@@ -250,34 +251,49 @@ def merge_alignments(A1, A2, traces):
     A2 = A2.alignments
 
     idx1 = idx2 = 0
+
+    # trace can either be 0, 1, or 2
+    # if it is 0, there are no gaps. otherwise, if it is 1 or 2,
+    # there is a gap in A2 or A1 respectively.
+
     for trace in traces:
-        # trace can either be 0, 1, or 2
-        # if it is 0, there are no gaps. otherwise, if it is 1 or 2,
-        # there is a gap in A2 or A1 respectively.
+
         if trace == 0:
+
             for i in range(len(A1)):
                 merged[i].append(A1[i][idx1])
+
             for j in range(len(A2)):
                 merged[1+i+j].append(A2[j][idx2])
+
             idx1 = idx1 + 1
             idx2 = idx2 + 1
+
         elif trace == 1:
+
             for i in range(len(A1)):
                 merged[i].append(A1[i][idx1])
+
             for j in range(len(A2)):
                 merged[1+i+j].append(None)
+
             idx1 = idx1 + 1
+
         elif trace == 2:
+
             for i in range(len(A1)):
                 merged[i].append(None)
+
             for j in range(len(A2)):
                 merged[1+i+j].append(A2[j][idx2])
+
             idx2 = idx2 + 1
 
     merged_alignments.alignments = merged
 
     # helper function for sorting alignments by its average
     def alignment_compare(x, y):
+
         x = [ _.rt for _ in filter(None, x)]
         y = [ _.rt for _ in filter(None, y)]
 

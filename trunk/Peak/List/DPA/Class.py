@@ -54,7 +54,11 @@ class Alignment(object):
         if experiment and isinstance(experiment, Experiment):
             self.alignments = [experiment.peaks[:]] # work on copy of the peaklist
             self.expr_codes = [experiment.expr_code]
-            self.similarity = 0.
+            self.similarity = 0.0
+        else:
+            self.alignments = []
+            self.expr_codes = []
+            self.similarity = None
 
     def __len__(self):
 
