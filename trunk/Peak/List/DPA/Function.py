@@ -33,6 +33,7 @@ from pyms.Utils.DP import dp
 from pyms.Experiment.Class import Experiment
 
 import Class
+import Utils
 
 def align_with_tree(T, min_peaks=1):
 
@@ -206,23 +207,9 @@ def merge_alignments(A1, A2, traces):
 
     ma.peakpos = merged
 
-    # helper function for sorting alignments by its average
-    def alignment_compare(x, y):
-
-        x = [ _.rt for _ in filter(None, x)]
-        y = [ _.rt for _ in filter(None, y)]
-
-        avg_x = numpy.sum(x) / len(x)
-        avg_y = numpy.sum(y) / len(y)
-
-        if avg_x < avg_y:
-            return -1
-        else:
-            return 1
-
     # sort according to average peak
     ma.transpose()
-    ma.peakpos.sort(alignment_compare)
+    ma.peakpos.sort(Utils.alignment_compare)
     ma.transpose()
 
     return ma
