@@ -70,44 +70,42 @@ def align_with_tree(T, min_peaks=1):
         print " -> %d item(s) remaining" % total
 
     # the final alignment is in the root. Filter min peaks and return
-    As[index].filter_min_peaks(min_peaks)
+    final_algt =  As[index]
 
-    return As[index]
+    # useful for within state alignment only
+    if min_peaks > 1:
+        final_algt.filter_min_peaks(min_peaks)
 
-def expr2alignment(exprl):
+    return final_algt
+
+def exprl2alignment(exprl):
 
     """
-    @summary: Converts experiment(s) into alignment(s)
+    @summary: Converts experiments into alignments
 
-    @param exprl: Experiment(s) to be converted into an alignment object(s)
-    @type exper: pyms.Experiment.Class.Experiment instance or list of such instances
+    The argument to this function is a list of experiment instances.
+
+    @param exprl: The list of experiments to be converted into an alignment objects
+    @type exper: ListType
 
     @author: Vladimir Likic
     """
 
-    if isinstance(exprl, Experiment):
+    if not is_list(exprl):
+        error("the argument is not a list")
 
-        algt = Class.Alignment(exprl)
+    algts = []
 
-        return algt
+    for item in exprl:
 
-    elif is_list(exprl):
+        if not isinstance(item, Experiment):
+            error("list items must be 'Experiment' instances")
+        else:
+            algt = Class.Alignment(item)
 
-        algts = []
+        algts.append(algt)
 
-        for item in exprl:
-
-            if not isinstance(item, Experiment):
-                error("list items must be 'Experiment' instances")
-            else:
-                algt = Class.Alignment(item)
-
-            algts.append(algt)
-
-        return algts
-
-    else:
-        error("the argument must be 'Experiment' instance, or list of such instances")
+    return algts
 
 def align(a1, a2, D, gap):
 

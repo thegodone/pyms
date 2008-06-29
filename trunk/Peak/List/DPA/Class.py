@@ -53,12 +53,6 @@ class Alignment(object):
         @author: Woon Wai Keen
         """
 
-        #tmp = copy.deepcopy(expr.peaks)
-        #peaks1= tmp[:4]
-        #peaks2 = tmp[4:8]
-        #peaks2[1] = None
-        #self.peakpos = [ peaks1, peaks2 ]
-
         if expr == None:
             self.peakpos = []
             self.expr_code =  []
@@ -71,10 +65,11 @@ class Alignment(object):
     def __len__(self):
 
         """
-        @summary: Returns length of the alignment: the number of peak positions
-        in the alignment
+        @summary: Returns the length of the alignment, defined as the number of
+        peak positions in the alignment
 
         @author: Woon Wai Keen
+        @author: Vladimir Likic
         """
 
         return len(self.peakpos[0])
@@ -82,19 +77,21 @@ class Alignment(object):
     def transpose(self):
 
         """
-        @summary: Transposes peakpositions in the alignment
+        @summary: Transposes peak positions in the alignment
 
         @author: Woon Wai Keen
         """
 
-        self.peakpos = [ [r[col] for r in self.peakpos]
+        self.peakpos = [ [ r[col] for r in self.peakpos ]
                          for col in range(len(self.peakpos[0]))
                        ]
 
     def filter_min_peaks(self, min_peaks):
 
         """
-        @summary: Filters alignment positions that have less than 'min_peaks'
+        @summary: Filters alignment positions that have less peaks than 'min_peaks'
+
+        This function is useful only for within state alignment.
 
         @param min_peaks: Minimum number of peaks required for the alignment
             position to survive filtering
@@ -108,6 +105,7 @@ class Alignment(object):
         self.peakpos =  [ x for x in self.peakpos
                           if len(filter(None, x)) >= min_peaks
                         ]
+
         self.transpose()
 
     def write_csv(self, rt_file_name, area_file_name, minutes=True):
@@ -122,10 +120,9 @@ class Alignment(object):
         @type rt_file_name: StringType
         @param area_file_name: The name for the areas alignment file
         @type area_file_name: StringType
-        @param minutes: An indicator whether to save retention times in
-            minutes. If False, retention time will be saved in seconds 
+        @param minutes: An optional indicator whether to save retention times
+            in minutes. If False, retention time will be saved in seconds 
         @type minutes: BooleanType
-        @rtype: NoneType
 
         @author: Woon Wai Keen
         """
