@@ -2,33 +2,54 @@
 Dynamic Programming routine
 """
 
+ #############################################################################
+ #                                                                           #
+ #    PyMS software for processing of metabolomic mass-spectrometry data     #
+ #    Copyright (C) 2005-8 Vladimir Likic                                    #
+ #                                                                           #
+ #    This program is free software; you can redistribute it and/or modify   #
+ #    it under the terms of the GNU General Public License version 2 as      #
+ #    published by the Free Software Foundation.                             #
+ #                                                                           #
+ #    This program is distributed in the hope that it will be useful,        #
+ #    but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+ #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          #
+ #    GNU General Public License for more details.                           #
+ #                                                                           #
+ #    You should have received a copy of the GNU General Public License      #
+ #    along with this program; if not, write to the Free Software            #
+ #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.              #
+ #                                                                           #
+ #############################################################################
+
 import numpy
 
-def dp(S, gap_penalty, peak_list1=None, peak_list2=None):
+def dp(S, gap_penalty):
     
-    """ Solves optimal path in score matrix based on global sequence alignment
+    """ 
+    @summary: Solves optimal path in score matrix based on global sequence alignment
 
-    @param S Score matrix
-    @param gap_penalty Gap penalty
-    @param peak_list1 Peak list that coresponds to row index in score matrix
-    @param peak_list2 Peak list that coresponds to column index in score matrix
+    @param S: Score matrix
+    @type S: numpy.
+    @param gap_penalty: Gap penalty
+    @type gap_penalty: FloatType
+    @return: A dictionary of results
+    @rtype: DictType
 
-    @return A dictionary of results
+    @author: Tim Erwin
+    @author: Vladimir Likic
     """
     
-    if(peak_list1 and peak_list2==None) or (peak_list1==None and peak_list2):
-        error("Both peak lists must be defined")
-    
-    row_length=len(S[:,0])
-    col_length=len(S[0,:])
+    row_length = len(S[:,0])
+    col_length = len(S[0,:])
 
     #D contains the score of the optimal alignment
     D = numpy.zeros((row_length+1,col_length+1), dtype='d')
-    for i in range(1,row_length+1):
+    for i in range(1, row_length+1):
         D[i,0] = gap_penalty*i
-    for j in range(1,col_length+1):
+    for j in range(1, col_length+1):
         D[0,j] = gap_penalty*j
-    D[0,0] = 0.
+    D[0,0] = 0.0
     D[1:(row_length+1), 1:(col_length+1)] = S.copy();
 
     # Directions for trace
@@ -54,18 +75,8 @@ def dp(S, gap_penalty, peak_list1=None, peak_list2=None):
 
             darray = [D[i-1,j-1]+S[i-1,j-1], D[i-1,j]+gap_penalty, D[i,j-1]+gap_penalty]
             D[i,j] = min(darray)
-            direction = darray.index(D[i,j])
-
-            if(peak_list1 and peak_list2 and direction != 0):
-                #Make sure gaps are inserted in order of retention time
-                if(peak_list1[i-1].rt < peak_list2[j-1].rt):
-                    direction = 2
-                    D[i,j] = D[i,j-1]+gap_penalty
-                elif(peak_list1[i-1].rt > peak_list2[j-1].rt):
-                    direction = 1
-                    D[i,j] = (D[i-1,j]+gap_penalty)
-
-            trace_matrix[i,j] = direction
+            #Store direction in trace matrix
+            trace_matrix[i,j] = darray.index(D[i,j])
 
     # Trace back from bottom right
     trace = []
@@ -79,13 +90,13 @@ def dp(S, gap_penalty, peak_list1=None, peak_list2=None):
     while direction != 3:
         
         if direction == 0: #Match
-            i=i-1
-            j=j-1
+            i = i-1
+            j = j-1
             matches.append([i,j])
         elif direction == 1: #peaks1 has no match
-            i=i-1
+            i = i-1
         elif direction == 2: #peaks2 has no match
-            j=j-1
+            j = j-1
         p.append(i-1)
         q.append(j-1)
         trace.append(direction)
