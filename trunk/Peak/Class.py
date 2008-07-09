@@ -159,6 +159,21 @@ class Peak:
 
         self.confidence = float(confidence)
 
+    def _set_mass_spectrum(self, mass_spectrum):
+        self.mass_spectrum = mass_spectrum
+
+    def set_mass_intensity_list(self, list):
+
+        """set_intensity(intensity)
+
+        Sets peak intensity.
+
+        @param intensity A number
+        """
+
+        #TODO: Add error checking!!
+        self.mass_intensity_list = list
+
     def set_mass_spectrum(self, andi_data):
 
         """
