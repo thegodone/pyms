@@ -34,15 +34,16 @@ from pyms.Utils.IO import file_lines
 def read_experiments(file_name):
 
     """ 
-    @summary: Reads a file containing AMDIS experiments into a list of Experiment objects
+    @summary: Reads a file containing AMDIS experiments into a list of
+    Experiment objects
 
-    @param file_name: The name of the file which lists AMDIS file names, one file per line
+    @param file_name: The name of the file which lists AMDIS file names,
+        one file per line
     @type file_name: StringType
     @return: A list of Experiment objects
     @rtype: ListType
 
     @author: Tim Erwin
-    @author: Vladimir Likic
     """
 
     experiment_files = file_lines(file_name)
@@ -65,13 +66,13 @@ def load_ELU(file_name, uncertain_peaks=0):
 
     @param file_name: A AMDIS ELU file name
     @type file_name: StringType
-    @param uncertain_peaks: Boolean flag used to include uncertain masses under a peak
+    @param uncertain_peaks: Boolean flag used to include uncertain masses
+        under a peak
     @type uncertain_peaks: BooleanType 
     @return: A  Experiment object
     @rtype: pyms.Experiment.Class.Experiment
 
     @author: Tim Erwin
-    @author: Vladimir Likic
     """
 
     lines = file_lines(file_name)
@@ -109,7 +110,8 @@ def load_ELU(file_name, uncertain_peaks=0):
             bp_match = re.search(r'AM(\d+)',line)
             if bp_match: bp = float(bp_match.group(1))
 
-        #Get mass list under each peak, intensities are stored as percentages of base peak
+        #Get mass list under each peak, intensities are stored as percentages
+        #of base peak
         mass_intensity_match = re.findall(r'\((\d+)\,(\d+) \)',line)
         for match in mass_intensity_match:
             mass = int(match[0])
@@ -144,13 +146,14 @@ def load_FIN(file_name, uncertain_peaks=0):
 
     @param file_name: A AMDIS ELU file name
     @type file_name: StringType
-    @param uncertain_peaks: Boolean flag used to include uncertain masses under a peak
+    @param uncertain_peaks: Boolean flag used to include uncertain masses
+        under a peak
     @type uncertain_peaks: BooleanType 
-    @return: A  Experiment object
+
+    @return: An Experiment object
     @rtype: pyms.Experiment.Class.Experiment
 
     @author: Tim Erwin
-    @author: Vladimir Likic
     """
 
     if not is_str(file_name):
@@ -161,7 +164,5 @@ def load_FIN(file_name, uncertain_peaks=0):
         error("Cannot open file '%s'" % file_name)
 
     print " -> Processing FIN file '%s'" % (file_name)
-
-
 
 

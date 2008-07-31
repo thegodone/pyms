@@ -34,15 +34,16 @@ from pyms.Utils.Error import error
 def read_experiments(file_name):
 
     """ 
-    @summary: Reads a file containing Xcalibur experiments into a list of Experiment objects
+    @summary: Reads a file containing Xcalibur experiments into a list of Experiment
+        objects
 
-    @param file_name: The name of the file which lists Xcalibur file names, folled by corresponding netCDF file
+    @param file_name: The name of the file which lists Xcalibur file names, folled
+        by corresponding netCDF file
     @type file_name: StringType
     @return: A list of Experiment objects
     @rtype: ListType
 
     @author: Tim Erwin
-    @author: Vladimir Likic
     """
 
     lines = file_lines(file_name)
@@ -66,15 +67,16 @@ def read_experiments(file_name):
 def construct_experiment_from_peaks(file_name):
 
     """ 
-    @summary: Reads a file containing peaks exported from Xcalibur into a Experiment object
+    @summary: Reads a file containing peaks exported from Xcalibur into a Experiment
+    object
 
-    @param file_name: The name of the file which lists contains Xcalibur file names, folled by corresponding netCDF file
+    @param file_name: The name of the file which lists contains Xcalibur file names,
+        folled by corresponding netCDF file
     @type file_name: StringType
     @return: A list of Experiment objects
     @rtype: ListType
 
     @author: Tim Erwin
-    @author: Vladimir Likic
     """
 
     lines = file_lines(file_name)
@@ -98,17 +100,18 @@ def construct_experiment_from_peaks(file_name):
 def load_Xcalibur(file_name, netcdf_file):
 
     """ 
-    @summary: Reads a tab delimited txt file from Xcalibur and creates a pyms.Experiment instance
+    @summary: Reads a tab delimited txt file from Xcalibur and creates a pyms.Experiment
+    instance
 
     @param file_name: The name of the tab delimited txt file exported from Xcalibur
     @type file_name: StringType
     @param netcdf_file: Corresponding netCDF file for exported Xcalibur results
     @type netcdf_file: StringType
+
     @return: A Experiment object
     @rtype: pyms.Experiment.Class.Experiment
 
     @author: Tim Erwin
-    @author: Vladimir Likic
     """
 
     lines = file_lines(file_name)
@@ -151,13 +154,14 @@ def load_peaks(peak_file):
     """ 
     @summary: Loads a file containing one or more peaks exported from Xcalibur
 
-    @param peak_file: The name of the file which contains one or more peaks exported from Xcalibur
+    @param peak_file: The name of the file which contains one or more peaks
+        exported from Xcalibur
     @type peak_file: StringType
+
     @return: A Peak object
     @rtype: numpy.Peak.Class.Peak
 
     @author: Tim Erwin
-    @author: Vladimir Likic
     """
 
     #Initialise list to store peaks
@@ -199,5 +203,4 @@ def load_peaks(peak_file):
     peak.set_mass_intensity_list(mass_intensity_list)
     peak_list.append(peak)
     return peak_list
-
 

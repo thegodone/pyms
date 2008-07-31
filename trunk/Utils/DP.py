@@ -27,7 +27,8 @@ import numpy
 def dp(S, gap_penalty):
     
     """ 
-    @summary: Solves optimal path in score matrix based on global sequence alignment
+    @summary: Solves optimal path in score matrix based on global sequence
+    alignment
 
     @param S: Score matrix
     @type S: numpy.
@@ -37,7 +38,6 @@ def dp(S, gap_penalty):
     @rtype: DictType
 
     @author: Tim Erwin
-    @author: Vladimir Likic
     """
     
     row_length = len(S[:,0])
@@ -110,5 +110,6 @@ def dp(S, gap_penalty):
     q.reverse()
     trace.reverse()
     matches.reverse()
+
     return {'p':p, 'q':q, 'trace':trace, 'matches':matches, 'D':D, 'phi':trace_matrix}
 
