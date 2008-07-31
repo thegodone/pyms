@@ -31,9 +31,11 @@ from pyms.Utils.Utils import *
 class Peak:
 
     """
-    @summary: A class representing a signal peak
+    @summary: Models signal peak
 
-    Peak object is initialised with retention time and raw peak area.
+    A peak object is initialised with retention time and raw peak area.
+
+    @author: Vladimir Likic
     """
 
     def __init__(self, rt, raw_area):
@@ -64,6 +66,7 @@ class Peak:
 
         @param intensity: Intensity value
         @type intensity: FloatType or IntType
+
         @return: none
         @rtype: NoneType
         """
@@ -81,6 +84,7 @@ class Peak:
         @param pt_bounds: A list containing left, apex, and right
             peak boundary (points)
         @type pt_bounds: ListType
+
         @return: none
         @rtype: NoneType
         """
@@ -102,9 +106,10 @@ class Peak:
         """
         @summary: Sets peak retention time boundaries
 
-        @param rt_bounds: A list containing left, apex, and right peak
-            boundary (retention time)
+        @param rt_bounds: A list of four elements containing left, apex,
+            and right peak boundary in time units
         @type rt_bounds: ListType
+
         @return: none 
         @rtype: NoneType
         """
@@ -131,6 +136,7 @@ class Peak:
 
         @param norm_area: Normalised area value
         @type norm_area: IntType or FloatType
+
         @return: none
         @rtype: NoneType
         """
@@ -147,6 +153,7 @@ class Peak:
 
         @param confidence: A number between 0 and 1
         @type confidence: IntType or FloatType
+
         @return: none
         @rtype: NoneType
         """
@@ -160,15 +167,22 @@ class Peak:
         self.confidence = float(confidence)
 
     def _set_mass_spectrum(self, mass_spectrum):
+
+        """
+        @summary: Sets peak mass spectrum
+
+        @param mass_spectrum: a peak mass spectrum 
+        @type mass_spectrum: ListType
+        """
+
         self.mass_spectrum = mass_spectrum
 
     def set_mass_intensity_list(self, list):
 
-        """set_intensity(intensity)
+        """
+        @summary: Sets peak intensity.
 
-        Sets peak intensity.
-
-        @param intensity A number
+        @param intensity: A number
         """
 
         #TODO: Add error checking!!
