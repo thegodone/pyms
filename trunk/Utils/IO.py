@@ -34,8 +34,10 @@ def open_for_reading(file_name):
 
     @param file_name: Name of the file to be opened for reading
     @type file_name: StringType
+
     @return: Pointer to the opened file
     @rtype: FileType
+
     @author: Vladimir Likic
     """
 
@@ -55,8 +57,10 @@ def open_for_writing(file_name):
 
     @param file_name: Name of the file to be opened for writing
     @type file_name: StringType
+
     @return: Pointer to the opened file
     @rtype: FileType
+
     @author: Vladimir Likic
     """
 
@@ -75,8 +79,10 @@ def close_for_reading(fp):
 
     @param fp: A file pointer, previously opened for reading
     @type fp: FileType
+
     @return: none
     @rtype: NoneType
+
     @author: Vladimir Likic
     """
 
@@ -89,8 +95,10 @@ def close_for_writing(fp):
 
     @param fp: A file pointer, previously opened for writing
     @type fp: FileType
+
     @return: none
     @rtype: NoneType
+
     @author: Vladimir Likic
     """
 
@@ -103,8 +111,10 @@ def file_lines(file_name):
 
     @param file_name: Name of a file
     @type: StringType
+
     @return: A list of lines
     @rtype: ListType
+
     @author: Vladimir Likic
     """
 
@@ -136,8 +146,10 @@ def save_data(file_name, data, format_str="%.6f", prepend="", sep=" ",
     @type: StringType
     @param compressed: A boolean. If True, the output will be gzipped
     @type: BooleanType
+
     @return: none
     @rtype: NoneType
+
     @author: Vladimir Likic
     """
 

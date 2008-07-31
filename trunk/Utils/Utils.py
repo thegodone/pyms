@@ -35,8 +35,10 @@ def is_str(arg):
 
     @param arg: The argument to be evaluated as a string
     @type arg: arbitrary
+
     @return: A boolean indicator True or False
     @rtype: BooleanType
+
     @author: Vladimir Likic
     """
 
@@ -53,8 +55,10 @@ def is_int(arg):
 
     @param arg: The argument to be evaluated as an integer
     @type arg: arbitrary
+
     @return: A boolean indicator True or False
     @rtype: BooleanType
+
     @author: Vladimir Likic
     """
 
@@ -70,8 +74,10 @@ def is_float(arg):
 
     @param arg: The argument to be evaluated as a float
     @type arg: arbitrary
+
     @return: A boolean indicator True or False
     @rtype: BooleanType
+
     @author: Vladimir Likic
     """
 
@@ -88,8 +94,10 @@ def is_number(arg):
    
     @param arg: The argument to be evaluated as a number
     @type arg: arbitrary
+
     @return: A boolean indicator True or False
     @rtype: BooleanType
+
     @author: Vladimir Likic
     """
 
@@ -106,8 +114,10 @@ def is_list(arg):
 
     @param arg: The argument to be evaluated as a list
     @type arg: arbitrary
+
     @return: A boolean indicator True or False
     @rtype: BooleanType
+
     @author: Vladimir Likic
     """
 
@@ -125,8 +135,10 @@ def is_array(arg):
 
     @param arg: The argument to be evaluated as a numpy array
     @type arg: arbitrary
+
     @return: A boolean indicator True or False
     @rtype: BooleanType 
+
     @author: Vladimir Likic
     """
 
@@ -140,13 +152,15 @@ def is_str_num(arg):
     """
     @summary: determines if the argument is a string in the format of a number
 
-    The number can be an integer, or floating point in scientific or engineering
-    format.
+    The number can be an integer, or alternatively floating point in scientific
+    or engineering format.
 
     @param arg: A string to be evaluate as a number
     @type arg: StringType
+
     @return: A boolean indicator True or False
     @rtype:  BooleanType
+
     @author: Gyro Funch (from Active State Python Cookbook)
     """
 

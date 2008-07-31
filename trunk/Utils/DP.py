@@ -34,6 +34,7 @@ def dp(S, gap_penalty):
     @type S: numpy.
     @param gap_penalty: Gap penalty
     @type gap_penalty: FloatType
+
     @return: A dictionary of results
     @rtype: DictType
 

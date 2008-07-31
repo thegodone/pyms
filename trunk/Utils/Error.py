@@ -34,8 +34,10 @@ def error(message=None):
 
     @param message: The error message to be printed
     @type message: StringType
+
     @return: none
     @rtype: NoneType
+
     @author: Lewis Lee
     @author: Vladimir Likic
     """
@@ -88,6 +90,7 @@ def stop(message=None):
 
     @param message: The message to be printed
     @type message: StringType
+
     @return: none
     @rtype: NoneType
     """
