@@ -188,7 +188,7 @@ class ChemStation:
 
         return self.__intensity_matrix
 
-    def get_time(self):
+    def get_time_array(self):
 
         """
         @summary: Returns the array of time values
@@ -456,7 +456,7 @@ class Xcalibur:
         if len(time_list) > len(intensity_matrix):
             scan_index = file.var("scan_index")
             scanindex = scan_index.get().tolist()
-            #Count leading zero
+            # Count leading zero
             count = 0
             while scanindex[count]==0 and len(intensity_matrix) < len(time_list):
               count+=1
@@ -514,7 +514,7 @@ class Xcalibur:
 
         return self.__intensity_matrix
 
-    def get_time(self):
+    def get_time_array(self):
 
         """
         @summary: Returns the array of time values
