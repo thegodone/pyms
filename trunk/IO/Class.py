@@ -33,6 +33,14 @@ class IonChromatogram:
     """
     @summary: Models ion chromatogram
 
+    An ion chromatogram can be either m/z channel intensities as a
+    function of time, or cumulative intensities over all measured
+    m/z. In the latter case the ion chromatogram is total ion
+    chromatogram (TIC).
+
+    The attribute '_mass' gives the m/z value of the ion chromatogram.
+    If _mass = None, the ion chromatogram is TIC.
+
     @author: Lewis Lee
     @author: Vladimir Likic
     """
@@ -81,7 +89,7 @@ class IonChromatogram:
     def __calc_time_step(self, time_array):
 
         """
-        @summary: Calculates the time step of the IonChromatogram
+        @summary: Calculates the time step
 
         @param time_array: An array of retention times
         @type time_array: numpy.ndarray
@@ -162,7 +170,7 @@ class IonChromatogram:
     def set_intensity_array(self, ia):
 
         """
-        @summary: Sets the value of intensity array
+        @summary: Sets the value for the intensity array
 
         @param ia: An array of intensity values
         @type ia: numpy.ndarray
@@ -175,7 +183,7 @@ class IonChromatogram:
     def get_time_step(self):
 
         """
-        @summary: Returns time step
+        @summary: Returns the time step
 
         @return: Time step
         @rtype: FloatType
