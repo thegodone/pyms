@@ -1,5 +1,5 @@
 """
-Provides function for reading experiments
+Functions related to experiment I/O
 """
 
  #############################################################################
@@ -31,12 +31,15 @@ from pyms.Utils.Error import *
 def load_expr(file_name):
 
     """
-    @summary: Loads experiment saved with 'dump'
+    @summary: Loads an experiment saved with 'dump_expr'
  
     @param file_name: Experiment file name
     @type file_name: StringType
+
     @return: none
     @rtype: NoneType
+
+    @author: Vladimir Likic
     """
 
     if not is_str(file_name):
@@ -59,8 +62,11 @@ def dump_expr(expr, file_name):
     @type expr: Experiment
     @param fle_name: Experiment file name
     @type file_name: StringType
+
     @return: none
     @rtype: NoneType
+
+    @author: Vladimir Likic
     """
 
     if not isinstance(expr, Class.Experiment):
@@ -76,14 +82,17 @@ def dump_expr(expr, file_name):
 def read_expr(file_name):
 
     """
-    @summary: Reads the experiment files into a list of
-        Experiment objects
+    @summary: Reads the experiment files into a list of Experiment
+        objects
 
     @param file_name: The name of the file which lists experiment
         dump file names, one file per line
     @type file_name: StringType
+
     @return: A list of 'Experiment' instances
     @rtype: ListType
+
+    @author: Vladimir Likic
     """
 
     if not is_str(file_name):

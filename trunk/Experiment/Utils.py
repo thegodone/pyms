@@ -24,12 +24,20 @@ Utilities for the subpackage Experiment
 
 def cmp_peak_area(peak1, peak2):
 
-    """cmp_peak_area(peak1, peak2)
+    """
+    @summary: Compares normalised areas of two peak objects
 
-    Compares peak normalised area.
+    @param peak1: A first peak object
+    @type peak1: An instance of pyms.Peak.Class.Peak
+    @param peak2: A second peak object.
+    @type peak2: An instance of pyms.Peak.Class.Peak
 
-    @param peak1 A peak object.
-    @param peak2 A peak object.
+    @return: Negative if peak1.norm_area < peak2.norm_area, positive if
+         peak1.norm_area > peak2.norm_area, and zero if peak1.norm_area
+         == peak2.norm_area
+    @rtype: IntType 
+
+    @author: Vladimir Likic
     """
 
     return cmp(peak1.norm_area, peak2.norm_area)

@@ -1,5 +1,5 @@
 """
-Models an experiment which may consist of one or more replicate runs 
+Model experiment objects
 """
 
  #############################################################################
@@ -32,7 +32,9 @@ from pyms import Peak
 class Experiment:
 
     """
-    @summary: A class representing a single experiment
+    @summary: Models an experiment
+
+    @author: Vladimir Likic
     """
 
     def __init__(self, expr_code, peaks):
@@ -54,12 +56,12 @@ class Experiment:
         @summary: Finds the reference peak, sets the reference peak,
             and removes it from the list of peaks.
 
-        @param ref_peak_tag: Tag string for the chosen reference
-            peak. For example, two potential reference peaks may be
-            annotated in the peak file, "RT-SI" and "RT-NV". If the first
-            is to be used as the reference peak, ref_peak_tag should be
-            set to "si".
+        @param ref_peak_tag: Tag string for the chosen reference peak. For
+            example, two potential reference peaks may be annotated in the
+            peak file, "RT-SI" and "RT-NV". If the first is to be used as
+            the reference peak, ref_peak_tag is set to "si".
         @type ref_peak_tag: StringType
+
         @return: none
         @rtype: NoneType
         """
@@ -104,11 +106,12 @@ class Experiment:
     def remove_blank_peaks(self, peak_remove_tag):
 
         """
-        @summary: Removes peaks which whose tag is 'peak_remove_tag'
+        @summary: Removes peaks whose tag equals 'peak_remove_tag'
 
-        @param peak_remove_tag: Peaks tagged by this tag will
-            be discarded. Normally, peak_remove_tag equals "blank".
+        @param peak_remove_tag: Peaks tagged by this tag will be discarded.
+            Normally, peak_remove_tag equals "blank".
         @type peak_remove_tag: StringType
+
         @return: none
         @rtype: NoneType
         """
@@ -133,7 +136,8 @@ class Experiment:
 
         @param to_reference: True if reference is used, False otherwise
         @type to_reference: BooleanType
-        @return: none
+
+        @return: None
         @rtype: NoneType
         """
 
@@ -153,7 +157,8 @@ class Experiment:
 
         @param n: Number of strongest peaks
         @type n: IntType
-        @return: none
+
+        @return: None
         @rtype: NoneType
         """
 
@@ -167,12 +172,12 @@ class Experiment:
 
         """
         @summary: Purge peaks which are below the threshold expressed as the
-            fraction of the _normalized_ reference peak area (i.e. this
-            is exactly a normalized peak area peak.norm_area).
+        fraction peak.norm_area
 
         @param norm_area_threshold: Threshold value
         @type norm_area_threshold: IntType or FloatType
-        @return: none
+
+        @return: None
         @rtype: NoneType
         """
 
@@ -192,11 +197,12 @@ class Experiment:
         """
         @summary: Scales all normalised peak areas by a factor
 
-        Typically used to adjust DNA normalisation scaling.
+        Used in the past to adjust DNA normalisation scaling.
 
         @param scale_factor: Scale factor value
         @type scale_factor: IntType or FloatType
-        @return: none
+
+        @return: None
         @rtype: NoneType
         """
 
@@ -213,11 +219,12 @@ class Experiment:
     def sele_rt_range(self, rt_range):
 
         """
-        @summary: Discards all peaks with retention times outside
-            the specified range
+        @summary: Discards all peaks with retention times outside the
+        specified range
 
         @param rt_range: Contains two numbers [rt_min, rt_max]
         @type rt_range: ListType
+
         @return: none
         @rtype: NoneType
         """
