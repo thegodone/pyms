@@ -25,7 +25,7 @@ Provides classes for pyms.IO wide use
 import numpy
 
 from pyms.Utils.Error import error
-from pyms.Utils.Utils import is_str, is_int, is_array
+from pyms.Utils.Utils import is_str, is_int, is_array, is_list
 from pyms.Utils.IO import open_for_writing, close_for_writing 
 
 class IonChromatogram:
@@ -40,42 +40,40 @@ class IonChromatogram:
     (TIC).
 
     The nature of an IonChromatogram object can be revealed by inspecting
-    the value of the attribute '_mass'. This is se to the m/z value of the
+    the value of the attribute '__mass'. This is se to the m/z value of the
     ion chromatogram, or to None for TIC.
 
     @author: Lewis Lee
     @author: Vladimir Likic
     """
 
-    def __init__(self, ia, time_array, mass=None):
+    def __init__(self, ia, time_list, mass=None):
 
         """
-        @param ia: A numpy object representing an array of intensity
-            values (i.e. ion chromatogram intensity values)
+        @param ia: Ion chromatogram intensity values
         @type ia: numpy.ndarray
-        @param time_array: A numpy object representing an array of
-            retention times
-        @type time_array: numpy.ndarray
+        @param time_list: A list of ion chromatogram retention times
+        @type time_list: ListType
         @param mass: Mass of ion chromatogram (Null if TIC)
         @type mass: IntType
         """
 
         if not is_array(ia):
-            error("'ia' must be a numpy.")
+            error("'ia' must be a numpy.ndarray object")
 
-        if not is_array(time_array):
-            error("'time_array' must be a numpy.")
+        if not is_list(time_list):
+            error("'time_list' must be a list")
 
         if mass != None and not is_int(mass):
-            error("'mass' must be an integer.")
+            error("'mass' must be an integer")
 
-        if ia.size != time_array.size:
-            error("Intensity and time arrays differ in length.")
+        if ia.size != len(time_list):
+            error("Intensity array and time list differ in length")
 
-        self._ia = ia
-        self._time_array = time_array
-        self._mass = mass
-        self._time_step = self.__calc_time_step(time_array) 
+        self.__ia = ia
+        self.__time_list = time_list
+        self.__mass = mass
+        self.__time_step = self.__calc_time_step(time_list) 
 
     def __len__(self):
 
@@ -86,22 +84,22 @@ class IonChromatogram:
         @rtype: IntType
         """
 
-        return self._ia.size
+        return self.__ia.size
 
-    def __calc_time_step(self, time_array):
+    def __calc_time_step(self, time_list):
 
         """
         @summary: Calculates the time step
 
-        @param time_array: An array of retention times
-        @type time_array: numpy.ndarray
+        @param time_list: A list of retention times
+        @type time_list: ListType
         @return: Time step value 
         @rtype: FloatType
         """
 
         td_list = []
-        for ii in range(time_array.size-1):
-            td = time_array[ii+1]-time_array[ii]
+        for ii in range(len(time_list)-1):
+            td = time_list[ii+1]-time_list[ii]
             td_list.append(td) 
 
         td_array = numpy.array(td_list)
@@ -123,10 +121,10 @@ class IonChromatogram:
         if not is_int(ix):
             error("index not an integer")
 
-        if ix < 0 or ix > self._ia.size - 1:
+        if ix < 0 or ix > self.__ia.size - 1:
             error("index out of bounds")
 
-        return self._ia[ix]
+        return self.__ia[ix]
 
     def get_intensity_array(self):
 
@@ -137,7 +135,7 @@ class IonChromatogram:
         @rtype: numpy.ndarray
         """
 
-        return self._ia
+        return self.__ia
 
     def get_time_at_index(self, ix):
 
@@ -153,21 +151,21 @@ class IonChromatogram:
         if not is_int(ix):
             error("index not an integer")
 
-        if ix < 0 or ix > self._time_array.size - 1:
+        if ix < 0 or ix > len(self.__time_list) - 1:
             error("index out of bounds")
 
-        return self._time_array[ix]
+        return self.__time_list[ix]
 
-    def get_time_array(self):
+    def get_time_list(self):
 
         """
-        @summary: Returns the entire time array
+        @summary: Returns the time list 
 
-        @return: Time array
-        @rtype: numpy.ndarray
+        @return: Time list 
+        @rtype: ListType
         """
 
-        return self._time_array
+        return self.__time_list
 
     def set_intensity_array(self, ia):
 
@@ -180,7 +178,7 @@ class IonChromatogram:
         @rtype: NoneType
         """
 
-        self._ia = ia
+        self.__ia = ia
 
     def get_time_step(self):
 
@@ -191,20 +189,20 @@ class IonChromatogram:
         @rtype: FloatType
         """
 
-        return self._time_step
+        return self.__time_step
 
     def is_tic(self):
 
         """
-        @summary: Returns True if the ion chromatogram is a total
-            ion chromatogram (TIC), or False otherwise
+        @summary: Returns True if the ion chromatogram is a total ion
+            chromatogram (TIC), or False otherwise
 
         @return: A boolean value indicating if the ion chromatogram
             is a total ion chromatogram (True) or not (False)
         @rtype: BooleanType
         """
 
-        if self._mass == None:
+        if self.__mass == None:
             return True
         else:
             return False
@@ -220,6 +218,7 @@ class IonChromatogram:
         @param minutes: A boolean value indicating whether time is in
             minutes (True) or seconds (False)
         @type minutes: BooleanType
+
         @return: none
         @rtype: NoneType
         """
@@ -230,15 +229,15 @@ class IonChromatogram:
         fp = open_for_writing(file_name)
 
         ix = 0
-        n = self._ia.size
+        n = self.__ia.size
 
         while ix < n:
             if minutes:
-                fp.write("%8.3f  %10d\n" % (self._time_array[ix]/60.0, \
-                        self._ia[ix]))
+                fp.write("%8.3f  %10d\n" % (self.__time_list[ix]/60.0, \
+                        self.__ia[ix]))
             else:
-                fp.write("%8.3f  %10d\n" % (self._time_array[ix], \
-                        self._ia[ix]))
+                fp.write("%8.3f  %10d\n" % (self.__time_list[ix], \
+                        self.__ia[ix]))
             ix = ix + 1
 
         close_for_writing(fp)
