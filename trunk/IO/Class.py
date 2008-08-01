@@ -33,13 +33,15 @@ class IonChromatogram:
     """
     @summary: Models ion chromatogram
 
-    An ion chromatogram can be either m/z channel intensities as a
-    function of time, or cumulative intensities over all measured
-    m/z. In the latter case the ion chromatogram is total ion
-    chromatogram (TIC).
+    An ion chromatogram is a set of intensities as a function of retention
+    time. This can can be either m/z channel intensities (for example, ion
+    chromatograms at m/z = 65), or cumulative intensities over all measured
+    m/z. In the latter case the ion chromatogram is total ion chromatogram
+    (TIC).
 
-    The attribute '_mass' gives the m/z value of the ion chromatogram.
-    If _mass = None, the ion chromatogram is TIC.
+    The nature of an IonChromatogram object can be revealed by inspecting
+    the value of the attribute '_mass'. This is se to the m/z value of the
+    ion chromatogram, or to None for TIC.
 
     @author: Lewis Lee
     @author: Vladimir Likic
