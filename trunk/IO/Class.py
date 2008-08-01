@@ -35,7 +35,7 @@ class IonChromatogram:
 
     An ion chromatogram is a set of intensities as a function of retention
     time. This can can be either m/z channel intensities (for example, ion
-    chromatograms at m/z = 65), or cumulative intensities over all measured
+    chromatograms at m/z=65), or cumulative intensities over all measured
     m/z. In the latter case the ion chromatogram is total ion chromatogram
     (TIC).
 
@@ -93,6 +93,7 @@ class IonChromatogram:
 
         @param time_list: A list of retention times
         @type time_list: ListType
+
         @return: Time step value 
         @rtype: FloatType
         """
@@ -114,6 +115,7 @@ class IonChromatogram:
 
         @param ix: An index
         @type ix: IntType
+
         @return: Intensity value
         @rtype: FloatType
         """
@@ -144,6 +146,7 @@ class IonChromatogram:
 
         @param ix: An index
         @type ix: IntType
+
         @return: Time value
         @rtype: FloatType
         """
@@ -174,6 +177,7 @@ class IonChromatogram:
 
         @param ia: An array of intensity values
         @type ia: numpy.ndarray
+
         @return: none
         @rtype: NoneType
         """
@@ -215,8 +219,8 @@ class IonChromatogram:
         @param file_name: A string representing the file name to write
             the ion chromatogram to
         @type file_name: StringType
-        @param minutes: A boolean value indicating whether time is in
-            minutes (True) or seconds (False)
+        @param minutes: A boolean value indicating whether to write
+            time in minutes
         @type minutes: BooleanType
 
         @return: none
