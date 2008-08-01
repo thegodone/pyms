@@ -293,7 +293,7 @@ class ChemStation:
 
         return mass_spectrum 
 
-    def get_mass_list(self):
+    def get_mass_array(self):
 
         """
         @summary: Returns the m/z list
