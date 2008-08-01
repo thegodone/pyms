@@ -293,7 +293,7 @@ class ChemStation:
 
         return mass_spectrum 
 
-    def get_mass_array(self):
+    def get_mass_list(self):
 
         """
         @summary: Returns the m/z list
@@ -625,7 +625,7 @@ class Xcalibur:
         @summary: Returns the m/z list
 
         @return: List of m/z
-        @rtype: numpy.ndarray
+        @rtype: ListType
         """
 
         return self.__mass_list
