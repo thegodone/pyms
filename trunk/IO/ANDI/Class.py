@@ -233,6 +233,7 @@ class ChemStation:
         @param index: Index of an ion chromatogram in the
             intensity data matrix
         @type index: IntType 
+
         @return: Ion chromatogram at given index
         @rtype: IonChromatogram
         """
@@ -257,8 +258,8 @@ class ChemStation:
 
         @param mass: Mass value of an ion chromatogram
         @type mass: IntType
-        @return: Ion chromatogram for given mass, or, if no mass
-            is given, total ion chromatogram
+
+        @return: Ion chromatogram for given mass
         @rtype: IonChromatogram
         """
 
@@ -277,19 +278,20 @@ class ChemStation:
 
         @param index: Index of an ion chromatogram
         @type index: IntType
+
         @return: Mass spectrum at given index
         @rtype: numpy.ndarray
         """
 
         if not is_int(index):
-            error("'index' must be an integer.")
+            error("'index' must be an integer")
 
         im = self.get_intensity_matrix()
 
         try:
             mass_spectrum = im[index]
         except IndexError:
-            error("index out of bounds.")
+            error("index out of bounds")
 
         return mass_spectrum 
 
@@ -311,6 +313,7 @@ class ChemStation:
 
         @param time: Time in seconds
         @type time: FloatType
+
         @return: Index corresponding to given time
         @rtype: IntType
         """
@@ -329,11 +332,12 @@ class ChemStation:
     def null_mass(self, mass):
 
         """
-        @summary: Sets the values of given mass to 0 across entire
+        @summary: Zeroes the intensity of a given mass across the entire
             time range
 
         @param mass: The mass value of an ion chromatogram
         @type mass: IntType
+
         @return: none
         @rtype: NoneType
         """
