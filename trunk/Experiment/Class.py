@@ -1,5 +1,5 @@
 """
-Models an experiment
+Models an GC-MS or LC-MS experiment represented by a list of signal peaks
 """
 
  #############################################################################
@@ -23,11 +23,8 @@ Models an experiment
  #############################################################################
 
 from pyms.Utils.Error import error
-from pyms.Utils.Utils import *
-
-from Utils import cmp_peak_area
-
 from pyms import Peak
+from pyms.Peak.List.Utils import sele_peaks_by_rt 
 
 class Experiment:
 
@@ -131,15 +128,15 @@ class Experiment:
         if len(remove_list) == 0:
             print "\t[no peaks to be removed]"
 
-    def normalise_peaks(self, to_reference=False):
+    def raw2norm_area(self, to_reference=False):
 
         """
         @summary: Normalises peak areas
 
-        This method populates peak attributes 'norm_area'. If to_reference=True
-        is used, peak areas are normalized by the raw area of the reference
-        peak (assumed to be previously set). If to_reference=False, 'norm_area'
-        is the same as 'raw_area'.
+        This method populates peak attributes 'norm_area'. If to_reference=True,
+        peak areas are normalized by the raw area of the reference peak (assumed
+        to be previously set). If to_reference=False, 'norm_area' is the same as
+        'raw_area'.
 
         @param to_reference: True for normalization to reference peak, False
         otherwise
@@ -157,26 +154,7 @@ class Experiment:
         for peak in self.peaks:
             peak.norm_area = float(peak.raw_area)/float(ref_area)
 
-    def sele_top_peaks(self, n):
-
-        """
-        @summary: Selects n strongest peaks by normalised area
-            discrads others
-
-        @param n: Number of strongest peaks
-        @type n: IntType
-
-        @return: None
-        @rtype: NoneType
-        """
-
-        self.peaks.sort(cmp_peak_area)
-        self.peaks.reverse()
-        self.peaks = self.peaks[:n]
-
-        print " -> %d strongest peaks selected" % ( len(self.peaks) )
-
-    def purge_peaks(self, norm_area_threshold):
+    def purge_peaks(self, norm_area_threshold=0.0):
 
         """
         @summary: Purge peaks which are below the threshold expressed as the
@@ -190,6 +168,7 @@ class Experiment:
         """
 
         purge_list = []
+
         for peak in self.peaks:
             if peak.norm_area < norm_area_threshold:
                 purge_list.append(peak)
@@ -199,48 +178,23 @@ class Experiment:
 
         print " Experiment %s: %d peaks purged (below threshold=%.2f)" % \
                 (self.expr_code, len(purge_list), norm_area_threshold )
-
-    def scale_peaks(self, scale_factor):
-
-        """
-        @summary: Scales all normalised peak areas by a factor
-
-        Used in the past to adjust DNA normalisation scaling.
-
-        @param scale_factor: Scale factor value
-        @type scale_factor: IntType or FloatType
-
-        @return: None
-        @rtype: NoneType
-        """
-
-        if not is_number(scale_factor):
-            error("scale factor not a number")
-
-        f = float(scale_factor)
-
-        print " -> Scaling peak normalised areas with %.2f" % ( f )
-
-        for peak in self.peaks:
-            peak.norm_area = peak.norm_area*f
-
+ 
     def sele_rt_range(self, rt_range):
 
         """
-        @summary: Discards all peaks with retention times outside the
-        specified range
+        @summary: Discards all peaks which have the retention time outside
+        the specified range
 
-        @param rt_range: Contains two numbers [rt_min, rt_max]
+        @param rt_range: Min, max retention time given as a list [rt_min, rt_max]
         @type rt_range: ListType
 
         @return: none
         @rtype: NoneType
         """
 
-        print " -> Selection by retention time (from %s to %s):" % \
+        print " -> Selecting peaks by retention time (from %s to %s):" % \
                 (rt_range[0], rt_range[1]),
 
-        peaks_sele = Peak.List.Utils.sele_peaks_by_rt(self.peaks, rt_range)
+        peaks_sele = sele_peaks_by_rt(self.peaks, rt_range)
         self.peaks = peaks_sele
-
 
