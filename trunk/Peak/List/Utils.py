@@ -1,5 +1,5 @@
 """
- Utilities for peak lists
+Utilities for manipulation of peak lists
 """
 
  #############################################################################
@@ -33,12 +33,15 @@ def is_peak_list(peaks):
 
     """
     @summary: Returns True if 'peaks' is a valid peak list,
-        False otherwise
+    False otherwise
 
     @param peaks: A list of peak objects
     @type peaks: ListType
+
     @return: A boolean indicator
     @rtype: BooleanType
+
+    @author Vladimir Likic
     """
 
     flag = True
@@ -57,10 +60,10 @@ def find_peak_by_rt(rt, peaks, tol_str):
     """
     @summary: Finds the closest peak to given retention time
 
-        The closest peak must:
-        1. Be closer to the target retention time than tolerance.
-        2. Be the only peak which is closer to the target retention
-           time than tolerance.
+    The closest peak must:
+    1. Be closer to the target retention time than tolerance.
+    2. Be the only peak which is closer to the target retention
+    time than tolerance.
 
     @param rt: Target retention time in seconds
     @type rt: FloatType
@@ -69,6 +72,7 @@ def find_peak_by_rt(rt, peaks, tol_str):
     @param tol_str: A time string, "<NUMBER>s" or "<NUMBER>m"
         to specify a cutoff in seconds or minutes
     @type tol_str: StringType
+
     @return: A peak object
     @rtype: Peak
     """

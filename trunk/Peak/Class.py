@@ -1,5 +1,5 @@
 """
-Contains Peak-related classes
+Provides a class to model signal peak
 """
 
  #############################################################################
@@ -32,16 +32,17 @@ class Peak:
     """
     @summary: Models a signal peak
 
+    A signal peak object 
     A peak object is initialised with retention time and raw peak area.
 
     @author: Vladimir Likic
     """
 
-    def __init__(self, peak_rt=0.0, raw_area=0, minutes=False):
+    def __init__(self, rt=0.0, raw_area=0, minutes=False):
 
         """
-        @param peak_rt: Retention time
-        @type peak_rt: A number
+        @param rt: Retention time
+        @type rt: A number
         @param raw_area: Raw peak area
         @type raw_area: A number
         @param minutes: Retention time units flag. If True, retention time
@@ -49,22 +50,25 @@ class Peak:
         @type minutes: BooleanType 
         """
 
-        if not is_number(peak_rt):
-            error("'peak_rt' must be a number")
+        if not is_number(rt):
+            error("'rt' must be a number")
 
         if not is_number(raw_area):
             error("'raw_area' must be a number")
 
         if minutes:
-            peak_rt = peak_rt/60.0
+            rt = rt/60.0
 
-        self.rt = float(peak_rt)
+        self.rt = float(rt)
         self.raw_area = float(raw_area)
 
-        # optional attributes
+        self.tag = None
+
+        # these three attributes are required for
+        # setting the peak mass spectrum
+        self.pt_bounds = None
         self.mass_spectrum = None 
         self.mass_list = None 
-        self.tag = None
 
     def set_pt_bounds(self, pt_bounds):
 
@@ -72,7 +76,7 @@ class Peak:
         @summary: Sets peak boundaries in points
 
         @param pt_bounds: A list containing left, apex, and right
-            peak boundary (points)
+            peak boundaries in points
         @type pt_bounds: ListType
 
         @return: none
@@ -96,8 +100,9 @@ class Peak:
         """
         @summary: Sets peak mass spectrum
 
-        @param andi_data: An ANDI data object (such as IO.ANDI.ChemStation)
-        @type andi_data: ChemStation
+        @param andi_data: An IO.ANDI data object
+        @type andi_data: IO.ANDI.ChemStation for example
+
         @return: none
         @rtype: NoneType
         """
@@ -113,9 +118,9 @@ class Peak:
         # These two must be consistent, this is checked in IO.ANDI
         # upon reading the ANDI data file.  Check again:
         if not (len(self.mass_spectrum) == len(self.mass_list)):
-            error("peak mass spectrum data inconsistent")
+            error("mass spectrum data inconsistent")
 
-    def crop_mass_spectrum(self, mass_min, mass_max):
+    def crop_mass_spectrum(self, mass_min, mass_max, verbose=False):
 
         """
         @summary: Crops mass spectrum
@@ -124,35 +129,40 @@ class Peak:
         @type mass_min: IntType or FloatType 
         @param mass_max: Maximum mass value
         @type mass_max: IntType or FloatType
+        @param verbose: A verbose flag
+        @type verbose: BooleanType
+
         @return: none
         @rtype: NoneType
         """
         
         if self.mass_spectrum == None:
             error("mass spectrum not set for this peak")
-        else:
-            if (not is_number(mass_min)) or (not is_number(mass_max)):
-                error("'mass_min' and 'mass_max' must be numbers")
+
+        if not is_number(mass_min) or not is_number(mass_max):
+            error("'mass_min' and 'mass_max' must be numbers")
 
         new_mass_list = []
         new_mass_spectrum = [] 
 
         for ii in range(len(self.mass_list)):
+
             mass = self.mass_list[ii]
             intensity =  self.mass_spectrum[ii]
-            if (mass >= mass_min) and (mass <= mass_max):
+
+            if mass >= mass_min and mass <= mass_max:
                 new_mass_list.append(mass)
                 new_mass_spectrum.append(intensity) 
 
-        if len(new_mass_list) < 10:
-            print " WARNING: peak mass spectrum contains < 10 points"
- 
         self.mass_list = new_mass_list
         self.mass_spectrum = new_mass_spectrum
 
         if len(new_mass_list) == 0:
             error("mass spectrum empty")
-        else:
+        elif len(new_mass_list) < 10:
+            print " WARNING: peak mass spectrum contains < 10 points"
+
+        if verbose:
             print " [ Mass spectrum cropped to %d points:" % \
                     (len(new_mass_list)),
             print "masses %d to %d ]" % (min(new_mass_list), 
@@ -163,9 +173,10 @@ class Peak:
         """
         @summary: Sets the peak tag
 
-        @param tag: The supplied peak tag is either RF- type
-            tag (such as "RF-SI") or "BLANK"
+        @param tag: The supplied peak tag must be either "BLANK" or RF-type
+            tag for a reference peak (for example, "RF-SI")
         @type tag: StringType
+
         @return: none
         @rtype: NoneType
         """
