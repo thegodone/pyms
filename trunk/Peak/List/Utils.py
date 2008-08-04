@@ -93,7 +93,7 @@ def sele_peaks_by_rt(peaks, rt_range):
         if peak.rt > rt_lo and peak.rt < rt_hi:
             peaks_sele.append(peak)
 
-    print " -> %d peaks selected" % (len(peaks_sele))
+    print "%d peaks selected" % (len(peaks_sele))
 
     return peaks_sele
 
