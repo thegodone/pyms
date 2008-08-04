@@ -82,7 +82,7 @@ def read_chem_station_peaks(file_name):
             if peak_id:
 
                 fields2 = string.split(line)
-                peak_rt = float(fields2[1])*60.0
+                peak_rt = float(fields2[1])
 
                 # -2 correction was found empirically to
                 # match the peak apex

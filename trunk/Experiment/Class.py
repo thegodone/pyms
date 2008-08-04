@@ -1,5 +1,5 @@
 """
-Model experiment objects
+Models an experiment
 """
 
  #############################################################################
@@ -32,7 +32,7 @@ from pyms import Peak
 class Experiment:
 
     """
-    @summary: Models an experiment
+    @summary: Models an experiment object
 
     @author: Vladimir Likic
     """
@@ -53,13 +53,14 @@ class Experiment:
     def set_ref_peak(self, ref_peak_tag):
 
         """
-        @summary: Finds the reference peak, sets the reference peak,
-            and removes it from the list of peaks.
+        @summary: Sets the reference peak and removes it from the list of peaks
 
-        @param ref_peak_tag: Tag string for the chosen reference peak. For
-            example, two potential reference peaks may be annotated in the
-            peak file, "RT-SI" and "RT-NV". If the first is to be used as
-            the reference peak, ref_peak_tag is set to "si".
+        Reference peaks are annotated with the RF-type tags. For example, two
+        potential reference peaks may be annotated in the peak file, "RT-SI"
+        and "RT-NV". To set the first peak as the reference peak, 'ref_peak_tag'
+        should be set to "si".
+
+        @param ref_peak_tag: Tag string for the chosen reference peak
         @type ref_peak_tag: StringType
 
         @return: none
@@ -69,7 +70,7 @@ class Experiment:
         ref_peaks = {}
 
         for peak in self.peaks:
-            if (peak.tag != None) and (peak.tag[:3] == "rf-"):
+            if peak.tag != None and peak.tag[:3] == "rf-":
                 ref_tag = peak.tag[3:]
                 if ref_tag in ref_peaks.keys():
                     error("multiple reference peaks with the tag '%s'" \
@@ -93,23 +94,23 @@ class Experiment:
                     (ref_peak_tag))
         else:
             self.ref_peak = ref_peak
-            print "\t[ Reference peak found: '%s' @ %.3f s" % \
+            print " [ Reference peak found: '%s' @ %.3f s ]" % \
                     (self.ref_peak.tag, self.ref_peak.rt)
 
         # remove all reference peaks from the peak list
         for ref_tag in ref_peaks.keys():
             rm_ref_peak = ref_peaks[ref_tag]
-            print "\t  [ Removing reference peak '%s' @ %.3f s ]" % \
+            print "  [ Removing reference peak '%s' @ %.3f s ]" % \
                 (rm_ref_peak.tag, rm_ref_peak.rt)
             self.peaks.remove(rm_ref_peak)
 
-    def remove_blank_peaks(self, peak_remove_tag):
+    def remove_blank_peaks(self, peak_remove_tag="blank"):
 
         """
         @summary: Removes peaks whose tag equals 'peak_remove_tag'
 
-        @param peak_remove_tag: Peaks tagged by this tag will be discarded.
-            Normally, peak_remove_tag equals "blank".
+        @param peak_remove_tag: Peaks tagged by this tag will be discarded
+            from the peak list
         @type peak_remove_tag: StringType
 
         @return: none
@@ -117,6 +118,7 @@ class Experiment:
         """
 
         remove_list = []
+
         for peak in self.peaks:
             if peak.tag == peak_remove_tag:
                 remove_list.append(peak)
@@ -124,17 +126,23 @@ class Experiment:
         for peak in remove_list:
             self.peaks.remove(peak)
             print "\t[ Designated blank peak at %.3f s removed ]" \
-                        % (peak.rt)
+                        % ( peak.rt )
 
         if len(remove_list) == 0:
             print "\t[no peaks to be removed]"
 
-    def normalise_peaks(self, to_reference=True):
+    def normalise_peaks(self, to_reference=False):
 
         """
         @summary: Normalises peak areas
 
-        @param to_reference: True if reference is used, False otherwise
+        This method populates peak attributes 'norm_area'. If to_reference=True
+        is used, peak areas are normalized by the raw area of the reference
+        peak (assumed to be previously set). If to_reference=False, 'norm_area'
+        is the same as 'raw_area'.
+
+        @param to_reference: True for normalization to reference peak, False
+        otherwise
         @type to_reference: BooleanType
 
         @return: None

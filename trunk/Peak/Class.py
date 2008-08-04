@@ -57,7 +57,7 @@ class Peak:
             error("'raw_area' must be a number")
 
         if minutes:
-            rt = rt/60.0
+            rt = rt*60.0
 
         self.rt = float(rt)
         self.raw_area = float(raw_area)
