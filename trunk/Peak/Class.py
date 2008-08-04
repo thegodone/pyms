@@ -22,59 +22,49 @@ Contains Peak-related classes
  #                                                                           #
  #############################################################################
 
-import sys, types, math
-import numpy
+import math
 
 from pyms.Utils.Error import error
-from pyms.Utils.Utils import *
+from pyms.Utils.Utils import is_int, is_number, is_list
 
 class Peak:
 
     """
-    @summary: Models signal peak
+    @summary: Models a signal peak
 
     A peak object is initialised with retention time and raw peak area.
 
     @author: Vladimir Likic
     """
 
-    def __init__(self, rt, raw_area):
+    def __init__(self, peak_rt=0.0, raw_area=0, minutes=False):
 
         """
-        @param rt: Retention time
-        @type rt: FloatType
+        @param peak_rt: Retention time
+        @type peak_rt: A number
+        @param raw_area: Raw peak area
+        @type raw_area: A number
+        @param minutes: Retention time units flag. If True, retention time
+            is in minutes; if Flase retention time is in seconds
+        @type minutes: BooleanType 
         """
 
-        # Retention time and raw_area are mandatory
-        self.rt = float(rt)
+        if not is_number(peak_rt):
+            error("'peak_rt' must be a number")
+
+        if not is_number(raw_area):
+            error("'raw_area' must be a number")
+
+        if minutes:
+            peak_rt = peak_rt/60.0
+
+        self.rt = float(peak_rt)
         self.raw_area = float(raw_area)
 
-        # Other attributes
-        self.intensity = None 
-        self.pt_bounds = None
-        self.rt_bounds = None
-        self.norm_area = None 
-        self.confidence = None
+        # optional attributes
         self.mass_spectrum = None 
         self.mass_list = None 
         self.tag = None
-
-    def set_intensity(self, intensity):
-
-        """
-        @summary: Sets peak intensity
-
-        @param intensity: Intensity value
-        @type intensity: FloatType or IntType
-
-        @return: none
-        @rtype: NoneType
-        """
-
-        if not is_number(intensity):
-            error("'intensity' must be a number")
-
-        self.intensity = float(intensity)
 
     def set_pt_bounds(self, pt_bounds):
 
@@ -100,93 +90,6 @@ class Peak:
                     error("'pt_bounds' element not an integer")
 
         self.pt_bounds = pt_bounds
-
-    def set_rt_bounds(self, rt_bounds):
-
-        """
-        @summary: Sets peak retention time boundaries
-
-        @param rt_bounds: A list of four elements containing left, apex,
-            and right peak boundary in time units
-        @type rt_bounds: ListType
-
-        @return: none 
-        @rtype: NoneType
-        """
-
-        if not is_list(rt_bounds):
-            error("'rt_bounds' must be a list")
-
-        if not len(rt_bounds) == 3:
-            error("'rt_bounds' must have exactly 3 elements")
-        else:
-            for item in rt_bounds:
-                if not is_number(item):
-                    error("'rt_bounds' element not a number")
-
-        if not math.fabs(rt_bounds[1] - self.rt) < 1e-7:
-            error("rt_bounds[1] does not match peak retention time")
-
-        self.rt_bounds = rt_bounds
-
-    def set_norm_area(self, norm_area):
-
-        """
-        @summary: Sets peak normalised area
-
-        @param norm_area: Normalised area value
-        @type norm_area: IntType or FloatType
-
-        @return: none
-        @rtype: NoneType
-        """
-
-        if not is_number(norm_area):
-            error("'norm_area' must be a number")
-
-        self.norm_area = float(norm_area)
-
-    def set_confidence(self, confidence):
-
-        """
-        @summary: Sets peak confidence level
-
-        @param confidence: A number between 0 and 1
-        @type confidence: IntType or FloatType
-
-        @return: none
-        @rtype: NoneType
-        """
-
-        if not is_number(confidence):
-            error("peak confidence must be a number")
-        else:
-            if confidence < 0.0 or confidence > 1.0:
-                error("peak confidence must be between 0 and 1")
-
-        self.confidence = float(confidence)
-
-    def _set_mass_spectrum(self, mass_spectrum):
-
-        """
-        @summary: Sets peak mass spectrum
-
-        @param mass_spectrum: a peak mass spectrum 
-        @type mass_spectrum: ListType
-        """
-
-        self.mass_spectrum = mass_spectrum
-
-    def set_mass_intensity_list(self, list):
-
-        """
-        @summary: Sets peak intensity.
-
-        @param intensity: A number
-        """
-
-        #TODO: Add error checking!!
-        self.mass_intensity_list = list
 
     def set_mass_spectrum(self, andi_data):
 
