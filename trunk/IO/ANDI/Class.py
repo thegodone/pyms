@@ -33,10 +33,10 @@ from pyms.Utils.Error import error, stop
 from pyms.Utils.Utils import is_str, is_int, is_float, is_number
 from pyms.Utils.IO import save_data
 
-class ChemStation:
+class ANDIMS_reader(object):
 
     """
-    @summary: ANDI-MS reader for Agilent ChemStation NetCDF files
+    @summary: Generic reader for ANDI-MS NetCDF files
 
     @author: Lewis Lee
     @author: Vladimir Likic
@@ -387,14 +387,24 @@ class ChemStation:
         rt_vector = self.get_time_list()
         save_data(root_name+'.rt.csv', rt_vector, sep=",")
 
-class Xcalibur:
+class ChemStation(ANDIMS_reader):
+
+    """
+    @summary: ANDI-MS reader for Agilent ChemStation NetCDF files
+
+    @author: Lewis Lee
+    @author: Vladimir Likic
+    """
+
+    pass
+
+class Xcalibur(ANDIMS_reader):
 
     """
     @summary: ANDI-MS reader for Thermo Xcalibur NetCDF files
 
-    @author: Lewis Lee
-    @author: Vladimir Likic
     @author: Tim Erwin
+    @author: Vladimir Likic
     """
 
     pass
