@@ -24,9 +24,9 @@ Functions related to experiment I/O
 
 import string, cPickle
 
-from pyms.Experiment import Class
-from pyms.Utils.Utils import *
-from pyms.Utils.Error import *
+from pyms.Utils.Error import error 
+from pyms.Experiment.Class import Experiment 
+from pyms.Utils.Utils import is_str
 
 def load_expr(file_name):
 
@@ -56,11 +56,11 @@ def load_expr(file_name):
 def dump_expr(expr, file_name):
 
     """
-    @summary: Dumps an expriment to a file
+    @summary: Dumps expriment to a file
  
-    @param expr: An instance of the Experiment class
-    @type expr: Experiment
-    @param fle_name: Experiment file name
+    @param expr: An experiment object
+    @type expr: pyms.Experiment.Class.Experiment
+    @param fle_name: The name of the file
     @type file_name: StringType
 
     @return: none
@@ -69,27 +69,29 @@ def dump_expr(expr, file_name):
     @author: Vladimir Likic
     """
 
-    if not isinstance(expr, Class.Experiment):
-        error("argument not an instance of the class 'Peak'")
+    if not isinstance(expr, Experiment):
+        error("argument not an instance of the class 'Experiment'")
 
     if not is_str(file_name):
         error("'file_name' not a string")
 
     fp = open(file_name,'w')
     cPickle.dump(expr, fp, 1)
-    fp.close()    
+    fp.close()
 
-def read_expr(file_name):
+    print " -> Experiment '%s' saved as '%s'" % (expr.expr_code, file_name)
+
+def read_expr_list(file_name):
 
     """
-    @summary: Reads the experiment files into a list of Experiment
-        objects
+    @summary: Reads the set of experiment files and returns a list of
+    Experiment objects
 
     @param file_name: The name of the file which lists experiment
         dump file names, one file per line
     @type file_name: StringType
 
-    @return: A list of 'Experiment' instances
+    @return: A list of Experiment instances
     @rtype: ListType
 
     @author: Vladimir Likic
@@ -105,14 +107,14 @@ def read_expr(file_name):
     exprfiles = fp.readlines()
     fp.close()
 
-    exprs = []
+    exprl = []
 
     for exprfile in exprfiles:
 
         exprfile = string.strip(exprfile)
         expr = load_expr(exprfile)
 
-        exprs.append(expr)
+        exprl.append(expr)
 
-    return exprs
+    return exprl
 

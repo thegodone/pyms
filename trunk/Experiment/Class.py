@@ -1,5 +1,5 @@
 """
-Models an GC-MS or LC-MS experiment represented by a list of signal peaks
+Models a GC-MS experiment represented by a list of signal peaks
 """
 
  #############################################################################
