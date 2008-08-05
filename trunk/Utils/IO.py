@@ -132,7 +132,7 @@ def save_data(file_name, data, format_str="%.6f", prepend="", sep=" ",
 
     """
     @summary: Saves a list of numbers or a list of lists of numbers
-        to a file with specific formatting
+    to a file with specific formatting
 
     @param file_name: Name of a file
     @type: StringType

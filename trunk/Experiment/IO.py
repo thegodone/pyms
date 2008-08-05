@@ -60,7 +60,7 @@ def dump_expr(expr, file_name):
  
     @param expr: An experiment object
     @type expr: pyms.Experiment.Class.Experiment
-    @param fle_name: The name of the file
+    @param file_name: The name of the file
     @type file_name: StringType
 
     @return: none

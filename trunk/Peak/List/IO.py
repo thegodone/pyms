@@ -32,8 +32,8 @@ from pyms.Peak.Class import Peak
 def read_chem_station_peaks(file_name):
 
     """
-    @summary: Reads ChemStation peak integration report, and returns the list
-        of peak objects
+    @summary: Reads ChemStation peak integration report, and returns
+    the list of peak objects
 
     @param file_name: Peak list file name
     @type file_name: StringType
@@ -41,7 +41,7 @@ def read_chem_station_peaks(file_name):
     @return: Returns the list of pyms.Peak.Class.Peak objects
     @rtype: ListType
 
-    @author Vladimir Likic
+    @author: Vladimir Likic
     """
 
     if not is_str(file_name):

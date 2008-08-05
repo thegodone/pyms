@@ -256,7 +256,7 @@ class PairwiseAlignment(object):
         @summary: Build a guide tree from the distance matrix
 
         @param dist_matrix: The distance matrix
-        @type sim_matrix: numpy.ndarray
+        @type dist_matrix: numpy.ndarray
         @return: Pycluster similarity tree
         @rtype: Pycluster.cluster.Tree
 

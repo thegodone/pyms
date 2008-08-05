@@ -85,8 +85,9 @@ def exprl2alignment(exprl):
 
     The argument to this function is a list of experiment instances.
 
-    @param exprl: The list of experiments to be converted into an alignment objects
-    @type exper: ListType
+    @param exprl: The list of experiments to be converted into an alignment
+        objects
+    @type exprl: ListType
 
     @author: Vladimir Likic
     """
@@ -147,11 +148,11 @@ def merge_alignments(A1, A2, traces):
     """
     @summary: Merges two alignments with gaps added in from DP traceback
 
-    @param A1 First alignment
-    @param A2 Second alignment
-    @param traces DP traceback
+    @param A1: First alignment
+    @param A2: Second alignment
+    @param traces: DP traceback
 
-    @return A single alignment from A1 and A2
+    @return: A single alignment from A1 and A2
     """
 
     # Create object to hold new merged alignment and fill in its expr_codes
@@ -214,13 +215,14 @@ def merge_alignments(A1, A2, traces):
 
 def alignment_similarity(traces, score_matrix, gap):
 
-    """ Calculates similarity score between two alignments (new method)
+    """
+    @summary: Calculates similarity score between two alignments (new method)
 
-    @param traces Traceback from DP algorithm
-    @param score_matrix Score matrix of the two alignments
-    @param gap Gap penalty
+    @param traces: Traceback from DP algorithm
+    @param score_matrix: Score matrix of the two alignments
+    @param gap: Gap penalty
 
-    @return Similarity score (i.e. more similar => higher score)
+    @return: Similarity score (i.e. more similar => higher score)
     """
 
     score_matrix = 1. - score_matrix
@@ -292,7 +294,7 @@ def score_matrix_pair(peaks1, peaks2, D):
     @param peaks2: The second list of peaks
     @param D: Retention time tolerance
 
-    @return A tuple (score matrix, binary matrix)
+    @return: A tuple (score matrix, binary matrix)
     """
 
     # Initialize gap matrix, gap1 and gap2. This is the identity matrix with
@@ -337,12 +339,13 @@ def score_matrix_pair(peaks1, peaks2, D):
 
 def cos_ndp(ms1, ms2):
 
-    """ Calculates cosine distance between two mass spectra
+    """
+    @summary: Calculates cosine distance between two mass spectra
 
-    @param ms1 First mass spectrum matrix
-    @param ms2 Second mass spectrum matrix
+    @param ms1: First mass spectrum matrix
+    @param ms2: Second mass spectrum matrix
 
-    @return Cosine distance between ms1 and ms2
+    @return: Cosine distance between ms1 and ms2
     """
     sum_ms1squared = numpy.sum(ms1 ** 2, axis=0)
     sum_ms2squared = numpy.sum(ms2 ** 2, axis=0)
@@ -363,11 +366,11 @@ def modulate(rt1, rt2, D):
 
     """ Calculates gaussian distance between two peak retention time lists
 
-    @param rt1 First retention time list
-    @param rt2 Second retention time list
-    @param D D
+    @param rt1: First retention time list
+    @param rt2: Second retention time list
+    @param D: Retention time modulation parameter
 
-    @return Gaussian similarity matrix between rt1 and rt2
+    @return: Gaussian similarity matrix between rt1 and rt2
     """
 
     M = numpy.zeros(shape=(len(rt1), len(rt2)), dtype='d')
