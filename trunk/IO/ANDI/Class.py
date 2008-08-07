@@ -23,7 +23,7 @@ Classes for reading manufacturer specific ANDI-MS data files
  #############################################################################
 
 
-import sys, types
+import sys, types, math
 
 import numpy
 
@@ -137,6 +137,7 @@ class ANDIMS_reader(object):
         # Fix any differences in scan sizes between the time values'
         # array and the intensity values' matrix
         scan_size = len(intensity_matrix)
+
         if len(intensity_matrix) > len(time_list):
             scan_size = len(time_list)
 
@@ -327,9 +328,19 @@ class ANDIMS_reader(object):
             error("time %.2f is out of bounds (min: %.2f, max: %.2f)" %
                   (time, self.__min_rt, self.__max_rt))
 
-        for index in range(len(self.__time_list)):
-            if time <= self.__time_list[index]:
-                return index 
+        time_list = self.__time_list
+        time_diff_min = self.__max_rt
+        ix_match = None
+
+        for ix in range(len(time_list)):
+
+            time_diff = math.fabs(time-time_list[ix])
+
+            if time_diff < time_diff_min:
+                ix_match = ix
+                time_diff_min = time_diff
+
+        return ix_match
 
     def null_mass(self, mass):
 
