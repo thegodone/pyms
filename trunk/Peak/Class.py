@@ -61,6 +61,7 @@ class Peak:
 
         self.rt = float(rt)
         self.raw_area = float(raw_area)
+        self.norm_area = None
 
         self.tag = None
 

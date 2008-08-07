@@ -26,6 +26,7 @@ Classes for reading manufacturer specific ANDI-MS data files
 import sys, types
 
 import numpy
+
 from pycdf import CDF, CDFError
 
 from pyms.IO import Class
@@ -320,7 +321,7 @@ class ANDIMS_reader(object):
         """
 
         if not is_number(time):
-            error("'time' must be a number.")
+            error("'time' must be a number")
 
         if time < self.__min_rt or time > self.__max_rt:
             error("time %.2f is out of bounds (min: %.2f, max: %.2f)" %
