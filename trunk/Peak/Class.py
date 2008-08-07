@@ -25,7 +25,7 @@ Provides a class to model signal peak
 import math
 
 from pyms.Utils.Error import error
-from pyms.Utils.Utils import is_int, is_number, is_list
+from pyms.Utils.Utils import is_int, is_number, is_list, is_boolean
 
 class Peak:
 
@@ -96,28 +96,43 @@ class Peak:
 
         self.pt_bounds = pt_bounds
 
-    def set_mass_spectrum(self, andi_data):
+    def set_mass_spectrum(self, andi_data, from_bounds=False):
 
         """
         @summary: Sets peak mass spectrum
 
         @param andi_data: An IO.ANDI data object
         @type andi_data: IO.ANDI.ChemStation for example
+        @param from_bounds: Indicator whether to use the attribute
+            'pt_bounds' or to find the peak apex from the peak
+             retention time
+        @type peak_apex: BooleanType
 
         @return: none
         @rtype: NoneType
         """
-        
-        if self.pt_bounds == None:
-            error("pt_bounds not set for this peak")
-        else:
-            pt_apex = self.pt_bounds[1]
 
+        if not is_boolean(from_bounds):
+            error("'from_bounds' must be boolean")
+        
+        if from_bounds:
+            if self.pt_bounds == None:
+                error("pt_bounds not set for this peak")
+            else:
+                pt_apex = self.pt_bounds[1]
+        else:
+            # get the index of peak apex from peak retention time
+            pt_apex = andi_data.get_index_at_time(self.rt)
+
+        # set the mass spectrum
         self.mass_spectrum = andi_data.get_mass_spectrum_at_index(pt_apex)
+
+        # set mass list for this peak
         self.mass_list = andi_data.get_mass_list()
 
-        # These two must be consistent, this is checked in IO.ANDI
-        # upon reading the ANDI data file.  Check again:
+        # 'mass_spectrum' and 'mass_list' must be consistent. This is
+        # checked in IO.ANDI upon reading the ANDI data file, but
+        # check here again
         if not (len(self.mass_spectrum) == len(self.mass_list)):
             error("mass spectrum data inconsistent")
 

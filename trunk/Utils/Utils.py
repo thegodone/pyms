@@ -147,10 +147,30 @@ def is_array(arg):
     else:
         return False
 
+
+def is_boolean(arg):
+
+    """
+    @summary: Returns true of the argument is booleean, False otherwise
+
+    @param arg: The argument to be evaluated as boolean
+    @type arg: arbitrary
+
+    @return: A boolean indicator True or False
+    @rtype: BooleanType 
+
+    @author: Vladimir Likic
+    """
+
+    if isinstance(arg,types.BooleanType):
+        return True
+    else:
+        return False 
+
 def is_str_num(arg):
 
     """
-    @summary: determines if the argument is a string in the format of a number
+    @summary: Determines if the argument is a string in the format of a number
 
     The number can be an integer, or alternatively floating point in scientific
     or engineering format.
@@ -170,4 +190,3 @@ def is_str_num(arg):
         return True
     else:
         return False
-
