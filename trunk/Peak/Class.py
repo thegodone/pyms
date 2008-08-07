@@ -25,7 +25,8 @@ Provides a class to model signal peak
 import math
 
 from pyms.Utils.Error import error
-from pyms.Utils.Utils import is_int, is_number, is_list, is_boolean
+from pyms.Utils.Utils import is_int, is_number, is_list, is_boolean, is_str
+from pyms.Utils.IO import open_for_writing, close_for_writing
 
 class Peak:
 
@@ -208,4 +209,32 @@ class Peak:
                 error("incorrect reference peak tag '%s'" % (tag))
 
         self.tag = peak_tag
+
+    def write_mass_spectrum(self, file_name):
+
+        """
+        @summary: Writes the peak mass spectrum to a file
+
+        @param file_name: File for writing the mass spectrum
+        @type file_name: StringType
+
+        @return: none
+        @rtype: NoneType
+        """
+
+        if self.mass_spectrum == None:
+            error("mass spectrum for this peak not set")
+
+        if not is_str(file_name):
+            error("'file_name' must be a string")
+
+        fp = open_for_writing(file_name)
+
+        for ix in range(len(self.mass_list)):
+
+            fp.write("%8.3f %16.3f\n" % (self.mass_list[ix], \
+                    self.mass_spectrum[ix])) 
+
+        close_for_writing(fp)
+    
 

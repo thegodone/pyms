@@ -216,8 +216,7 @@ class IonChromatogram:
         """
         @summary: Writes the ion chromatogram to the specified file
 
-        @param file_name: A string representing the file name to write
-            the ion chromatogram to
+        @param file_name: File for writing the ion chromatogram
         @type file_name: StringType
         @param minutes: A boolean value indicating whether to write
             time in minutes
@@ -228,7 +227,7 @@ class IonChromatogram:
         """
 
         if not is_str(file_name):
-            error("'file_name' must be a string.")
+            error("'file_name' must be a string")
 
         fp = open_for_writing(file_name)
 
