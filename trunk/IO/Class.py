@@ -238,7 +238,7 @@ class IonChromatogram:
                 time_list[ii] = time_list[ii]/60.0
 
         for ii in range(len(time_list)):
-            fp.write("%8.3f %10d\n" % (time_list[ii], self.__ia[ii]))
+            fp.write("%8.4f %16.4f\n" % (time_list[ii], self.__ia[ii]))
 
         close_for_writing(fp)
 
