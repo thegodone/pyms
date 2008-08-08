@@ -231,17 +231,14 @@ class IonChromatogram:
 
         fp = open_for_writing(file_name)
 
-        ix = 0
-        n = self.__ia.size
+        time_list = self.__time_list
 
-        while ix < n:
-            if minutes:
-                fp.write("%8.3f  %10d\n" % (self.__time_list[ix]/60.0, \
-                        self.__ia[ix]))
-            else:
-                fp.write("%8.3f  %10d\n" % (self.__time_list[ix], \
-                        self.__ia[ix]))
-            ix = ix + 1
+        if minutes:
+            for ii in range(len(time_list)):
+                time_list[ii] = time_list[ii]/60.0
+
+        for ii in range(len(time_list)):
+            fp.write("%8.3f %10d\n" % (time_list[ii], self.__ia[ii]))
 
         close_for_writing(fp)
 
