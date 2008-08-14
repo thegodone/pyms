@@ -22,8 +22,8 @@ Time conversion functions
  #                                                                           #
  #############################################################################
 
-from Error import error
-from Utils import is_str, is_str_num
+from pyms.Utils.Error import error
+from pyms.Utils.Utils import is_str, is_str_num
 
 def time_str_secs(time_str):
 

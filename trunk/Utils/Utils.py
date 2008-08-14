@@ -26,7 +26,7 @@ import types, re
 
 import numpy
 
-from Error import error
+from pyms.Utils.Error import error
 
 def is_str(arg):
 

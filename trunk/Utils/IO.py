@@ -24,8 +24,8 @@ General I/O functions
 
 import types, os, string
 
-from Error import error
-from Utils import is_number, is_str, is_list
+from pyms.Utils.Error import error
+from pyms.Utils.Utils import is_number, is_str, is_list
 
 def open_for_reading(file_name):
 
