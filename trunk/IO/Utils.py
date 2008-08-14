@@ -57,9 +57,10 @@ def ic_window_points(ic, window_sele, half_window=False):
 
     @param ic: ion chromatogram object relevant for the conversion
     @type ic: pyms.IO.Class.IonChromatogram
-    @param window_sele: The window selection. If integer, taken as the
-        number of points. If a string, must of the form "<NUMBER>s" or
-        "<NUMBER>m", specifying a time in seconds or minutes, respectively
+    @param window_sele: The window selection parameter. This can be an
+        integer or time string. If integer, taken as the number of points.
+        If a string, must of the form "<NUMBER>s" or "<NUMBER>m",
+        specifying a time in seconds or minutes, respectively
     @type window_sele: IntType or StringType 
     @param half_window: Specifies whether to return half-window
     @type half_window: Booleantype
