@@ -106,8 +106,8 @@ class Peak:
         @type andi_data: IO.ANDI.ChemStation for example
         @param from_bounds: Indicator whether to use the attribute
             'pt_bounds' or to find the peak apex from the peak
-             retention time
-        @type peak_apex: BooleanType
+            retention time
+        @type from_bounds: BooleanType
 
         @return: none
         @rtype: NoneType

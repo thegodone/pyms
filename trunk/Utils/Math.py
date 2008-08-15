@@ -32,7 +32,7 @@ def median(v):
     """
     @summary: Returns a median of a list or numpy array
 
-    @parm v: Input list or array
+    @param v: Input list or array
     @type v: ListType or numpy.core.ndarray
     @return: The median of the input list
     @rtype: FloatType
