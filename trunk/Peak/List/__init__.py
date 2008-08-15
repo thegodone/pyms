@@ -1,4 +1,5 @@
-"""pyms.Peak.List __init__.py
+"""
+Functions for modelling peak lists
 """
 
  #############################################################################

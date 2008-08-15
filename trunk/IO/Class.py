@@ -1,5 +1,5 @@
 """
-Provides classes for pyms.IO wide use
+Provides IonChromatogram class
 """
 
  #############################################################################

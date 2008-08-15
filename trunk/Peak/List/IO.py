@@ -1,5 +1,5 @@
 """
-Provides IO functions for peak lists
+Provides input/output functions for peak lists
 """
 
  #############################################################################

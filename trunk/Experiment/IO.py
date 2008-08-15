@@ -1,5 +1,5 @@
 """
-Functions related to experiment I/O
+Functions related to experiment input/output
 """
 
  #############################################################################

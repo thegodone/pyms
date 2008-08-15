@@ -1,4 +1,5 @@
-"""pyms.Experiment __init__.py
+"""
+Functions for modelling experiments
 """
 
  #############################################################################
