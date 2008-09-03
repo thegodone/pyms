@@ -61,24 +61,62 @@ class ANDIMS_reader(object):
         try:
             file = CDF(file_name)
             self.__file_name = file_name
+            self.__file_handle = file
         except CDFError:
             error("Cannot open file '%s'" % file_name) 
 
         print " -> Processing netCDF file '%s'" % (self.__file_name)
 
-        time = file.var(self.__TIME_STRING)
-        mass = file.var(self.__MASS_STRING)
-        intensity = file.var(self.__INTENSITY_STRING)
+        self.set_min_max_mass(file)
+        self.set_intensity_list(file)
 
-        time_list = time.get().tolist()
-        mass_list = mass.get().tolist()
-        intensity_list = intensity.get().tolist()
-
-        if len(mass_list) == 0 or len(intensity_list) == 0:
+        if len(self.__mass_list) == 0 or len(self.__intensity_list) == 0:
             error("The file contains no useable data")
 
-        if len(mass_list) != len(intensity_list):
+        if len(self.__mass_list) != len(self.__intensity_list):
             error("The mass values do not match intensities")
+
+        self.set_time_list(file)
+        self.set_intensity_matrix()
+        self.set_scan_size()
+        
+        scan_size = self.get_scan_size()
+
+        # Check if time array is sorted and raise error if it isn't
+        if not (self.__time_list[:scan_size] == sorted(self.__time_list[:scan_size])):
+            error("File input was not sorted in chronological order")
+
+        self.__time_list = self.__time_list[:scan_size]
+        self.__intensity_matrix = numpy.array(self.__intensity_matrix[:scan_size])
+
+        if len(self.__time_list) != len(self.__intensity_matrix):
+            error("data inconsistent in time domain")
+
+        self.__min_rt = self.__time_list[0]
+        self.__max_rt = self.__time_list[-1]
+
+        #Round mass list 
+        self.__mass_list = []
+        for mass in range(self.__min_mass, self.__max_mass+1):
+            self.__mass_list.append(mass)
+    
+        if len(self.__mass_list) != len(self.__intensity_matrix[0]):
+            error("data inconsistent in m/z domain")
+
+        print "    [ %d scans, masses from %d to %d ]" % \
+                (len(self.get_tic()), self.__min_mass, self.__max_mass)
+
+    def set_min_max_mass(self,file):
+
+        """
+        @summary: Sets the min and max mass
+        """ 
+
+        mass = file.var(self.__MASS_STRING)
+        mass_list = mass.get().tolist()
+
+        if len(mass_list) == 0:
+            error("The file contains no useable data")
 
         min_mass = min(mass_list)
         max_mass = max(mass_list)
@@ -86,7 +124,42 @@ class ANDIMS_reader(object):
         if is_float(min_mass): min_mass = int(round(min_mass))
         if is_float(max_mass): max_mass = int(round(max_mass))
 
+        self.__min_mass = min_mass
+        self.__max_mass = max_mass
+
+        self.__mass_list = mass_list
+
+
+    def set_time_list(self,file):
+
+        """
+        @summary: Sets internal time_list
+        """ 
+
+        time = file.var(self.__TIME_STRING)
+        time_list = time.get().tolist()
+        self.__time_list = time_list
+
+    def set_intensity_list(self,file):
+
+        """
+        @summary: Sets internal intensity_list
+        """ 
+
+        intensity = file.var(self.__INTENSITY_STRING)
+        intensity_list = intensity.get().tolist()
+        self.__intensity_list = intensity_list
+
+    def set_intensity_matrix(self):
+
+        """
+        @summary: Sets the intensity list
+        """ 
+
         intensity_matrix = []
+        min_mass,max_mass = self.get_mass_range()
+        mass_list = self.get_mass_list()
+        intensity_list = self.get_intensity_list()
 
         scan = numpy.repeat([0], max_mass - min_mass + 1)
 
@@ -133,40 +206,46 @@ class ANDIMS_reader(object):
 
         # Append the final scan to the data
         intensity_matrix.append(scan)
+        self.__intensity_matrix = intensity_matrix
+
+    def set_scan_size(self):
+
+        """
+        @summary: Sets the scan size
+        """ 
+
+        intensity_matrix = self.get_intensity_matrix()
+        time_list = self.get_time_list()
 
         # Fix any differences in scan sizes between the time values'
         # array and the intensity values' matrix
         scan_size = len(intensity_matrix)
-
         if len(intensity_matrix) > len(time_list):
             scan_size = len(time_list)
 
-        # Check if time array is sorted and raise error if it isn't
-        if not (time_list[:scan_size] == sorted(time_list[:scan_size])):
-            error("File input was not sorted in chronological order")
+        self.__scan_size = scan_size
 
-        self.__time_list = time_list[:scan_size]
-        self.__intensity_matrix = numpy.array(intensity_matrix[:scan_size])
+    def get_scan_size(self):
 
-        self.__min_rt = self.__time_list[0]
-        self.__max_rt = self.__time_list[-1]
+        """
+        @summary: Returns the scan size
 
-        self.__min_mass = min_mass
-        self.__max_mass = max_mass
+        @return: Scan size
+        @rtype: IntType
+        """ 
 
-        self.__mass_list = []
+        return self.__scan_size
 
-        for mass in range(min_mass, max_mass+1):
-            self.__mass_list.append(mass)
+    def get_intensity_list(self):
 
-        if len(self.__time_list) != len(self.__intensity_matrix):
-            error("data inconsistent in time domain")
+        """
+        @summary: Returns the full intensity list
 
-        if len(self.__mass_list) != len(self.__intensity_matrix[0]):
-            error("data inconsistent in m/z domain")
+        @return: Intensity list
+        @rtype: ListType
+        """ 
 
-        print "    [ %d scans, masses from %d to %d ]" % \
-                (len(self.get_tic()), self.__min_mass, self.__max_mass)
+        return self.__intensity_list
 
     def get_filename(self):
 
@@ -179,6 +258,17 @@ class ANDIMS_reader(object):
         """
 
         return self.__file_name
+
+    def get_file_handle(self):
+
+        """
+        @summary: Returns the file handle of the CDF file
+
+        @return: File Handle
+        @rtype: FileHandleType
+        """ 
+
+        return self.__file_handle
 
     def get_intensity_matrix(self):
 
@@ -408,8 +498,6 @@ class ChemStation(ANDIMS_reader):
     @author: Vladimir Likic
     """
 
-    pass
-
 class Xcalibur(ANDIMS_reader):
 
     """
@@ -419,5 +507,55 @@ class Xcalibur(ANDIMS_reader):
     @author: Vladimir Likic
     """
 
-    pass
+    def set_scan_index(self):
+
+        """
+        @summary: Sets the scan index list
+        """ 
+
+        fh = self.get_file_handle()
+        scan_index = fh.var("scan_index")
+        scan_index_list = scan_index.get().tolist()
+        self.__scan_index_list = scan_index_list
+
+    def set_scan_size(self):
+ 
+        """
+        @summary: Sets the scan size
+        """ 
+
+        min_mass,max_mass = self.get_mass_range()
+        intensity_matrix = self.get_intensity_matrix()
+        time_list = self.get_time_list()
+
+        # Fix any differences in scan sizes between the time values'
+        # array and the intensity values' matrix.
+        scan_size = len(intensity_matrix)
+        if len(intensity_matrix) > len(time_list):
+            scan_size = len(time_list)
+
+        if len(time_list) > len(intensity_matrix):
+            self.set_scan_index()
+            scan_index_list = self.__scan_index_list
+            #Count leading zero
+            count = 0
+            while scan_index_list[count]==0 and len(intensity_matrix) < len(time_list):
+              count+=1
+              scan = numpy.repeat([0], max_mass - min_mass + 1)
+              intensity_matrix.insert(0,scan)
+            
+        scan_size = len(intensity_matrix)
+        self.__scan_size = scan_size
+        #return scan_size
+
+    def get_scan_size(self):
+
+        """
+        @summary: Returns the scan size
+
+        @return: Scan size
+        @rtype: IntType
+        """ 
+
+        return self.__scan_size
 
