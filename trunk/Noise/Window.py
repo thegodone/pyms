@@ -1,5 +1,5 @@
 """
-Moving window noise smoothing
+Moving window noise filter
 """
 
  #############################################################################
@@ -33,7 +33,7 @@ __DEFAULT_WINDOW = 3
 def window_smooth(ic, window=__DEFAULT_WINDOW, median=False):
 
     """
-    @summary: Applies windows smoothing on ion chromatogram
+    @summary: Applies window smoothing on ion chromatogram
 
     @param ic: The input ion chromatogram
     @type ic: pyms.IO.Class.IonChromatogram
