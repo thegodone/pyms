@@ -34,7 +34,7 @@ _STRUCT_ELM_FRAC = 0.2
 def tophat(ic, struct=None):
 
     """
-    @summary: Pefroms top-hat baseline correction
+    @summary: Top-hat baseline correction
 
     @param ic: The input ion chromatogram
     @type ic: pyms.IO.Class.IonChromatogram
