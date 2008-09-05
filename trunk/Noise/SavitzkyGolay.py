@@ -39,6 +39,7 @@ def savitzky_golay(ic, window=__DEFAULT_WINDOW, degree=__DEFAULT_PLOYNOMIAL_DEGR
     @return: Smoothed ion chromatogram
     @rtype: pyms.IO.Class.IonChromatogram
 
+    @author: Uwe Schmitt
     @author: Vladimir Likic
     """
 
