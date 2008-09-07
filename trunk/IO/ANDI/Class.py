@@ -22,7 +22,6 @@ Classes for reading manufacturer specific ANDI-MS data files
  #                                                                           #
  #############################################################################
 
-
 import sys, types, math
 
 import numpy
@@ -40,6 +39,7 @@ class ANDIMS_reader(object):
     @summary: Generic reader for ANDI-MS NetCDF files
 
     @author: Lewis Lee
+    @author: Tim Erwin
     @author: Vladimir Likic
     """
 
@@ -67,8 +67,8 @@ class ANDIMS_reader(object):
 
         print " -> Processing netCDF file '%s'" % (self.__file_name)
 
-        self.set_min_max_mass(file)
-        self.set_intensity_list(file)
+        self.__set_min_max_mass(file)
+        self.__set_intensity_list(file)
 
         if len(self.__mass_list) == 0 or len(self.__intensity_list) == 0:
             error("The file contains no useable data")
@@ -76,9 +76,9 @@ class ANDIMS_reader(object):
         if len(self.__mass_list) != len(self.__intensity_list):
             error("The mass values do not match intensities")
 
-        self.set_time_list(file)
-        self.set_intensity_matrix()
-        self.set_scan_size()
+        self.__set_time_list(file)
+        self.__set_intensity_matrix()
+        self.__set_scan_size()
         
         scan_size = self.get_scan_size()
 
@@ -106,7 +106,7 @@ class ANDIMS_reader(object):
         print "    [ %d scans, masses from %d to %d ]" % \
                 (len(self.get_tic()), self.__min_mass, self.__max_mass)
 
-    def set_min_max_mass(self,file):
+    def __set_min_max_mass(self,file):
 
         """
         @summary: Sets the min and max mass
@@ -130,7 +130,7 @@ class ANDIMS_reader(object):
         self.__mass_list = mass_list
 
 
-    def set_time_list(self,file):
+    def __set_time_list(self,file):
 
         """
         @summary: Sets internal time_list
@@ -140,7 +140,7 @@ class ANDIMS_reader(object):
         time_list = time.get().tolist()
         self.__time_list = time_list
 
-    def set_intensity_list(self,file):
+    def __set_intensity_list(self,file):
 
         """
         @summary: Sets internal intensity_list
@@ -150,7 +150,7 @@ class ANDIMS_reader(object):
         intensity_list = intensity.get().tolist()
         self.__intensity_list = intensity_list
 
-    def set_intensity_matrix(self):
+    def __set_intensity_matrix(self):
 
         """
         @summary: Sets the intensity list
@@ -208,7 +208,7 @@ class ANDIMS_reader(object):
         intensity_matrix.append(scan)
         self.__intensity_matrix = intensity_matrix
 
-    def set_scan_size(self):
+    def __set_scan_size(self):
 
         """
         @summary: Sets the scan size
@@ -518,7 +518,7 @@ class Xcalibur(ANDIMS_reader):
         scan_index_list = scan_index.get().tolist()
         self.__scan_index_list = scan_index_list
 
-    def set_scan_size(self):
+    def __set_scan_size(self):
  
         """
         @summary: Sets the scan size
@@ -537,7 +537,7 @@ class Xcalibur(ANDIMS_reader):
         if len(time_list) > len(intensity_matrix):
             self.set_scan_index()
             scan_index_list = self.__scan_index_list
-            #Count leading zero
+            # Count leading zeros
             count = 0
             while scan_index_list[count]==0 and len(intensity_matrix) < len(time_list):
               count+=1
