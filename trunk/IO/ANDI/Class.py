@@ -78,7 +78,7 @@ class ANDIMS_reader(object):
 
         self.__set_time_list(file)
         self.__set_intensity_matrix()
-        self.__set_scan_size()
+        self.set_scan_size()
         
         scan_size = self.get_scan_size()
 
@@ -208,7 +208,7 @@ class ANDIMS_reader(object):
         intensity_matrix.append(scan)
         self.__intensity_matrix = intensity_matrix
 
-    def __set_scan_size(self):
+    def set_scan_size(self):
 
         """
         @summary: Sets the scan size
@@ -518,7 +518,7 @@ class Xcalibur(ANDIMS_reader):
         scan_index_list = scan_index.get().tolist()
         self.__scan_index_list = scan_index_list
 
-    def __set_scan_size(self):
+    def set_scan_size(self):
  
         """
         @summary: Sets the scan size
