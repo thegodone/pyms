@@ -184,10 +184,12 @@ class ANDIMS_reader(object):
             index = 1
 
             while index < len(mass_list) and index < len(intensity_list):
+
                 mass_elem_prev = mass_elem
                 intensity_elem_prev = intensity_elem
                 mass_elem = int(round(mass_list[index]))
                 intensity_elem = int(round(intensity_list[index]))
+
                 # If the previous mass value is larger than the current
                 # mass value, the current scan has ended.  As such,
                 # append the current scan into the data list and create
@@ -195,13 +197,16 @@ class ANDIMS_reader(object):
                 if mass_elem_prev > mass_elem:
                     intensity_matrix.append(scan)
                     scan = numpy.repeat([0], max_mass - min_mass + 1)
+
                 # Calculate the index in the scan to insert the
                 # intensity value into
                 i = mass_elem - offset
+
                 # If the calculated index is valid, add the intensity
                 # value to the existing value at the specified index
                 if 0 <= i and i < len(scan):
                     scan[i] = scan[i] + intensity_elem
+
                 index = index + 1
 
         # Append the final scan to the data
@@ -535,14 +540,17 @@ class Xcalibur(ANDIMS_reader):
             scan_size = len(time_list)
 
         if len(time_list) > len(intensity_matrix):
+
             self.set_scan_index()
             scan_index_list = self.__scan_index_list
+
             # Count leading zeros
             count = 0
-            while scan_index_list[count]==0 and len(intensity_matrix) < len(time_list):
-              count+=1
-              scan = numpy.repeat([0], max_mass - min_mass + 1)
-              intensity_matrix.insert(0,scan)
+            while scan_index_list[count]==0 and \
+                    len(intensity_matrix) < len(time_list):
+                count = count + 1
+                scan = numpy.repeat([0], max_mass - min_mass + 1)
+                intensity_matrix.insert(0,scan)
             
         scan_size = len(intensity_matrix)
         self.__scan_size = scan_size
