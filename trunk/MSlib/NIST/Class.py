@@ -34,8 +34,8 @@ class NIST_library(object):
     """
     @summary: NIST library reader 
 
-    @author Saravanan Daylan
-    @author Vladimir Likic
+    @author: Saravanan Daylan
+    @author: Vladimir Likic
     """ 
 
     def __init__(self, file_name):
@@ -58,8 +58,8 @@ class NIST_library(object):
         @param file_name: The name of the NIST library file
         @type file_name: StringType
 
-        @author Saravanan Daylan
-        @author Vladimir Likic
+        @author: Saravanan Daylan
+        @author: Vladimir Likic
         """ 
 
         __CMPD_NAME_KEYWORD = "NAME"

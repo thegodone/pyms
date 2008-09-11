@@ -32,8 +32,8 @@ class Compound(object):
     """
     @summary: Models a chemical compound
 
-    @author Saravanan Daylan
-    @author Vladimir Likic
+    @author: Saravanan Daylan
+    @author: Vladimir Likic
     """
 
     def __init__(self, cmpd_name):
@@ -57,8 +57,8 @@ class Compound(object):
         @summary: Converts NIST type mass string into mass_list,
         mass_spectrum attributes
         
-        @author Saravanan Daylan
-        @author Vladimir Likic
+        @author: Saravanan Daylan
+        @author: Vladimir Likic
         """
 
         if not is_str(mass_spectrum_str):
