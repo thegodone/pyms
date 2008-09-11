@@ -51,7 +51,7 @@ class Compound(object):
         self.mass_spectrum = []
         self.mass_list = []
 
-    def str2mass_spectrum(self, mass_spectrum_str):
+    def NISTstr2mass(self, mass_spectrum_str):
 
         """
         @summary: Converts NIST type mass string into mass_list,
@@ -77,6 +77,7 @@ class Compound(object):
             if len(pair) != 2:
                 error('Error: Length of pair is != 2')
             
-            self.mass_spectrum.append(int(pair[0]))
-            self.mass_list.append(int(pair[1]))
+            self.mass_list.append(int(pair[0]))
+            self.mass_spectrum.append(int(pair[1]))
+
 

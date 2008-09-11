@@ -103,7 +103,7 @@ class NIST_library(object):
                 first_mass_line_flag = True
                 
             if prev_cmpd != None and new_cmpd_flag:
-                prev_cmpd.str2mass_spectrum(mass_spectrum_string)
+                prev_cmpd.NISTstr2mass(mass_spectrum_string)
                 mass_spectrum_string = ""
                 new_cmpd_flag = False
 
@@ -114,7 +114,7 @@ class NIST_library(object):
                     first_mass_line_flag = False
             
         if cmpd_counter > 0:
-            crnt_cmpd.str2mass_spectrum(mass_spectrum_string)
+            crnt_cmpd.NISTstr2mass(mass_spectrum_string)
         
         return compounds 
 
