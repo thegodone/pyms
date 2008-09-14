@@ -22,7 +22,7 @@ Classes for reading manufacturer specific ANDI-MS data files
  #                                                                           #
  #############################################################################
 
-import sys, types, math
+import math
 
 import numpy
 
@@ -128,7 +128,6 @@ class ANDIMS_reader(object):
         self.__max_mass = max_mass
 
         self.__mass_list = mass_list
-
 
     def __set_time_list(self,file):
 
