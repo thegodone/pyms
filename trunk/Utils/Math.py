@@ -25,7 +25,7 @@ Provides mathematical functions
 import copy
 
 from pyms.Utils.Error import error
-from pyms.Utils.Utils import is_list
+from pyms.Utils.Utils import is_list, is_number
 
 def median(v):
 
@@ -57,4 +57,32 @@ def median(v):
         median = local_data[K+1]
 
     return median
+
+def vector_by_step(vstart,vstop,vstep):
+
+    """
+    @summary: generates a list by using start, stop, and step values
+
+    @param vstart: Initial value 
+    @type vstart: A number
+    @param vstop: Max value
+    @type vstop: A number
+    @param vstep: Step
+    @type vstep: A number
+   
+    @return: A list generated
+    @rtype: ListType
+    """
+
+    if not is_number(vstart) or not is_number(vstop) or not is_number(vstep):
+        error("parameters start, stop, step must be numbers")
+
+    v = []
+
+    p = vstart 
+    while p < vstop:
+        v.append(p)
+        p = p + vstep
+
+    return v
 
