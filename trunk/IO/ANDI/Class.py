@@ -158,7 +158,7 @@ class ANDIMS_reader(object):
         intensity_matrix = []
         min_mass,max_mass = self.get_mass_range()
         mass_list = self.get_mass_list()
-        intensity_list = self.get_intensity_list()
+        intensity_list = self.__get_intensity_list()
 
         scan = numpy.repeat([0], max_mass - min_mass + 1)
 
@@ -240,7 +240,7 @@ class ANDIMS_reader(object):
 
         return self.__scan_size
 
-    def get_intensity_list(self):
+    def __get_intensity_list(self):
 
         """
         @summary: Returns the full intensity list
@@ -249,7 +249,7 @@ class ANDIMS_reader(object):
         @rtype: ListType
         """ 
 
-        return copy.deepcopy(self.__intensity_list)
+        return self.__intensity_list
 
     def get_filename(self):
 
