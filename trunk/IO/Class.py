@@ -22,6 +22,8 @@ Provides IonChromatogram class
  #                                                                           #
  #############################################################################
 
+import copy
+
 import numpy
 
 from pyms.Utils.Error import error
@@ -231,7 +233,7 @@ class IonChromatogram:
 
         fp = open_for_writing(file_name)
 
-        time_list = self.__time_list
+        time_list = copy.deepcopy(self.__time_list)
 
         if minutes:
             for ii in range(len(time_list)):
