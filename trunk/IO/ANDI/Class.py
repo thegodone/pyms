@@ -22,7 +22,7 @@ Classes for reading manufacturer specific ANDI-MS data files
  #                                                                           #
  #############################################################################
 
-import math
+import math, copy
 
 import numpy
 
@@ -249,7 +249,7 @@ class ANDIMS_reader(object):
         @rtype: ListType
         """ 
 
-        return self.__intensity_list
+        return copy.deepcopy(self.__intensity_list)
 
     def get_filename(self):
 
@@ -283,7 +283,7 @@ class ANDIMS_reader(object):
         @rtype: numpy.ndarray
         """ 
 
-        return self.__intensity_matrix
+        return copy.deepcopy(self.__intensity_matrix)
 
     def get_time_list(self):
 
@@ -294,7 +294,7 @@ class ANDIMS_reader(object):
         @rtype: numpy.ndarray
         """ 
 
-        return self.__time_list
+        return copy.deepcopy(self.__time_list)
 
     def get_tic(self):
 
@@ -306,7 +306,7 @@ class ANDIMS_reader(object):
         """
 
         ia = numpy.sum(self.__intensity_matrix, 1)
-        rt = self.__time_list
+        rt = copy.deepcopy(self.__time_list)
         tic = Class.IonChromatogram(ia, rt)
 
         return tic
@@ -338,12 +338,14 @@ class ANDIMS_reader(object):
         if not int(index):
             error("'index' must be an integer")
         try:
-            intensity_array = self.__intensity_matrix[:,index]
+            ia = copy.deepcopy(self.__intensity_matrix[:,index])
         except IndexError:
             error("index out of bounds.")
 
-        return Class.IonChromatogram(intensity_array, self.__time_list, \
-                index + self.__min_mass)
+        rt = copy.deepcopy(self.__time_list)
+        ic = Class.IonChromatogram(ia, rt, index + self.__min_mass)
+
+        return ic
 
     def get_ic_at_mass(self, mass):
 
