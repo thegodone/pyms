@@ -38,22 +38,23 @@ class GCMS_simulator(object):
     def __init__(self, rt=None, mz=None):
 
         """
-        dim[0] is the number of scans (rt dimension)
-        dim[1] is the number of m/z channels (m/z dimension)
         """
 
         if rt == None or mz == None:
-            error('Both retention time and mz specifications must be given')
+            error('Retention time and mz specifications must be given')
 
         if not is_list(rt) or len(rt) != 3:
-            error("'rt' specification must be a list with exactly three elements")
+            error("'rt' specification list must have exactly three elements")
 
         if not is_list(mz) or len(mz) != 3:
-            error("'mz' specification must be a list with exactly three elements")
+            error("'mz' specification list must have exactly three elements")
 
         self.__time_list = self.__set_time_list(rt)
         self.__mass_list = self.__set_mass_list(mz)
-        self.__intensity_matrix = numpy.zeros((len(self.__time_list),len(self.__mass_list)))
+
+        n = len(self.__time_list)
+        m = len(self.__mass_list)
+        self.__intensity_matrix = numpy.zeros((n,m))
 
     def  __set_time_list(self, rt_spec):
 
