@@ -27,6 +27,7 @@ import copy
 import numpy
 
 from pyms.Utils.Error import error, stop
+from pyms.Utils.Utils import is_str, is_list
 from pyms.Utils.Time import time_str_secs
 from pyms.Utils.Math import vector_by_step
 
