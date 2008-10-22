@@ -553,9 +553,10 @@ class Xcalibur(ANDIMS_reader):
                 scan = numpy.repeat([0], max_mass - min_mass + 1)
                 intensity_matrix.insert(0,scan)
             
+        #Fix differences in intensity matrix
+        self._ANDIMS_reader__intensity_matrix = intensity_matrix	
         scan_size = len(intensity_matrix)
         self.__scan_size = scan_size
-        #return scan_size
 
     def get_scan_size(self):
 
