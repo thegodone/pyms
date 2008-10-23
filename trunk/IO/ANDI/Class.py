@@ -30,7 +30,7 @@ from pycdf import CDF, CDFError
 
 from pyms.IO import Class
 from pyms.Utils.Error import error, stop
-from pyms.Utils.Utils import is_str, is_int, is_float, is_number
+from pyms.Utils.Utils import is_str, is_int, is_float, is_number, is_list
 from pyms.Utils.IO import save_data
 
 class ANDIMS_reader(object):
@@ -211,6 +211,17 @@ class ANDIMS_reader(object):
         # Append the final scan to the data
         intensity_matrix.append(scan)
         self.__intensity_matrix = intensity_matrix
+
+    def modify_intensity_matrix(self,intensity_matrix):
+
+        """
+        @summary: Modifies the intensity matrix
+        """
+
+        if not is_list(intensity_matrix):
+            error("'intensity_matrix' must be an list")
+	else:
+	    self.__intensity_matrix = intensity_matrix
 
     def set_scan_size(self):
 
@@ -554,7 +565,7 @@ class Xcalibur(ANDIMS_reader):
                 intensity_matrix.insert(0,scan)
             
         #Fix differences in intensity matrix
-        self._ANDIMS_reader__intensity_matrix = intensity_matrix	
+        self.modify_intensity_matrix(intensity_matrix)
         scan_size = len(intensity_matrix)
         self.__scan_size = scan_size
 
