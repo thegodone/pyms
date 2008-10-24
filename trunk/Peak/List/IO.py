@@ -23,6 +23,8 @@ Provides input/output functions for peak lists
  #############################################################################
 
 import string
+import re
+import numpy
 
 from pyms.Utils.Error import error
 from pyms.Utils.Utils import is_str 
@@ -110,4 +112,151 @@ def read_chem_station_peaks(file_name):
                 peaks.append(peak)
 
     return peaks
+
+def read_xcalibur_peaks(file_name):
+
+    """
+    @summary: Reads Xcalibur peak report, and returns the list of peak objects
+
+    @param file_name: Peak list file name
+    @type file_name: StringType
+
+    @return: Returns the list of pyms.Peak.Class.Peak objects
+    @rtype: ListType
+
+    @author: Tim Erwin
+    """
+
+    lines = file_lines(file_name)
+
+    print " -> Reading Xcalibur peak file '%s'" % (file_name)
+    del lines[0:5] # get rid of the title line
+
+    #Initialise list to store peaks
+    peak_list=[]
+
+    for line in lines:
+
+        fields = string.split(line,"\t")
+
+        #initalise variables for peak
+        retention_time = float(fields[0])*60.0
+        peak_area = float(fields[3])
+
+        #Create peak
+        peak = Peak(retention_time, peak_area)
+        peak_list.append(peak)
+
+    return peak_list
+
+def read_amdis_peaks(file_name,uncertain_masses=False):
+
+    """
+    @summary: Reads Xcalibur peak report, and returns the list of peak objects
+
+    @param file_name: Peak list file name
+    @type file_name: StringType
+
+    @return: Returns the list of pyms.Peak.Class.Peak objects
+    @rtype: ListType
+
+    @author: Tim Erwin
+    """
+
+    lines = file_lines(file_name)
+
+    print " -> Reading AMDIS ELU file '%s'" % (file_name)
+
+    #Initialise list to store peaks
+    peak_list=[]
+    retention_time=0
+    area = 0
+    peak_name = None
+    peak_percentage = None    
+
+    for line in lines:
+    
+        #New peak denoted by string beginning with Retention Time
+        rt_match = re.search(r'RT(\d+\.\d*)',line)
+        if rt_match:
+
+            prev_peak_name = peak_name
+            prev_peak_percentage = peak_percentage
+
+            #Get peak name and percentage match
+            name_match = re.search(r'SC(\d+)',line)
+            percentage_match = re.search(r'%(\d+\.\d*)',line)
+
+            if not (name_match and percentage_match):
+                error("ELU is not of expected format")
+            else:
+                peak_name = name_match.group(1)
+                peak_percentage = percentage_match.group(1)
+
+            #Store previous peak only if best match (there may be multiple models of
+            #a single peak)
+            if (retention_time):
+                if (prev_peak_name == peak_name) and \
+                        (prev_peak_percentage < peak_percentage):
+                    peak = Peak(retention_time, area) 
+                    mass_list,mass_spectrum = create_mass_spec(mass_intensity_list)
+                    peak.mass_list = mass_list
+                    peak.mass_spectrum = mass_spectrum
+                    peak_list.append(peak)
+
+            #initalise variables for peak
+            retention_time = rt_match.group(1)
+            retention_time=float(retention_time)*60.0
+            mass_intensity_list={}
+
+            #Area
+            area_match = re.search(r'IS(\d+)',line)
+            if area_match: area = float(area_match.group(1))
+
+            #Abundance of base peak
+            bp_match = re.search(r'AM(\d+)',line)
+            if bp_match: bp = float(bp_match.group(1))
+
+        #Get mass list under each peak, intensities are stored as percentages of base peak
+        mass_intensity_match = re.findall(r'\((\d+)\,(\d+) \)',line)
+        for match in mass_intensity_match:
+            mass = int(match[0])
+            intensity = ( float(match[1])/1000.0 ) * bp
+            mass_intensity_list[mass]=intensity
+
+        #Use uncertain peaks
+        if uncertain_masses:
+            mass_intensity_ = re.findall(r'(\(\d+\,\d+ B\d\.\d\))',line)
+            for match in mass_intensity_match:
+                mass = int(match[0])
+                intensity = ( float(match[1])/1000.0 ) * bp
+                mass_intensity_list[mass]=intensity
+
+    #Create last peak
+    if(prev_peak_name == peak_name) and (prev_peak_percentage < peak_percentage):
+        peak = Peak(retention_time, area)
+        mass_list,mass_spectrum = create_mass_spec(mass_intensity_list)
+        peak.mass_list = mass_list
+        peak.mass_spectrum = mass_spectrum
+        peak_list.append(peak)
+
+    return peak_list
+
+def create_mass_spec(mass_intensity_list):
+
+    mass_values = mass_intensity_list.keys()
+    min_mass = min(mass_values)
+    max_mass = max(mass_values)
+
+    mass_spectrum = numpy.zeros(((max_mass - min_mass)+1), dtype='d')
+    mass_list = []
+    i = 0
+
+    for mass in range(min_mass,max_mass+1):
+        mass_list.append(mass)
+        if (mass_intensity_list.has_key(mass)):
+            mass_spectrum[i] = mass_intensity_list[mass]
+        i+=1
+
+    return mass_list, mass_spectrum
 
