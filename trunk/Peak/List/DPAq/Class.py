@@ -85,6 +85,7 @@ class Alignment(object):
         self.peakalgt = numpy.transpose(self.peakalgt)
 
     def filter_min_peaks(self, min_peaks):
+
         """
         @summary: Filters alignment positions that have less peaks than 'min_peaks'
 
@@ -99,8 +100,8 @@ class Alignment(object):
         """
 
         self.peakalgt =  [ x for x in self.peakalgt
-                          if len(filter(None, x)) >= min_peaks
-                        ]
+                         if len(filter(None, x)) >= min_peaks
+                         ]
 
     def write_csv(self, rt_file_name, area_file_name, minutes=True):
 
