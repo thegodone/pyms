@@ -44,6 +44,8 @@ def align_with_tree(T, min_peaks=1):
     @type: pyms.Peak.List.DPA.Class.PairwiseAlignment 
     @return: The final alignment consisting of aligned input alignments
     @rtype: pyms.Peak.List.DPA.Class.Alignment
+    @author: Woon Wai Keen
+    @author: Vladimir Likic
     """
 
     print " Aligning %d items with guide tree (D=%.2f, gap=%.2f)" % \
@@ -110,7 +112,7 @@ def exprl2alignment(exprl):
 
 def align(a1, a2, D, gap):
 
-    """ 
+    """
     @summary: Aligns two alignments
 
     @param a1: The first alignment
@@ -153,6 +155,9 @@ def merge_alignments(A1, A2, traces):
     @param traces: DP traceback
 
     @return: A single alignment from A1 and A2
+    @author: Woon Wai Keen
+    @author: Vladimir Likic
+    @author: Qiao Wang
     """
 
     # Create object to hold new merged alignment and fill in its expr_codes
@@ -160,8 +165,8 @@ def merge_alignments(A1, A2, traces):
     ma.expr_code = A1.expr_code + A2.expr_code
 
     # create empty lists of dimension |A1| + |A2|
-    merged = [ [] for _ in range(len(A1.peakpos) + len(A2.peakpos)) ]
-
+    dimension = len(A1.peakpos) + len(A2.peakpos)
+    merged = [ [] for _ in range(dimension) ]
     A1 = A1.peakpos
     A2 = A2.peakpos
 
@@ -204,13 +209,11 @@ def merge_alignments(A1, A2, traces):
 
             idx2 = idx2 + 1
 
-    ma.peakpos = merged
-
+    ma.peakalgt = numpy.transpose(merged)
     # sort according to average peak
-    ma.transpose()
-    ma.peakpos.sort(Utils.alignment_compare)
-    ma.transpose()
-
+    ma.peakalgt = list(ma.peakalgt)
+    ma.peakalgt.sort(Utils.alignment_compare)
+    ma.peakpos = numpy.transpose(ma.peakalgt)
     return ma
 
 def alignment_similarity(traces, score_matrix, gap):
@@ -223,6 +226,8 @@ def alignment_similarity(traces, score_matrix, gap):
     @param gap: Gap penalty
 
     @return: Similarity score (i.e. more similar => higher score)
+    @author: Woon Wai Keen
+    @author: Vladimir Likic
     """
 
     score_matrix = 1. - score_matrix
@@ -267,14 +272,11 @@ def score_matrix(a1, a2, D):
     @rtype: pyms.Peak.List.Class.Alignment
 
     @author: Qiao Wang
-    @author: Vladimir Likic
     """
     score_matrix = numpy.zeros((len(a1.peakalgt), len(a2.peakalgt)))
-
     row = 0
     col = 0
     sim_score=0
-
     for algt1pos in a1.peakalgt:
         for algt2pos in a2.peakalgt:
             sim_score = position_similarity(algt1pos, algt2pos, D)
@@ -282,13 +284,9 @@ def score_matrix(a1, a2, D):
             col=col+1
         row=row+1
         col=0
-
-    print "Return a", len(a1.peakalgt), "by", len(a2.peakalgt), "similarity matrix"
-
     return score_matrix
 
 def position_similarity(pos1, pos2, D):
-
     """
     @summary: Calculates the similarity between each alignment pairs of positions
     
@@ -300,29 +298,24 @@ def position_similarity(pos1, pos2, D):
     @rtype: FloatType
     
     @author: Qiao Wang
+    
     """
-
-    score = 0
-
+    score=0.
     i = len(pos1)
     j = len(pos2)
-
     for a in pos1:
         for b in pos2:
             if a is not None and b is not None:
-
-                mass_spect1=numpy.array(a.mass_spectrum, dtype='d')
-                mass_spect2=numpy.array(b.mass_spectrum, dtype='d')
-                mass_spect1_sum=numpy.sum(mass_spect1**2, axis=0)
-                mass_spect2_sum=numpy.sum(mass_spect2**2, axis=0)
-
-                top = numpy.dot(mass_spect1, mass_spect2)
+                mass_spect1=numpy.array(a.mass_spectrum,dtype='d')
+                mass_spect2=numpy.array(b.mass_spectrum,dtype='d')
+                mass_spect1_sum=numpy.sum(mass_spect1 ** 2, axis=0)
+                mass_spect2_sum=numpy.sum(mass_spect2 ** 2, axis=0)
+                top = numpy.dot(mass_spect1,mass_spect2)
                 bot = numpy.sqrt(mass_spect1_sum*mass_spect2_sum)
                 cs =1.-(top/bot)
                 cos = 1.-cs
                 rtime=numpy.exp(-((a.rt-b.rt) / D)**2 / 2.)
                 score=score + (1.-(cos*rtime))
                 score=score / (i*j)
-
-    return score
+        return score
 

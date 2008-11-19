@@ -55,12 +55,12 @@ class Alignment(object):
         """
         if expr == None:
             self.peakpos = []
-	    self.peakalgt = []
+            self.peakalgt = []
             self.expr_code =  []
             self.similarity = None
         else:
             self.peakpos = [ copy.deepcopy(expr.peaks) ]
-	    self.peakalgt = numpy.transpose(self.peakpos)
+            self.peakalgt = numpy.transpose(self.peakpos)
             self.expr_code =  [ expr.expr_code ]
             self.similarity = None
 
@@ -76,16 +76,14 @@ class Alignment(object):
 
     def transpose(self):
 
-        """
-        @summary: Transposes peak positions in the alignment
+        #@summary: Transposes peak positions in the alignment
 
-        @author: Qiao Wang
-        """
+        #@author: Qiao Wang
+
 
         self.peakalgt = numpy.transpose(self.peakalgt)
 
     def filter_min_peaks(self, min_peaks):
-
         """
         @summary: Filters alignment positions that have less peaks than 'min_peaks'
 
@@ -95,13 +93,14 @@ class Alignment(object):
             position to survive filtering
         @type min_peaks: IntType
 
-        @author: Woon Wai Keen
         @author: Qiao Wang
         """
-
-        self.peakalgt =  [ x for x in self.peakalgt
-                         if len(filter(None, x)) >= min_peaks
-                         ]
+        filtered_list=[]
+        for pos in range(len(self.peakalgt)):
+            if len(filter(None,self.peakalgt[pos])) >= min_peaks:
+                filtered_list.append(self.peakalgt[pos])
+        self.peakalgt=filtered_list
+        self.peakpos = numpy.transpose(self.peakalgt)
 
     def write_csv(self, rt_file_name, area_file_name, minutes=True):
 
@@ -165,7 +164,6 @@ class PairwiseAlignment(object):
     @author: Woon Wai Keen
     @author: Vladimir Likic
     """
-
     def __init__(self, algts, D, gap):
         """
         @param algts: A list of alignments 
@@ -178,7 +176,6 @@ class PairwiseAlignment(object):
         @author: Woon Wai Keen
         @author: Vladimir Likic
         """
-
         self.algts = algts
         self.D = D
         self.gap = gap
@@ -218,7 +215,6 @@ class PairwiseAlignment(object):
                 sim_matrix[i,j] = sim_matrix[j,i] = ma.similarity
                 total_n = total_n - 1
                 print " -> %d pairs remaining" % total_n
-
         return sim_matrix
 
 
@@ -241,7 +237,6 @@ class PairwiseAlignment(object):
         # set diagonal elements of the similarity matrix to zero
         for i in range(len(dist_matrix)):
             dist_matrix[i,i] = 0
-
         return dist_matrix
 
     def _guide_tree(self, dist_matrix):
@@ -257,14 +252,8 @@ class PairwiseAlignment(object):
         @author: Woon Wai Keen
         @author: Vladimir Likic
         """
-
         n = len(dist_matrix)
-
         print " -> Clustering %d pairwise alignments." % (n*(n-1)),
-
         tree = Pycluster.treecluster(distancematrix=dist_matrix, method='a')
-
         print "Done"
-
         return tree
-
