@@ -1,5 +1,5 @@
 """
-Utilities for manipulation of peak lists
+Utilities for peak alignment by dynamic programming
 """
 
  #############################################################################
@@ -22,78 +22,22 @@ Utilities for manipulation of peak lists
  #                                                                           #
  #############################################################################
 
-import math
+import numpy
 
-from pyms.Peak.Class import Peak 
-from pyms.Utils.Error import error
-from pyms.Utils.Utils import is_list, is_str
-from pyms.Utils.Time import time_str_secs 
-
-def is_peak_list(peaks):
+def alignment_compare(x, y):
 
     """
-    @summary: Returns True if 'peaks' is a valid peak list, False
-    otherwise
-
-    @param peaks: A list of peak objects
-    @type peaks: ListType
-
-    @return: A boolean indicator
-    @rtype: BooleanType
-
-    @author: Vladimir Likic
+    @summary: A helper function for sorting peak positions in a alignment
     """
 
-    flag = True
+    x = [ _.rt for _ in filter(None, x)]
+    y = [ _.rt for _ in filter(None, y)]
 
-    if not is_list(peaks):
-        flag = False
+    avg_x = numpy.sum(x)/len(x)
+    avg_y = numpy.sum(y)/len(y)
+
+    if avg_x < avg_y:
+        return -1
     else:
-        for item in peaks:
-           if not isinstance(item, Peak):
-              flag = False
-
-    return flag
-
-def sele_peaks_by_rt(peaks, rt_range):
-
-    """
-    @summary: Selects peaks from a retention time range
-
-    @param peaks: A list of peak objects
-    @type peaks: ListType
-    @param rt_range: A list of two time strings, specifying lower and
-           upper retention times
-    @type rt_range: ListType
-    @return: A list of peak objects
-    @rtype: ListType
-    """
-
-    if not is_peak_list(peaks):
-        error("'peaks' not a peak list")
-
-    if not is_list(rt_range):
-        error("'rt_range' not a list")
-    else:
-        if len(rt_range) != 2:
-            error("'rt_range' must have exactly two elements")
-
-        if not is_str(rt_range[0]) or not is_str(rt_range[1]):
-            error("lower/upper retention time limits must be strings")
-
-    rt_lo = time_str_secs(rt_range[0])
-    rt_hi = time_str_secs(rt_range[1])
-
-    if not rt_lo < rt_hi:
-        error("lower retention time limit must be less than upper")
-
-    peaks_sele = []
-
-    for peak in peaks:
-        if peak.rt > rt_lo and peak.rt < rt_hi:
-            peaks_sele.append(peak)
-
-    print "%d peaks selected" % (len(peaks_sele))
-
-    return peaks_sele
+        return 1
 
