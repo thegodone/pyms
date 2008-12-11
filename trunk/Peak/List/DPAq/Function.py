@@ -303,6 +303,7 @@ def position_similarity(pos1, pos2, D):
     score=0.
     i = len(pos1)
     j = len(pos2)
+    count=0.
     for a in pos1:
         for b in pos2:
             if a is not None and b is not None:
@@ -316,9 +317,9 @@ def position_similarity(pos1, pos2, D):
                 cos = 1.-cs
                 rtime=numpy.exp(-((a.rt-b.rt) / D)**2 / 2.)
                 score=score + (1.-(cos*rtime))
-            elif a is None:
-                i = i - 1
-            elif b is None:
-                j = j - 1
-    score = score / (i*j)
+                count=count+1
+    if count==0.:
+        score=0.
+    else:
+        score = score / count
     return score
