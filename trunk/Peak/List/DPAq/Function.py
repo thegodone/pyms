@@ -316,6 +316,9 @@ def position_similarity(pos1, pos2, D):
                 cos = 1.-cs
                 rtime=numpy.exp(-((a.rt-b.rt) / D)**2 / 2.)
                 score=score + (1.-(cos*rtime))
-                score=score / (i*j)
-        return score
-
+            elif a is None:
+                i = i - 1
+            elif b is None:
+                j = j - 1
+    score = score / (i*j)
+    return score
