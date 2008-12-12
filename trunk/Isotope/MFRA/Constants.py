@@ -22,8 +22,8 @@ Constants for MFRA
  #                                                                           #
  #############################################################################
 
-# abundance values of natural stable isotopes from Rosman & Taylor (1998)
-# {give full reference please}
+# abundance values of natural stable isotopes from "Isotopic compositions
+# of the elements 1997" Rosman and Taylor, 1998
 nsi = {
   'c' : [0.9893, 0.0107],
   'o' : [0.99757, 0.00038, 0.00205],
