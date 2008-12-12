@@ -22,21 +22,42 @@ Functions for MFRA
  #                                                                           #
  #############################################################################
 
-from numpy import *
+import numpy
+
+from pyms.Utils.Error import error
+from pyms.Utils.Utils import is_int, is_positive_int, is_list, is_list_of_dec_nums, is_array
 
 def c_mass_isotope_distr(mdv, c_corr):
 
-    # calculate the exclusive mass isotope distribution of
-    # the carbon skeleton, mdv_alpha_star
-    mdv = array(mdv, float)
-    mdv_alpha = mdv/sum(mdv)
-    mdv_alpha = matrix(mdv_alpha)
-    mdv_alpha = mdv_alpha.T
-    c_corr = matrix(c_corr)
-    mdv_alpha_star = (c_corr.I) * mdv_alpha
-    mdv_alpha_star = array(mdv_alpha_star, float)
-    mdv_alpha_star = mdv_alpha_star/sum(mdv_alpha_star)
+    """
+    @summary: Calculates the mass isotope distribution of the carbon skeleton.
 
+    @param mdv: Mass distribution vector.
+    @type mdv: types.ListType
+    @param c_corr: The overall correction matrix.
+    @type c_corr: numpy.ndarray
+    
+    @return: The exclusive mass isotope distribution of the carbon skeleton.
+    @rtype: numpy.ndarray
+    
+    @author: Milica Ng
+    """
+
+    # check the arguments
+    if not is_list(mdv):
+        error("'mdv' must be types.ListType")
+    if not is_array(c_corr):
+        error("'c_corr' must be numpy.ndarray")
+
+    mdv = numpy.array(mdv, float)
+    mdv_alpha = mdv/sum(mdv)
+    mdv_alpha = numpy.matrix(mdv_alpha)
+    mdv_alpha = mdv_alpha.T
+    c_corr = numpy.matrix(c_corr)
+    mdv_alpha_star = (c_corr.I) * mdv_alpha
+    mdv_alpha_star = numpy.array(mdv_alpha_star, float)
+    mdv_alpha_star = mdv_alpha_star/sum(mdv_alpha_star)
+    
     return mdv_alpha_star
 
 def correction_matrix(n, num_a, nsil):
@@ -60,34 +81,25 @@ def correction_matrix(n, num_a, nsil):
     @author: Milica Ng
     """
 
-    # if not(isinstance(n, IntType)):
-        # error("'n' must be an integer")
-    # elif not (n > 0):
-        # error("'n' must be grater than zero")
-    # if not(isinstance(num_a, IntType)):
-        # error("'num_a' must be an integer")
-    # elif not (num_a > 0):
-        # error("'num_a' must be grater than zero")
-    # if not(isinstance(nsil, ListType)):
-        # error("'nsil' must be a list")
-    # elif (nsil == []):
-        # error("'nsil' must not be empty")
-    # else:
-        # for q in nsil: 
-           # if not(isinstance(q, FloatType)):
-               # error("'nsil' must be a list of decimal numbers")
+    # check the arguments
+    if not is_positive_int(n):
+        error("'n' must be an integer greater than zero")
+    if not is_int(num_a):
+        error("'num_a' must be an integer")
+    if not is_list_of_dec_nums(nsil):
+        error("'nsil' must be a non-empty list of decimal numbers")
 
     if not num_a == 0:
-        c_corr_a = zeros((n+1,n+1))
+        c_corr_a = numpy.zeros((n+1,n+1))
         # calculate the first column of the correction matrix
         tmp = mass_dist_vector(n, num_a, nsil)
-        c_corr_a[:,0]  = reshape(tmp,(1,len(tmp)))
+        c_corr_a[:,0]  = numpy.reshape(tmp,(1,len(tmp)))
         # calculate the rest of the matrix from the first column
         for i in range(1,(n+1)):
             for j in range(1,(n+1)):
                 c_corr_a[i,j] = c_corr_a[i-1,j-1]
     else:
-        c_corr_a = identity(n+1)
+        c_corr_a = numpy.identity(n+1)
     return c_corr_a
 
 def mass_dist_vector (n, num_a, nsil):
@@ -111,39 +123,30 @@ def mass_dist_vector (n, num_a, nsil):
     @author: Milica Ng
     """
 
-    # if not(isinstance(n, IntType)):
-        # error("'n' must be an integer")
-    # elif not (n > 0):
-        # error("'n' must be grater than zero")
-    # if not(isinstance(num_a, IntType)):
-        # error("'num_a' must be an integer")
-    # elif not (num_a > 0):
-        # error("'num_a' must be grater than zero")
-    # if not(isinstance(nsil, ListType)):
-        # error("'nsil' must be a list")
-    # elif (nsil == []):
-        # error("'nsil' must not be empty")
-    # else:
-        # for q in nsil: 
-           # if not(isinstance(q, FloatType)):
-               # error("'nsil' must be a list of decimal numbers")
+    # check the arguments
+    if not is_positive_int(n):
+        error("'n' must be an integer greater than zero")
+    if not is_positive_int(num_a):
+        error("'n' must be an integer greater than zero")
+    if not is_list_of_dec_nums(nsil):
+        error("'nsil' must be a non-empty list of decimal numbers")
 
-    mdv = zeros(((n + 1),1))
+    mdv = numpy.zeros(((n + 1),1))
     #   calculate all mass combinations where value 0 corresponds to m0,
     #     1 corresponds to m1, 2 corresponds to m2, ..., N corresponds to mN
     m_combs = []
-    m_combs = combinations_with_repetition(size(range(0,(len(nsil)))), num_a) - 1
-    # sort m_comb in order of row sums
+    m_combs = combinations_with_repetition(numpy.size(range(0,(len(nsil)))), num_a) - 1
+    # sort m_combs in order of row sums
     m_combs = m_combs.tolist()
     m_combs.sort(lambda x, y: cmp(sum(x),sum(y)))
-    m_combs = array(m_combs)
+    m_combs = numpy.array(m_combs)
     m = 0  # initial mass value
     count = 0  # current row in m_comb
     for i in range(0,n+1):
-        #loop until the value of m changes (e.g m0 -> m1)
+        # loop until the value of m changes (e.g m0 -> m1)
         while m == sum(m_combs[count,]):
             # calculate v vector
-            v = zeros((len(nsil),1))
+            v = numpy.zeros((len(nsil),1))
             for j in range(0,num_a):
                 v[(m_combs[count,j])] = v[(m_combs[count,j])] + 1
             # calculate isotopolog abundance (part_1 * part_2) and add any
@@ -154,9 +157,9 @@ def mass_dist_vector (n, num_a, nsil):
                 part_2 = part_2 * nsil[k]**v[k]/fact(int(v[k]))
             mdv[i] = mdv[i] + part_1 * part_2
             count = count + 1
-            if (count > (size(m_combs,0)) - 1):  # check if finished
+            if (count > (numpy.size(m_combs,0)) - 1):  # check if finished
                 break                              # (some entries might 0)
-        if (((i + 1) > (size(m_combs,0)) - 1) or (count > (size(m_combs,0)) - 1)):
+        if (((i + 1) > (numpy.size(m_combs,0)) - 1) or (count > (numpy.size(m_combs,0)) - 1)):
             break                              # (some entries might be 0)
         m = m + 1
     return mdv
@@ -185,28 +188,24 @@ def combinations_with_repetition(n, k):
     @author: Milica Ng
     """
 
-    # if not(isinstance(n, IntType)):
-        # error("'n' must be an integer")
-    # elif not (n > 0):
-        # error("'n' must be grater than zero")
-    # if not(isinstance(k, IntType)):
-        # error("'k' must be an integer")
-    # elif not (k > 0):
-        # error("'k' must be grater than zero")
+    # check the arguments
+    if not is_positive_int(n):
+        error("'n' must be an integer greater than zero")
+    if not is_positive_int(k):
+        error("'k' must be an integer greater than zero")
 
     if (k==1):
-        indices = arange(1,n+1)[:, newaxis]
+        indices = numpy.arange(1,n+1)[:, numpy.newaxis]
         return indices
     if (n==1):
-        indices = ones((1,k,))
+        indices = numpy.ones((1,k,))
         return indices
     indices = []
     for z in range(1,n+1):
         next_indices = combinations_with_repetition(n+1-z,k-1)
         if indices == []:
-            indices = hstack((z*ones((size(next_indices,0),1)), next_indices+z-1))
+            indices = numpy.hstack((z*numpy.ones((numpy.size(next_indices,0),1)), next_indices+z-1))
         else:
-            tmp = hstack((z*ones((size(next_indices,0),1)), next_indices+z-1))
-            indices = vstack((indices, tmp))
+            tmp = numpy.hstack((z*numpy.ones((numpy.size(next_indices,0),1)), next_indices+z-1))
+            indices = numpy.vstack((indices, tmp))
     return indices
-
