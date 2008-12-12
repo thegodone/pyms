@@ -190,3 +190,48 @@ def is_str_num(arg):
         return True
     else:
         return False
+
+def is_positive_int(arg):
+
+    """
+    @summary: Determines if the argument is an integer greater than zero
+
+    @param arg: A string to be evaluate as a postive integer
+    @type arg: types.StringType
+
+    @return: A boolean indicator True or False
+    @rtype:  BooleanType
+
+    @author: Milica Ng
+    """
+
+    if not is_int(arg):
+        return False
+    elif not (arg > 0):
+        return False
+    else:
+        return True
+
+def is_list_of_dec_nums(arg):
+
+    """
+    @summary: Determines if the argument is a list of decimal numbers
+
+    @param arg: A string to be evaluate as a list of decimal numbers
+    @type arg: types.StringType
+
+    @return: A boolean indicator True or False
+    @rtype:  BooleanType
+
+    @author: Milica Ng
+    """
+
+    if not(isinstance(arg, types.ListType)):
+        return False
+    elif (arg == []):
+        return False
+    else:
+        for q in arg:
+           if not(isinstance(q, types.FloatType)):
+               return False
+    return True
