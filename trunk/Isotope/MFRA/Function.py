@@ -26,8 +26,21 @@ import numpy
 
 from pyms.Utils.Error import error
 from pyms.Utils.Utils import is_int, is_positive_int, is_list, is_list_of_dec_nums, is_array
+from pyms.Isotope.MFRA.Constants import nsi
 
-def overall_correction_matrix(n, mdv, atoms, nsi):
+def fract_labelling(n, mdv_aa):
+
+    mdv_aa = numpy.matrix(mdv_aa)
+    fl = (range(0,(n+1)) * mdv_aa) / (n * numpy.sum(mdv_aa))
+    return fl
+
+def corr_unlabelled(n, mdv_alpha_star, f_unlablelled):
+
+    mdv_unlabelled = mass_dist_vector(n, n, nsi['c'])
+    mdv_aa = (mdv_alpha_star - f_unlablelled * mdv_unlabelled)/(1 - f_unlablelled)
+    return mdv_aa
+
+def overall_correction_matrix(n, mdv, atoms):
 
     """
     @summary: Calculates the overall correction matrix.
@@ -62,6 +75,7 @@ def overall_correction_matrix(n, mdv, atoms, nsi):
         print '\n Calculating %s correction matrix' % ( a )
         m_corr = correction_matrix(n, atoms[a], nsi[a])
         c_corr = numpy.dot(c_corr,m_corr)
+    print '\n Calculated overall correction matrix.'
     return c_corr
 
 def correction_matrix(n, num_a, nsil):
