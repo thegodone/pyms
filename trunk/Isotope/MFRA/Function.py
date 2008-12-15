@@ -25,19 +25,66 @@ Functions for MFRA
 import numpy
 
 from pyms.Utils.Error import error
-from pyms.Utils.Utils import is_int, is_positive_int, is_list, is_list_of_dec_nums, is_array
+from pyms.Utils.Utils import is_int, is_positive_int, is_list, \
+    is_list_of_dec_nums, is_array, is_number
 from pyms.Isotope.MFRA.Constants import nsi
 
 def fract_labelling(n, mdv_aa):
 
+    """
+    @summary: Calculates the fractional labelling of the fragment.
+
+    @param n: Number of fragment's C atoms which may contain exogenous (non
+        natural abundance) 13C (e.g. only amino acid ones)
+    @type n: types.IntType
+    @param mdv_aa: Mass distribution vector.
+    @type mdv_aa: numpy.ndarray
+
+    @return: Fractional labelling.
+    @rtype: types.FloatType
+    
+    @author: Milica Ng
+    """
+
+    # check the arguments
+    if not is_positive_int(n):
+        error("'n' must be an integer greater than zero")
+    if not is_array(mdv_aa):
+        error("'mdv_aa' be numpy.ndarray")
+
     mdv_aa = numpy.matrix(mdv_aa)
     fl = (range(0,(n+1)) * mdv_aa) / (n * numpy.sum(mdv_aa))
-    return fl
+    return float(fl)
 
-def corr_unlabelled(n, mdv_alpha_star, f_unlablelled):
+def corr_unlabelled(n, mdv_alpha_star, f_unlabelled):
+
+    """
+    @summary: Corrects the mass distribution vector for fractional labelling.
+
+    @param n: Number of fragment's C atoms which may contain exogenous (non
+        natural abundance) 13C (e.g. only amino acid ones)
+    @type n: types.IntType
+    @param mdv_alpha_star: Mass distribution vector.
+    @type mdv_alpha_star: numpy.ndarray
+    @param f_unlabelled: Percentage unlabelled biomass.
+    @type f_unlabelled: types.IntType or types.FloatType
+
+    @return: Mass distribution vector.
+    @rtype: numpy.ndarray
+
+    @author: Milica Ng
+    """
+
+    # check the arguments
+    if not is_positive_int(n):
+        error("'n' must be an integer greater than zero")
+    if not is_array(mdv_alpha_star):
+        error("'mdv_alpha_star' must be numpy.ndarray")
+    if not is_number(f_unlabelled):
+        error("'f_unlabelled' must be a number")
 
     mdv_unlabelled = mass_dist_vector(n, n, nsi['c'])
-    mdv_aa = (mdv_alpha_star - f_unlablelled * mdv_unlabelled)/(1 - f_unlablelled)
+    mdv_aa = (mdv_alpha_star - f_unlabelled * mdv_unlabelled)/(1 - f_unlabelled)
     return mdv_aa
 
 def overall_correction_matrix(n, mdv, atoms):
@@ -92,7 +139,7 @@ def correction_matrix(n, num_a, nsil):
     @type num_a: types.IntType
     @param nsil: Contains abundance values of natural stable isotopes.
     @type nsil: types.ListType
-    
+
     @return: Correction matrix.
     @rtype: numpy.ndarray
     
