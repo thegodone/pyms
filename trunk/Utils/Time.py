@@ -86,7 +86,7 @@ def window_sele_points(ic, window_sele, half_window=False):
         else:
             points = window_sele
     else:
-        time = time_str_seconds(window_sele)
+        time = time_str_secs(window_sele)
         time_step = ic.get_time_step()
 
         if half_window:
