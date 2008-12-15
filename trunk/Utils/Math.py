@@ -22,7 +22,7 @@ Provides mathematical functions
  #                                                                           #
  #############################################################################
 
-import copy
+import copy, math
 
 from pyms.Utils.Error import error
 from pyms.Utils.Utils import is_list, is_number
@@ -72,6 +72,8 @@ def vector_by_step(vstart,vstop,vstep):
    
     @return: A list generated
     @rtype: ListType
+
+    @author: Vladimir Likic
     """
 
     if not is_number(vstart) or not is_number(vstop) or not is_number(vstep):
@@ -85,4 +87,33 @@ def vector_by_step(vstart,vstop,vstep):
         p = p + vstep
 
     return v
+
+def MAD(v):
+
+    """
+    @summary: median absolute deviation
+
+    @param v: A list or array
+    @type v: ListType, TupleType, or numpy.core.ndarray
+
+    @return: median absolute deviation
+    @rtype: FloatType
+
+    @author: Vladimir Likic
+    """
+
+    if not is_list(v):
+        error("argument neither list nor array")
+
+    m = median(v)
+    m_list = []
+
+    for xi in v:
+        d = math.fabs(xi - m)
+        m_list.append(d)
+
+    mad = median(m_list)/0.6745
+
+    return mad
+
 
