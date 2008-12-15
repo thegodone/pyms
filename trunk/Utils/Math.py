@@ -116,4 +116,35 @@ def MAD(v):
 
     return mad
 
+def amin(v):
+
+    """
+    @summary: Finds the minimum element in a list or array
+
+    @param v: A list or array
+    @type v: ListType, TupleType, or numpy.core.ndarray
+
+    @return: Tuple (maxi, maxv), where maxv is the minimum 
+        element in the list and maxi is its index
+    @rtype: TupleType
+
+    @author: Vladimir Likic
+    """
+
+    if not is_list(v):
+        error("argument neither list nor array")
+
+    minv = max(v) # built-in max() function
+    mini = None
+
+    for ii in range(len(v)):
+        if v[ii] < minv:
+            minv = v[ii]
+            mini = ii
+
+    if mini == None:
+        error("finding maximum failed")
+
+    return mini, minv
+
 

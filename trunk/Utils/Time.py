@@ -22,6 +22,8 @@ Time conversion and related functions
  #                                                                           #
  #############################################################################
 
+import math
+
 from pyms.Utils.Error import error
 from pyms.Utils.Utils import is_int, is_str, is_str_num
 
