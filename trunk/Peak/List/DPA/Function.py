@@ -29,7 +29,6 @@ import numpy
 from pyms.Utils.Error import error, stop
 from pyms.Utils.Utils import is_list 
 from pyms.Utils.DP import dp
-
 from pyms.Experiment.Class import Experiment
 
 import Class
@@ -85,8 +84,6 @@ def exprl2alignment(exprl):
     """
     @summary: Converts experiments into alignments
 
-    The argument to this function is a list of experiment instances.
-
     @param exprl: The list of experiments to be converted into an alignment
         objects
     @type exprl: ListType
@@ -100,12 +97,10 @@ def exprl2alignment(exprl):
     algts = []
 
     for item in exprl:
-
         if not isinstance(item, Experiment):
             error("list items must be 'Experiment' instances")
         else:
             algt = Class.Alignment(item)
-
         algts.append(algt)
 
     return algts
@@ -179,7 +174,6 @@ def merge_alignments(A1, A2, traces):
     for trace in traces:
 
         if trace == 0:
-
             for i in range(len(A1)):
                 merged[i].append(A1[i][idx1])
 
@@ -190,7 +184,6 @@ def merge_alignments(A1, A2, traces):
             idx2 = idx2 + 1
 
         elif trace == 1:
-
             for i in range(len(A1)):
                 merged[i].append(A1[i][idx1])
 
@@ -200,7 +193,6 @@ def merge_alignments(A1, A2, traces):
             idx1 = idx1 + 1
 
         elif trace == 2:
-
             for i in range(len(A1)):
                 merged[i].append(None)
 
@@ -214,6 +206,7 @@ def merge_alignments(A1, A2, traces):
     ma.peakalgt = list(ma.peakalgt)
     ma.peakalgt.sort(Utils.alignment_compare)
     ma.peakpos = numpy.transpose(ma.peakalgt)
+
     return ma
 
 def alignment_similarity(traces, score_matrix, gap):
@@ -254,8 +247,6 @@ def alignment_similarity(traces, score_matrix, gap):
 
     return similarity
 
-################################################################
-
 def score_matrix(a1, a2, D):
 
     """
@@ -273,22 +264,27 @@ def score_matrix(a1, a2, D):
 
     @author: Qiao Wang
     """
+
     score_matrix = numpy.zeros((len(a1.peakalgt), len(a2.peakalgt)))
     row = 0
     col = 0
-    sim_score=0
+    sim_score = 0
+
     for algt1pos in a1.peakalgt:
         for algt2pos in a2.peakalgt:
             sim_score = position_similarity(algt1pos, algt2pos, D)
             score_matrix[row][col] = sim_score
-            col=col+1
-        row=row+1
-        col=0
+            col = col+1
+        row = row+1
+        col = 0
+
     return score_matrix
 
 def position_similarity(pos1, pos2, D):
+
     """
-    @summary: Calculates the similarity between each alignment pairs of positions
+    @summary: Calculates the similarity between the two alignment
+        positions
     
     @param pos1: The position of the first alignment
     @param pos2: The position of the second alignment
@@ -298,28 +294,30 @@ def position_similarity(pos1, pos2, D):
     @rtype: FloatType
     
     @author: Qiao Wang
-    
+    @author: Vladimir Likic
     """
-    score=0.
-    i = len(pos1)
-    j = len(pos2)
-    count=0.
+
+    score = 0.0
+    count = 0
+
     for a in pos1:
         for b in pos2:
             if a is not None and b is not None:
-                mass_spect1=numpy.array(a.mass_spectrum,dtype='d')
-                mass_spect2=numpy.array(b.mass_spectrum,dtype='d')
-                mass_spect1_sum=numpy.sum(mass_spect1 ** 2, axis=0)
-                mass_spect2_sum=numpy.sum(mass_spect2 ** 2, axis=0)
-                top = numpy.dot(mass_spect1,mass_spect2)
+                mass_spect1 = numpy.array(a.mass_spectrum, dtype='d')
+                mass_spect2 = numpy.array(b.mass_spectrum, dtype='d')
+                mass_spect1_sum = numpy.sum(mass_spect1**2, axis=0)
+                mass_spect2_sum = numpy.sum(mass_spect2**2, axis=0)
+                top = numpy.dot(mass_spect1, mass_spect2)
                 bot = numpy.sqrt(mass_spect1_sum*mass_spect2_sum)
-                cs =1.-(top/bot)
-                cos = 1.-cs
-                rtime=numpy.exp(-((a.rt-b.rt) / D)**2 / 2.)
-                score=score + (1.-(cos*rtime))
-                count=count+1
-    if count==0.:
-        score=0.
+                cos = top/bot
+                rtime = numpy.exp(-((a.rt-b.rt)/D)**2 / 2.0)
+                score = score + (1.0 - (cos*rtime))
+                count = count + 1
+
+    if count == 0:
+        score=0.0
     else:
-        score = score / count
+        score = score/float(count)
+
     return score
+

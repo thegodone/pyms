@@ -24,14 +24,10 @@ Classes for peak alignment by dynamic programming
 
 import copy
 
-import numpy
-
-import Pycluster
+import numpy, Pycluster
 
 from pyms.Utils.Error import error 
-
 from pyms.Experiment.Class import Experiment
-
 import Function
 
 class Alignment(object):
@@ -49,9 +45,9 @@ class Alignment(object):
         @param expr: The experiment to be converted into an alignment object
         @type expr: pyms.Experiment.Class.Experiment
 
-        @author: Vladimir Likic
         @author: Woon Wai Keen
         @author: Qiao Wang
+        @author: Vladimir Likic
         """
         if expr == None:
             self.peakpos = []
@@ -65,6 +61,7 @@ class Alignment(object):
             self.similarity = None
 
     def __len__(self):
+
         """
         @summary: Returns the length of the alignment, defined as the number of
         peak positions in the alignment
@@ -72,18 +69,11 @@ class Alignment(object):
         @author: Qiao Wang
         @author: Vladimir Likic
         """
+
         return len(self.peakalgt)
 
-    def transpose(self):
-
-        #@summary: Transposes peak positions in the alignment
-
-        #@author: Qiao Wang
-
-
-        self.peakalgt = numpy.transpose(self.peakalgt)
-
     def filter_min_peaks(self, min_peaks):
+
         """
         @summary: Filters alignment positions that have less peaks than 'min_peaks'
 
@@ -95,11 +85,14 @@ class Alignment(object):
 
         @author: Qiao Wang
         """
+
         filtered_list=[]
+
         for pos in range(len(self.peakalgt)):
             if len(filter(None,self.peakalgt[pos])) >= min_peaks:
                 filtered_list.append(self.peakalgt[pos])
-        self.peakalgt=filtered_list
+
+        self.peakalgt = filtered_list
         self.peakpos = numpy.transpose(self.peakalgt)
 
     def write_csv(self, rt_file_name, area_file_name, minutes=True):
@@ -164,7 +157,9 @@ class PairwiseAlignment(object):
     @author: Woon Wai Keen
     @author: Vladimir Likic
     """
+
     def __init__(self, algts, D, gap):
+
         """
         @param algts: A list of alignments 
         @type algts: ListType
@@ -215,8 +210,8 @@ class PairwiseAlignment(object):
                 sim_matrix[i,j] = sim_matrix[j,i] = ma.similarity
                 total_n = total_n - 1
                 print " -> %d pairs remaining" % total_n
-        return sim_matrix
 
+        return sim_matrix
 
     def _dist_matrix(self, sim_matrix):
 
@@ -237,6 +232,7 @@ class PairwiseAlignment(object):
         # set diagonal elements of the similarity matrix to zero
         for i in range(len(dist_matrix)):
             dist_matrix[i,i] = 0
+
         return dist_matrix
 
     def _guide_tree(self, dist_matrix):
@@ -252,8 +248,12 @@ class PairwiseAlignment(object):
         @author: Woon Wai Keen
         @author: Vladimir Likic
         """
+
         n = len(dist_matrix)
+
         print " -> Clustering %d pairwise alignments." % (n*(n-1)),
         tree = Pycluster.treecluster(distancematrix=dist_matrix, method='a')
         print "Done"
+
         return tree
+
