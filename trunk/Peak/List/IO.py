@@ -27,9 +27,18 @@ import re
 import numpy
 
 from pyms.Utils.Error import error
-from pyms.Utils.Utils import is_str 
+from pyms.Utils.Utils import is_str, is_int
 from pyms.Utils.IO import file_lines
 from pyms.Peak.Class import Peak
+from pyms.Utils.IO import open_for_writing, close_for_writing
+
+from Utils import is_peak_list
+
+_VERBOSE_LEVEL = "verbose_level"
+_DEFINED_VERBOSE_LEVELS = [0, 1]
+_TIME_UNITS = "time_units"
+_MINUTES = "minutes"
+_SECONDS = "seconds"
 
 def read_chem_station_peaks(file_name):
 
@@ -259,4 +268,90 @@ def create_mass_spec(mass_intensity_list):
         i+=1
 
     return mass_list, mass_spectrum
+
+def write_peaks(peaks, file_name, minutes=False, verbose_level=0):
+
+    """
+    Writes a peak list to a file.
+ 
+    @param peaks A list. List of Peak objects.
+    @param fle_name A string. Peak list file name.
+    @param minutes A boolean. If True, convert time to minutes. 
+    @param verbose_level An integer. Verbose level.
+    @return Returns no values. 
+    """
+
+    if not is_peak_list(peaks):
+        error("'peaks' not a list of peak objects")
+
+    if not is_str(file_name):
+        error("'file_name' not a string")
+
+    if not is_int(verbose_level):
+        error("'verbose_level' must be an integer.")
+    else:
+        if not verbose_level in _DEFINED_VERBOSE_LEVELS:
+            error("unknown 'verbose_level'.")
+
+    level_string = "# %s %d" % (_VERBOSE_LEVEL, verbose_level)
+
+    if minutes:
+        time_string = "# %s %s" % (_TIME_UNITS, _MINUTES)
+    else:
+        time_string = "# %s %s" % (_TIME_UNITS, _SECONDS)
+
+    print " -> Writing peak list to '%s' (verbose level %d)" % \
+        (file_name, verbose_level)
+
+    fp = open_for_writing(file_name)
+
+    fp.write("# PyMS peak list file\n")
+    fp.write("%s\n" % (level_string))
+    fp.write("%s\n" % (time_string))
+
+    if verbose_level == 0:
+
+        fp.write("# peak_num, rt_apex, raw_area\n");
+
+        cntr = 0
+
+        for peak in peaks:
+            cntr = cntr + 1
+            rt_apex = peak.rt
+            raw_area = peak.raw_area
+            if minutes:
+               rt_apex = rt_apex/60.0
+            fp.write("%4d %10.3f %12.1f\n" % (cntr, rt_apex, raw_area))
+
+    elif verbose_level == 1:
+
+        fp.write("# peak_num, pt_left, pt_apex, pt_right,");
+        fp.write(" rt_apex, raw_area\n");
+
+        cntr = 0
+
+        for peak in peaks:
+
+            cntr = cntr + 1
+
+            if peak.pt_bounds == None:
+               print "\t peak pt_bounds not defined."
+               error("cannot write peak list at verbose level %d" % \
+                   (verbose_level))
+            else:
+                pt_left = peak.pt_bounds[0]
+                pt_apex = peak.pt_bounds[1]
+                pt_right = peak.pt_bounds[2]
+
+            rt_apex = peak.rt
+
+            if minutes:
+               rt_apex = rt_apex/60.0
+
+            raw_area = peak.raw_area
+
+            fp.write("%4d %5d %5d %5d %10.3f %12.1f\n" % (cntr, \
+                    pt_left, pt_apex, pt_right, rt_apex, raw_area))
+
+    close_for_writing(fp)
 
