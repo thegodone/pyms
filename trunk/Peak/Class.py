@@ -60,6 +60,7 @@ class Peak:
         if minutes:
             rt = rt*60.0
 
+        # basic peak attributes
         self.rt = float(rt)
         self.raw_area = float(raw_area)
         self.norm_area = None
@@ -236,5 +237,4 @@ class Peak:
                     self.mass_spectrum[ix])) 
 
         close_for_writing(fp)
-    
 
