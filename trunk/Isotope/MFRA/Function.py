@@ -27,38 +27,42 @@ import numpy
 from pyms.Utils.Error import error
 from pyms.Utils.Utils import is_int, is_positive_int, is_list, is_list_of_dec_nums, is_array
 
-def c_mass_isotope_distr(mdv, c_corr):
+def overall_correction_matrix(n, mdv, atoms, nsi):
 
     """
-    @summary: Calculates the mass isotope distribution of the carbon skeleton.
+    @summary: Calculates the overall correction matrix.
 
+    @param n: Number of fragment's C atoms which may contain exogenous (non
+        natural abundance) 13C (e.g. only amino acid ones)
+    @type n: types.IntType
     @param mdv: Mass distribution vector.
     @type mdv: types.ListType
-    @param c_corr: The overall correction matrix.
-    @type c_corr: numpy.ndarray
-    
-    @return: The exclusive mass isotope distribution of the carbon skeleton.
+    @param atoms: Number of C, O, N, H, Si, and S atoms in the fragment
+        (note: the number of C atoms excludes C atoms which may 
+        contain exogenous (non natural abundance) 13C)
+    @type atoms: types.DictType
+    @param nsi: Contains abundance values of natural stable isotopes.
+    @type nsi: types.ListType
+
+    @return: Overall correction matrix.
     @rtype: numpy.ndarray
     
     @author: Milica Ng
     """
 
     # check the arguments
-    if not is_list(mdv):
-        error("'mdv' must be types.ListType")
-    if not is_array(c_corr):
-        error("'c_corr' must be numpy.ndarray")
+    if not is_positive_int(n):
+        error("'n' must be an integer greater than zero")
+    if not (is_list(mdv) or not is_list(nsi)):
+        error("'mdv' and 'nsi' must be types.ListType")
 
-    mdv = numpy.array(mdv, float)
-    mdv_alpha = mdv/sum(mdv)
-    mdv_alpha = numpy.matrix(mdv_alpha)
-    mdv_alpha = mdv_alpha.T
-    c_corr = numpy.matrix(c_corr)
-    mdv_alpha_star = (c_corr.I) * mdv_alpha
-    mdv_alpha_star = numpy.array(mdv_alpha_star, float)
-    mdv_alpha_star = mdv_alpha_star/sum(mdv_alpha_star)
-    
-    return mdv_alpha_star
+    atom_symbols = atoms.keys()
+    c_corr = numpy.eye(n+1) 
+    for a in atom_symbols:
+        print '\n Calculating %s correction matrix' % ( a )
+        m_corr = correction_matrix(n, atoms[a], nsi[a])
+        c_corr = numpy.dot(c_corr,m_corr)
+    return c_corr
 
 def correction_matrix(n, num_a, nsil):
 
@@ -101,6 +105,38 @@ def correction_matrix(n, num_a, nsil):
     else:
         c_corr_a = numpy.identity(n+1)
     return c_corr_a
+
+def c_mass_isotope_distr(mdv, c_corr):
+
+    """
+    @summary: Calculates the mass isotope distribution of the carbon skeleton.
+
+    @param mdv: Mass distribution vector.
+    @type mdv: types.ListType
+    @param c_corr: The overall correction matrix.
+    @type c_corr: numpy.ndarray
+    
+    @return: The exclusive mass isotope distribution of the carbon skeleton.
+    @rtype: numpy.ndarray
+    
+    @author: Milica Ng
+    """
+
+    # check the arguments
+    if not is_list(mdv):
+        error("'mdv' must be types.ListType")
+    if not is_array(c_corr):
+        error("'c_corr' must be numpy.ndarray")
+
+    mdv = numpy.array(mdv, float)
+    mdv_alpha = mdv/sum(mdv)
+    mdv_alpha = numpy.matrix(mdv_alpha)
+    mdv_alpha = mdv_alpha.T
+    c_corr = numpy.matrix(c_corr)
+    mdv_alpha_star = (c_corr.I) * mdv_alpha
+    mdv_alpha_star = numpy.array(mdv_alpha_star, float)
+    mdv_alpha_star = mdv_alpha_star/sum(mdv_alpha_star)
+    return mdv_alpha_star
 
 def mass_dist_vector (n, num_a, nsil):
 
