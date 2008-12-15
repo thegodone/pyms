@@ -1,5 +1,5 @@
 """
-Time conversion functions
+Time conversion and related functions
 """
 
  #############################################################################
@@ -23,7 +23,7 @@ Time conversion functions
  #############################################################################
 
 from pyms.Utils.Error import error
-from pyms.Utils.Utils import is_str, is_str_num
+from pyms.Utils.Utils import is_int, is_str, is_str_num
 
 def time_str_secs(time_str):
 
@@ -58,4 +58,46 @@ def time_str_secs(time_str):
         time = time*60.0
 
     return time
+
+def window_sele_points(ic, window_sele, half_window=False):
+
+    """
+    @summary: Converts 'window_sele' to points based on the times step in
+        in the ion chromatogram
+
+    @param ic: An IonChromatogram object (pyms.IO.Class.IonCromatogram)
+    @param window_sele: An integer or a string. The window specification. 
+        if integer, taken as the number of points. If a string, must 
+        of the form "<NUMBER>s" or "<NUMBER>m", specifying a time
+        in seconds or minutes, respectively.
+    @param half_window: A boolean. If True, half-window (window wing)
+       is returned
+    """
+
+    if not is_int(window_sele) and not is_str(window_sele):
+        error("'window' must be an integer or a string")
+
+    if is_int(window_sele):
+        if half_window:
+            if window_sele % 2 == 0:
+                error("window must be an odd number of points")
+            else:
+                points = int(math.floor(window_sele*0.5))
+        else:
+            points = window_sele
+    else:
+        time = time_str_seconds(window_sele)
+        time_step = ic.get_time_step()
+
+        if half_window:
+            time = time*0.5
+
+        points = int(math.floor(time/time_step))
+
+    if half_window:
+        if points < 1: error("window too small (half window=%d)" % (points))
+    else:
+        if points < 2: error("window too small (window=%d)" % (points))
+
+    return points
 

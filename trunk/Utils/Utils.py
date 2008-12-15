@@ -235,3 +235,4 @@ def is_list_of_dec_nums(arg):
            if not(isinstance(q, types.FloatType)):
                return False
     return True
+
