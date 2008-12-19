@@ -95,7 +95,7 @@ class GCMS_simulator(object):
 
         Y = self.__gen_mixture(C,S)
 
-        self.__intensity_matrix = self.__addNoise(Y, sigma)
+        self.__intensity_matrix = self.__add_noise(Y, sigma)
 
     def  __set_time_list(self, rt_spec):
 
@@ -216,16 +216,22 @@ class GCMS_simulator(object):
         X = numpy.dot(C.T,S)
         return X
 
-    def __addNoise(self, X, sigma):
+    def __add_noise(self, X, sigma):
+
         """
         @summary: Generate random noise
+
         @param X: Real valued Matrix
         @type X: Real valued Matrix
         @param sigma: Noise level (relative to max intensity=1.0)
         @type sigma: Positive Real, 0.0 <= sigma <= 1.0
+
         @return: Input matrix with added noise
         @type: Real valued Matrix
+
+        @author: Andrew Isaac
         """
+
         # Nm = rand(size(X))*sigma;
         # D = X+Nm;
         Nm = numpy.random.uniform(0.0,1.0,X.shape)*sigma

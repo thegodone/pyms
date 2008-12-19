@@ -36,8 +36,10 @@ def time_str_secs(time_str):
     @param time_str: A time string, which must be of the form
         "<NUMBER>s" or "<NUMBER>m" where "<NUMBER>" is a valid number
     @type time_str: StringType
+
     @return: Time in seconds
     @rtype: FloatType
+
     @author: Vladimir Likic
     """
 
@@ -64,16 +66,26 @@ def time_str_secs(time_str):
 def window_sele_points(ic, window_sele, half_window=False):
 
     """
-    @summary: Converts 'window_sele' to points based on the times step in
-        in the ion chromatogram
+    @summary: Converts window selection parameter into points based
+        on the time step in an ion chromatogram 
 
-    @param ic: An IonChromatogram object (pyms.IO.Class.IonCromatogram)
-    @param window_sele: An integer or a string. The window specification. 
-        if integer, taken as the number of points. If a string, must 
-        of the form "<NUMBER>s" or "<NUMBER>m", specifying a time
-        in seconds or minutes, respectively.
-    @param half_window: A boolean. If True, half-window (window wing)
-       is returned
+    @param ic: ion chromatogram object relevant for the conversion
+    @type ic: pyms.IO.Class.IonChromatogram
+    
+    @param window_sele: The window selection parameter. This can be
+        an integer or time string. If integer, taken as the number
+        of points. If a string, must of the form "<NUMBER>s" or
+        "<NUMBER>m", specifying a time in seconds or minutes,
+        respectively
+    @type window_sele: IntType or StringType 
+    
+    @param half_window: Specifies whether to return half-window
+    @type half_window: BooleanType
+    
+    @return: The number of points in the window
+    @rtype: IntType
+
+    @author: Vladimir Likic
     """
 
     if not is_int(window_sele) and not is_str(window_sele):
