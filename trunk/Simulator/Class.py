@@ -88,8 +88,13 @@ class GCMS_simulator(object):
 
         # generate Components and Spectra, mix and add noise
         C = self.__gen_components(num_components, num_chrom_points)
+
         S = self.__gen_spectra(num_components, num_channels)
+
+#        self.__intensity_matrix = self.__gen_mixture(C,S)
+
         Y = self.__gen_mixture(C,S)
+
         self.__intensity_matrix = self.__addNoise(Y, sigma)
 
     def  __set_time_list(self, rt_spec):
@@ -98,8 +103,8 @@ class GCMS_simulator(object):
         """
 
         rt_start = time_str_secs(rt_spec[0])
-        rt_stop = time_str_secs(rt_spec[1]) + 1    # +1 to include last point
         rt_step = float(rt_spec[2])
+        rt_stop = time_str_secs(rt_spec[1]) + rt_step    # include last point
 
         time_list = vector_by_step(rt_start, rt_stop, rt_step)
 
@@ -111,8 +116,8 @@ class GCMS_simulator(object):
         """
 
         mz_start = float(mz_spec[0])
-        mz_stop = float(mz_spec[1]) + 1    # +1 to include last point
         mz_step = float(mz_spec[2])
+        mz_stop = float(mz_spec[1]) + mz_step    # include last point
 
         mass_list = vector_by_step(mz_start, mz_stop, mz_step)
 
@@ -169,7 +174,9 @@ class GCMS_simulator(object):
         # TODO: is this efficient?
         for ii in range(num_components):
             ch = chromatogram(num_chrom_points)
-            C[ii,:] = ch
+
+            for jj in range(num_chrom_points):
+                C[ii,jj] = ch[jj]
 
         return C
 
@@ -189,7 +196,8 @@ class GCMS_simulator(object):
 
         for ii in range(num_components):
             m = mass_spectrum(num_channels)
-            S[ii,:] = m
+            for jj in range(num_channels):
+                S[ii,jj] = m[jj]
 
         return S
 

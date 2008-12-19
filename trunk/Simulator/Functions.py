@@ -22,6 +22,7 @@ GCMS_simulator utility functions
  #                                                                           #
  #############################################################################
 
+import copy
 import random
 import numpy
 import math
@@ -41,13 +42,12 @@ def mass_spectrum(num_channels):
     intensity in range 0-1.
     """
 
-
     #% initialize the m/z vector
     M = numpy.zeros((num_channels), 'd')
 
     #% the number of non-zero m/z values
     # NB: P < num_channels
-    P = int(math.ceil((num_channels/10)*random.random()));
+    P = int((num_channels/10)*random.random());
 
     #% generate mass spectrum
     rp = range(num_channels)
@@ -55,6 +55,7 @@ def mass_spectrum(num_channels):
     for ii in range(P):
         kk = rp[ii]
         M[kk] = random.random()
+#        M[kk] = 1
 
     return M
 
@@ -90,13 +91,12 @@ def chromatogram(num_chrom_points):
 
     V = numpy.zeros((num_chrom_points), 'd')
 
-    # TODO: rand from [0,1] or [-1,1]?
     peak_width = w1 + (w2-w1)*random.random()
     peak_pos = d + (g-d)*random.random()
     peak_scale = random.random()
 
     for ii in range(num_chrom_points):
-        x = ii/num_chrom_points
-        V[ii] = gaussian(x,peak_pos,peak_width,peak_scale)
+        x = float(ii)/num_chrom_points    # float to avoid int division
+        V[ii] = gaussian(x, peak_pos, peak_width, peak_scale)
 
     return V
