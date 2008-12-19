@@ -48,15 +48,23 @@ def minmax(ic, noise, window, peak_factor=_DEFAULT_PEAK_FACTOR ):
     """
     @summary: MinMax peak detector
 
-    @param ic An IonChromatogram object.
-    @param noise A number. The noise estimate. 
-    @param window A string. The width of the window for peak
-       detection specified as <NUMBER>s or <NUMBER>m, giving a time
-       in seconds or minutes, respectively.
-    @param peak_factor A number. The value that is multipled to the
+    @param ic: An IonChromatogram object.
+    @type ic: pyms.Peak.List.Class.Alignment
+    @param noise: A number. The noise estimate.
+    @type noise: FloatType
+    @param window: A string. The width of the window for peak
+        detection specified as <NUMBER>s or <NUMBER>m, giving a time
+        in seconds or minutes, respectively.
+    @type window: str
+    @param peak_factor: A number. The value that is multipled to the
         noise level to determine the peak threshold for minimum peak
         intensities.
-    @return A list.
+    @type peak_factor: int
+
+    @return: A list of peak objects
+    @rtype: list
+
+    @author: Vladimir Likic
     """
     if not is_ionchromatogram(ic):
         error("argument must be an IonChromatogram object")
