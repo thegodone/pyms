@@ -81,19 +81,22 @@ def __calc_coeff(num_points, pol_degree, diff_order=0):
 
     """
     @summary: Calculates filter coefficients for symmetric savitzky-golay
-    filter
+        filter
 
-    see: http://www.nrbook.com/a/bookcpdf/c14-8.pdf
+    See: http://www.nrbook.com/a/bookcpdf/c14-8.pdf
 
-    @param num_points: means that 2*num_points+1 values contribute to
-       the smoother.
+    @param num_points: Means that 2*num_points+1 values contribute to
+       the smoother
     @type num_points: IntType
     @param pol_degree: The degree of fitting polynomial
     @type pol_degree: IntType
-    @param diff_order:  The degree of implicit differentiation.  0 means
+    @param diff_order: The degree of implicit differentiation.  0 means
         that filter results in smoothing of function, 1 means that filter
         results in smoothing the first derivative of function, and so on.
-        Always use 0.
+        Always use 0
+
+    @return: Filter coefficients
+    @rtype: numpy.ndarray
 
     @author: Uwe Schmitt
     """
@@ -118,12 +121,13 @@ def __calc_coeff(num_points, pol_degree, diff_order=0):
         for m in range(pol_degree+1):
             x += wvec[m]*pow(n, m)
         coeff[n+num_points] = x
+
     return coeff
 
 def __resub(D, rhs):
 
     """
-    @summary: solves D D^T = rhs by resubstitution
+    @summary: Solves D D^T = rhs by resubstitution
 
     D is lower triangle-matrix from cholesky-decomposition
 
