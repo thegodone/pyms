@@ -95,7 +95,7 @@ class ANDIMS_reader(object):
         self.__min_rt = self.__time_list[0]
         self.__max_rt = self.__time_list[-1]
 
-        #Round mass list 
+        # Round mass list 
         self.__mass_list = []
         for mass in range(self.__min_mass, self.__max_mass+1):
             self.__mass_list.append(mass)
@@ -505,6 +505,19 @@ class ANDIMS_reader(object):
         # columns of the intensity matrix, into CSV format
         rt_vector = self.get_time_list()
         save_data(root_name+'.rt.csv', rt_vector, sep=",")
+
+    def is_synthetic(self):
+
+        """
+        @summary: Method that returns the nature of data set
+
+        @return: always False
+        @rtype: BooleanType
+
+        @author: Vladimir Likic
+        """
+
+        return False
 
 class ChemStation(ANDIMS_reader):
 
