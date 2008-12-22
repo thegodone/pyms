@@ -45,14 +45,14 @@ def mass_spectrum(nc):
     """
 
     #% initialize the m/z vector
-    M = numpy.zeros((num_channels), 'd')
+    M = numpy.zeros((nc), 'd')
 
     #% the number of non-zero m/z values
-    # NB: P < num_channels
-    P = int((num_channels/10)*random.random());
+    # NB: P < nc
+    P = int((float(nc)/10.0)*random.random());
 
     #% generate mass spectrum
-    rp = range(num_channels)
+    rp = range(nc)
     random.shuffle(rp)
     for ii in range(P):
         kk = rp[ii]
@@ -78,7 +78,7 @@ def gaussian(point, mean, width, scale):
     @rtype: FloatType
     """
 
-    return scale*math.exp(-((point-mean)**2)/(2*width**2))
+    return scale*math.exp(-(float(point-mean)**2)/(2.0*float(width)**2))
 
 def chromatogram(np):
 
@@ -109,14 +109,14 @@ def chromatogram(np):
     d = offset
     g = 1-offset
 
-    V = numpy.zeros((num_chrom_points), 'd')
+    V = numpy.zeros((np), 'd')
 
     peak_width = w1 + (w2-w1)*random.random()
     peak_pos = d + (g-d)*random.random()
     peak_scale = random.random()
 
-    for ii in range(num_chrom_points):
-        x = float(ii)/num_chrom_points    # float to avoid int division
+    for ii in range(np):
+        x = float(ii)/np    # float to avoid int division
         V[ii] = gaussian(x, peak_pos, peak_width, peak_scale)
 
     return V

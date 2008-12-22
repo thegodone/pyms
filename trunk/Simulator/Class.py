@@ -66,32 +66,32 @@ class GCMS_simulator(object):
             error('Retention time and mz specifications must be given')
 
         if not is_list(rt) or len(rt) != 3:
-            error("'rt' specification list must have exactly three elements")
+            error("'rtl' specification list must have exactly three elements")
 
         if not is_list(mz) or len(mz) != 3:
-            error("'mz' specification list must have exactly three elements")
+            error("'mzl' specification list must have exactly three elements")
 
         if not is_str(rt[0]) or not is_str(rt[1]):
             error("start/stop time limits must be strings")
 
-        if not is_int(num_components) or num_components < 1:
-            error("num_components must be an integer greater than 0")
+        if not is_int(nc) or nc < 1:
+            error("'nc' must be an integer greater than 0")
 
         if not is_number(sigma) or sigma < 0 or sigma > 1:
-            error("sigma must be a number in the range [0,1]")
+            error("'sigma' must be a number in the range [0,1]")
 
         self.__time_list = self.__set_time_list(rt)
         self.__mass_list = self.__set_mass_list(mz)
 
-        num_chrom_points = len(self.__time_list)
-        num_channels = len(self.__mass_list)
+        np = len(self.__time_list)
+        nm = len(self.__mass_list)
 
         # generate Components and Spectra, mix and add noise
-        self.__C = self.__gen_components(num_components, num_chrom_points)
+        self.__C = self.__gen_components(nc, np)
 
-        self.__S = self.__gen_spectra(num_components, num_channels)
+        self.__S = self.__gen_spectra(nc, nm)
 
-        Y = self.__gen_mixture(C,S)
+        Y = self.__gen_mixture(self.__C, self.__S)
 
         self.__intensity_matrix = self.__add_noise(Y, sigma)
 
@@ -103,7 +103,7 @@ class GCMS_simulator(object):
         @return: Intensity matrix
         @rtype: numpy.ndarray
 
-        @author: Vladimir Likic
+        @author: Andrew Isaac
         """
 
         return copy.deepcopy(self.__intensity_matrix)
@@ -114,9 +114,9 @@ class GCMS_simulator(object):
         @summary: Returns the array of time values
 
         @return: Array of time values in seconds
-        @rtype: numpy.ndarray
+        @rtype: ListType
 
-        @author: Vladimir Likic
+        @author: Andrew Isaac
         """
 
         return copy.deepcopy(self.__time_list)
@@ -127,9 +127,9 @@ class GCMS_simulator(object):
         @summary: Returns the m/z list
 
         @return: List of m/z
-        @rtype: numpy.ndarray
+        @rtype: ListType
 
-        @author: Vladimir Likic
+        @author: Andrew Isaac
         """
 
         return copy.deepcopy(self.__mass_list)
@@ -146,6 +146,7 @@ class GCMS_simulator(object):
         """
 
         return copy.deepcopy(self.__C)
+
     def get_spectra(self):
 
         """
@@ -176,12 +177,12 @@ class GCMS_simulator(object):
         """
 
         # create matrix (as an array) of zeroed floats (doubles)
-        C = numpy.zeros((num_components, num_chrom_points), 'd')
+        C = numpy.zeros((nc, np), 'd')
 
         # TODO: is this efficient?
-        for ii in range(num_components):
-            ch = chromatogram(num_chrom_points)
-            for jj in range(num_chrom_points):
+        for ii in range(nc):
+            ch = chromatogram(np)
+            for jj in range(np):
                 C[ii,jj] = ch[jj]
 
         return C
@@ -192,7 +193,7 @@ class GCMS_simulator(object):
         @summary: Generate the matrix S as num. components by num. mass channels
 
         @param nc: Total number of components
-        @type nuc: IntType
+        @type nc: IntType
         @param nm: Number of m/z channels
         @type nm: IntType
 
@@ -203,11 +204,11 @@ class GCMS_simulator(object):
         """
 
         # create matrix (as an array) of zeroed floats (doubles)
-        S = numpy.zeros((num_components, num_channels), 'd')
+        S = numpy.zeros((nc, nm), 'd')
 
-        for ii in range(num_components):
-            m = mass_spectrum(num_channels)
-            for jj in range(num_channels):
+        for ii in range(nc):
+            m = mass_spectrum(nm)
+            for jj in range(nm):
                 S[ii,jj] = m[jj]
 
         return S
