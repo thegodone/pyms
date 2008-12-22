@@ -85,7 +85,7 @@ def export_leco_csv(file_name, time_list, mass_list, data):
                 fp.write(",%#.6e" % (data[ii][jj]))
             else:
                 error("datum not a number")
-        fp.write("\n")
+        fp.write("\r\n")
 
     close_for_writing(fp)
 
