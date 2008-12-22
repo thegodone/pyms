@@ -24,7 +24,6 @@ Provides a class to simulate mass spectra of mixtures
  #############################################################################
 
 import copy
-
 import math
 import numpy
 import random
@@ -42,24 +41,25 @@ class GCMS_simulator(object):
     @summary: Simulate mass spectra of mixtures
 
         Simulates the data matrix X as a linear mixture of the pure
-        component matrix C and pure mass spectra S
+        component matrix C and pure mass spectra S, X = C'S + [noise]
+
+    @return:  none
+    @rtype:  NoneType
 
     @author: Andrew Isaac
     """
 
-    def __init__(self, rt=None, mz=None, num_components=100, sigma=0.01):
+    def __init__(self, rt=None, mz=None, nc=100, sigma=0.01):
 
         """
-        @summary: GCMS_simulator(rt=None, mz=None, num_components=100,
-            sigma=0.01)
         @param rt: Retention Time List
-        @type rt: List with start and stop as a string and step as an int
+        @type rt: ListType
         @param mz: Mass/Charge List with start, stop and step values as ints
-        @type mz: List with start, stop and step values as ints
-        @param num_components: Total number of components
-        @type num_components: Positive Integer
-        @param sigma: Noise level (relative to max intensity=1.0)
-        @type sigma: Positive Real, 0.0 <= sigma <= 1.0
+        @type mz: ListType
+        @param nc: Total number of components
+        @type nc: IntType
+        @param sigma: Noise level [0,1] (relative to max intensity=1.0)
+        @type sigma: FloatType
         """
 
         if rt == None or mz == None:
@@ -87,41 +87,13 @@ class GCMS_simulator(object):
         num_channels = len(self.__mass_list)
 
         # generate Components and Spectra, mix and add noise
-        C = self.__gen_components(num_components, num_chrom_points)
+        self.__C = self.__gen_components(num_components, num_chrom_points)
 
-        S = self.__gen_spectra(num_components, num_channels)
-
-#        self.__intensity_matrix = self.__gen_mixture(C,S)
+        self.__S = self.__gen_spectra(num_components, num_channels)
 
         Y = self.__gen_mixture(C,S)
 
         self.__intensity_matrix = self.__add_noise(Y, sigma)
-
-    def  __set_time_list(self, rt_spec):
-
-        """
-        """
-
-        rt_start = time_str_secs(rt_spec[0])
-        rt_step = float(rt_spec[2])
-        rt_stop = time_str_secs(rt_spec[1]) + rt_step    # include last point
-
-        time_list = vector_by_step(rt_start, rt_stop, rt_step)
-
-        return time_list
-
-    def  __set_mass_list(self, mz_spec):
-
-        """
-        """
-
-        mz_start = float(mz_spec[0])
-        mz_step = float(mz_spec[2])
-        mz_stop = float(mz_spec[1]) + mz_step    # include last point
-
-        mass_list = vector_by_step(mz_start, mz_stop, mz_step)
-
-        return mass_list
 
     def get_intensity_matrix(self):
 
@@ -130,6 +102,8 @@ class GCMS_simulator(object):
 
         @return: Intensity matrix
         @rtype: numpy.ndarray
+
+        @author: Vladimir Likic
         """
 
         return copy.deepcopy(self.__intensity_matrix)
@@ -141,6 +115,8 @@ class GCMS_simulator(object):
 
         @return: Array of time values in seconds
         @rtype: numpy.ndarray
+
+        @author: Vladimir Likic
         """
 
         return copy.deepcopy(self.__time_list)
@@ -152,20 +128,51 @@ class GCMS_simulator(object):
 
         @return: List of m/z
         @rtype: numpy.ndarray
+
+        @author: Vladimir Likic
         """
 
         return copy.deepcopy(self.__mass_list)
 
-    def __gen_components(self, num_components, num_chrom_points):
+    def get_components(self):
 
         """
-        @summary: Generate the matrix C as num_components by num_chrom_points
-        @param num_components: Total number of components
-        @type num_components: Positive Integer
-        @param num_chrom_points: Total number of chromatographic time points
-        @type num_chrom_points: Positive Integer
+        @summary: Returns the pure components' chromatogram
+
+        @return: Matrix of component chromatograms
+        @rtype: numpy.ndarray
+
+        @author: Andrew Isaac
+        """
+
+        return copy.deepcopy(self.__C)
+    def get_spectra(self):
+
+        """
+        @summary: Returns the pure components' spectra
+
+        @return: Matrix of component spectra
+        @rtype: numpy.ndarray
+
+        @author: Andrew Isaac
+        """
+
+        return copy.deepcopy(self.__S)
+
+    def __gen_components(self, nc, np):
+
+        """
+        @summary: Generate the matrix C as num. components by num. chrom. points
+
+        @param nc: Total number of components
+        @type nc: IntType
+        @param np: Total number of chromatographic time points
+        @type np: IntType
+
         @return: Component matrix
-        @type: Real valued Matrix
+        @rtype: numpy.ndarray
+
+        @author: Andrew Isaac
         """
 
         # create matrix (as an array) of zeroed floats (doubles)
@@ -174,23 +181,27 @@ class GCMS_simulator(object):
         # TODO: is this efficient?
         for ii in range(num_components):
             ch = chromatogram(num_chrom_points)
-
             for jj in range(num_chrom_points):
                 C[ii,jj] = ch[jj]
 
         return C
 
-    def __gen_spectra(self, num_components, num_channels):
+    def __gen_spectra(self, nc, nm):
 
         """
-        @summary: Generate the matrix S as num_components by num_channels
-        @param num_components: Total number of components
-        @type num_components: Positive Integer
-        @param num_channels: Number of m/z channels
-        @type num_channels: Positive Integer
+        @summary: Generate the matrix S as num. components by num. mass channels
+
+        @param nc: Total number of components
+        @type nuc: IntType
+        @param nm: Number of m/z channels
+        @type nm: IntType
+
         @return: Spectra matrix
-        @type: Real valued Matrix
+        @rtype: numpy.ndarray
+
+        @author: Andrew Isaac
         """
+
         # create matrix (as an array) of zeroed floats (doubles)
         S = numpy.zeros((num_components, num_channels), 'd')
 
@@ -205,13 +216,18 @@ class GCMS_simulator(object):
 
         """
         @summary: Calculate the data matrix X as a linear mixture of components
+
         @param C: Component matrix
         @type C: Real valued Matrix
         @param S: Spectra matrix
         @type S: Real valued Matrix
+
         @return: Mixture matrix
-        @type: Real valued Matrix
+        @rtype: numpy.ndarray
+
+        @author: Andrew Isaac
         """
+
         # X = C*S';
         X = numpy.dot(C.T,S)
         return X
@@ -222,12 +238,12 @@ class GCMS_simulator(object):
         @summary: Generate random noise
 
         @param X: Real valued Matrix
-        @type X: Real valued Matrix
-        @param sigma: Noise level (relative to max intensity=1.0)
-        @type sigma: Positive Real, 0.0 <= sigma <= 1.0
+        @type X: numpy.ndarray
+        @param sigma: Noise level [0,1] (relative to max intensity=1.0)
+        @type sigma: FloatType
 
         @return: Input matrix with added noise
-        @type: Real valued Matrix
+        @rtype: numpy.ndarray
 
         @author: Andrew Isaac
         """
@@ -238,11 +254,46 @@ class GCMS_simulator(object):
         D = X+Nm
         return D
 
-#%
-#% Non-negative matrix factorization (works only in matlab)
-#%
-#
-#%'calculating non-negative matrix factorization'
-#%[W,H] = nnmf(X,NP);
-#%
-#%'done'
+    def  __set_time_list(self, rt_spec):
+
+        """
+        @summary: Set the array of time values
+
+        @param rt_spec: List of start, stop and step times
+        @type rt_spec: ListType
+
+        @return: Array of time values in seconds
+        @rtype: numpy.ndarray
+
+        @author: Andrew Isaac
+        """
+
+        rt_start = time_str_secs(rt_spec[0])
+        rt_step = float(rt_spec[2])
+        rt_stop = time_str_secs(rt_spec[1]) + rt_step    # include last point
+
+        time_list = vector_by_step(rt_start, rt_stop, rt_step)
+
+        return time_list
+
+    def  __set_mass_list(self, mz_spec):
+
+        """
+        @summary: Set the m/z list
+
+        @param mz_spec: List of start, stop and step m/z
+        @type mz_spec: ListType
+
+        @return: List of m/z
+        @rtype: numpy.ndarray
+
+        @author: Andrew Isaac
+        """
+
+        mz_start = float(mz_spec[0])
+        mz_step = float(mz_spec[2])
+        mz_stop = float(mz_spec[1]) + mz_step    # include last point
+
+        mass_list = vector_by_step(mz_start, mz_stop, mz_step)
+
+        return mass_list

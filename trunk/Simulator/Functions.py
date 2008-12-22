@@ -1,5 +1,5 @@
 """
-GCMS_simulator utility functions
+GCMS_simulator functions
 """
 
  #############################################################################
@@ -27,19 +27,21 @@ import random
 import numpy
 import math
 
-"""
-Provides a function simulate pure mass spectrum given the number of m/z
-channels num_channels
-"""
-def mass_spectrum(num_channels):
+def mass_spectrum(nc):
 
     """
-    Returns a simulated pure mass spectrum given the number
-    of m/z channels num_channels
+    @summary: Returns a simulated pure mass spectrum
+        A mass spectrum contains between 1 and 'nc'/10 components
+        (the precise number is randomly chosen), with random
+        intensity in the range 0-1.
 
-    A mass spectrum contains between 1 and N/10 components
-    (the precise number is randomly chosen), with random
-    intensity in range 0-1.
+    @param nc: Number of m/z channels
+    @type nc: IntType
+
+    @return: Simulated spectra
+    @rtype: numpy.ndarray
+
+    @author: Andrew Isaac
     """
 
     #% initialize the m/z vector
@@ -55,29 +57,47 @@ def mass_spectrum(num_channels):
     for ii in range(P):
         kk = rp[ii]
         M[kk] = random.random()
-#        M[kk] = 1
 
     return M
 
-"""
-Provides a function to return the gaussian for a given point
-"""
 def gaussian(point, mean, width, scale):
-    return scale*math.exp(-((point-mean)**2)/(2*width**2))
-
-"""
-Provides a function to simulate ion chromatogram of a pure component
-"""
-def chromatogram(num_chrom_points):
 
     """
-    Returns a simulated ion chromatogram of a pure component
-    The ion chromatogram contains a single gaussian peak.
-    The peak position is randomly chosen, but not to be closer
-    to the edges for more than the fraction 'offset' of the
-    total time domain.
-    The peak width is randomly chosen between 'w1' and 'w2'.
-    The peak intensity is randomly chosen between 0 and 1.
+    @summary: Provides a function to return the gaussian for a given point
+
+    @param point: The point at which the gaussian is calculated
+    @type point: FloatType
+    @param mean: The centre of the gaussian
+    @type mean: FloatType
+    @param width: The width of the gaussian (std dev)
+    @type width: FloatType
+    @param scale: Height multiplier
+    @type scale: FloatType
+
+    @return: Gaussian value
+    @rtype: FloatType
+    """
+
+    return scale*math.exp(-((point-mean)**2)/(2*width**2))
+
+def chromatogram(np):
+
+    """
+    @summary: Returns a simulated ion chromatogram of a pure component
+        The ion chromatogram contains a single gaussian peak.
+        The peak position is randomly chosen, but not to be closer
+        to the edges for more than the fraction 'offset' of the
+        total time domain.
+        The peak width is randomly chosen between 'w1' and 'w2'.
+        The peak intensity is randomly chosen between 0 and 1.
+
+    @param np: The number of chromatogram (time) points
+    @type np: IntType
+
+    @return: Single chromatogram
+    @rtype: numpy.ndarray
+
+    @author: Andrew Isaac
     """
 
     #% peak width limits
