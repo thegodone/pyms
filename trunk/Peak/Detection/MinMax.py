@@ -48,24 +48,37 @@ def minmax(ic, noise, window, peak_factor=_DEFAULT_PEAK_FACTOR ):
     """
     @summary: MinMax peak detector
 
-    @param ic: An IonChromatogram object.
+    @param ic: An IonChromatogram object
     @type ic: pyms.Peak.List.Class.Alignment
-    @param noise: A number. The noise estimate.
+    @param noise: A number. The noise estimate
     @type noise: FloatType
     @param window: A string. The width of the window for peak
         detection specified as <NUMBER>s or <NUMBER>m, giving a time
-        in seconds or minutes, respectively.
-    @type window: str
+        in seconds or minutes, respectively
+    @type window: StringType
     @param peak_factor: A number. The value that is multipled to the
         noise level to determine the peak threshold for minimum peak
+        intensities
+    @type peak_factor: IntType
+
+    @return: A list.
+    @rtype: ListType
+
+    ---------------------------------------------------------------
+
+    @summary: MinMax peak detector
+
+    @param ic An IonChromatogram object.
+    @param noise A number. The noise estimate.
+    @param window A string. The width of the window for peak
+       detection specified as <NUMBER>s or <NUMBER>m, giving a time
+       in seconds or minutes, respectively.
+    @param peak_factor A number. The value that is multipled to the
+        noise level to determine the peak threshold for minimum peak
         intensities.
-    @type peak_factor: int
-
-    @return: A list of peak objects
-    @rtype: list
-
-    @author: Vladimir Likic
+    @return A list.
     """
+
     if not is_ionchromatogram(ic):
         error("argument must be an IonChromatogram object")
 
@@ -96,12 +109,33 @@ def minmax(ic, noise, window, peak_factor=_DEFAULT_PEAK_FACTOR ):
 
 def _get_peaks(ia, noise, peak_factor, wing_length):
 
-    """_get_peaks(ia, noise, peak_factor, wing_length)
+    """
+    @summary: Peak detection wrapper
+
+    @param ia: An numpy object. Ion chromatogram intensity array
+    @type ia: numpy.ndarray
+    @param noise: A number. The noise estimate
+    @type noise: FloatType
+    @param peak_factor: A number. The value that is multipled to
+        the noise level to determine the peak threshold for
+        minimum peak intensities
+    @type peak_factor: IntType
+    @param wing_length: An integer. The width measured in number of
+        points to the left and right of a point to be considered
+        for an extreme value
+    @type wing_length: IntType
+
+    @return: A list of maxima points and their corresponding left and right
+        boundaries. Each maximum is modelled using a list containing threex
+        elements: the left boundary, maximum point, and right boundary
+    @rtype: ListType
+
+    ------------------------------------------------------------------
 
     Peak detection wrapper.
 
     @param ia An numpy object. Ion chromatogram intensity array.
-    @param noise A number. The noise estimate. 
+    @param noise A number. The noise estimate.
     @param peak_factor A number. The value that is multipled to
         the noise level to determine the peak threshold for
         minimum peak intensities.
@@ -118,14 +152,29 @@ def _get_peaks(ia, noise, peak_factor, wing_length):
     peak_list = _peak_boundaries(ia, maxima_indices, wing_length)
     _resolve_overlaps(ia, peak_list)
     #_prune_peaks(peak_list, wing_length)
-    _adjust_boundaries(ia, peak_list, wing_length, 1.5 ) 
+    _adjust_boundaries(ia, peak_list, wing_length, 1.5 )
 
     return peak_list
 
-
 def _prune_peaks(peak_list, wing_length):
 
-    """_prune_peaks(peak_list, wing_length)
+    """
+    @summary: Rejects peaks for which the difference between the apex and
+        left/right boundary is less than wing_length
+
+    @param peak_list: A list of pre-peaks
+    @type peak_list: ListType
+    @param wing_length: An integer. The width measured in number of
+        points to the left and right of a point to be considered
+        for an extreme value
+    @type wing_length: IntType
+
+    @return: No return value
+    @rtype: NoneType
+
+    -----------------------------------------------------------------
+
+    _prune_peaks(peak_list, wing_length)
 
     Rejects peaks for which the difference between the apex and
     left/right boundary is less than wing_length.
@@ -154,7 +203,20 @@ def _prune_peaks(peak_list, wing_length):
 
 def _resolve_overlaps(ia, peak_list):
 
-    """_resolve_overlaps(ia, peak_list)
+    """
+    @summary: Resolves overlapped peaks
+
+    @param ia: An numpy object. Ion chromatogram intensity array
+    @type ia: numpy.ndarray
+    @param peak_list: A list of pre-peaks
+    @type peak_list: ListType
+
+    @return: No return value
+    @rtype: NoneType
+
+    ------------------------------------------------------------
+
+    _resolve_overlaps(ia, peak_list)
 
     Resolves overlapped peaks.
 
@@ -173,7 +235,23 @@ def _resolve_overlaps(ia, peak_list):
 
 def _adjust_boundary(ia, peak_crnt, peak_next):
 
-    """_adjust_boundary(ia, peak_crnt, peak_next)
+    """
+    @summary: Adjusts the boundary between two overlapping peaks. The new
+        boundary is set to the minimum between the two peak apexes
+
+    @param ia: An numpy object. Ion chromatogram intensity array
+    @type ia: numpy.ndarray
+    @param peak_crnt: A list [left,max,right] for peak 1
+    @type peak_crnt: ListType
+    @param peak_next: A list [left,max,right] for peak 2
+    @type peak_next: ListType
+
+    @return: No return value
+    @rtype: NoneType
+
+    -----------------------------------------------------------
+
+    _adjust_boundary(ia, peak_crnt, peak_next)
 
     Adjusts the boundary between two overlapping peaks. The new
     boundary is set to the minimum between the two peak apexes.
@@ -195,7 +273,35 @@ def _adjust_boundary(ia, peak_crnt, peak_next):
 
 def _identify_maxima(ia, wing_length, peak_threshold):
 
-    """_identify_maxima(ia, wing_length, peak_threshold)
+    """
+    @summary: Returns an array of indices where each index corresponds to
+        a local maximum. A point is a local maximum if the following
+        are satisfied:
+
+        1. It is equal or greater than any of 'wing_length' points to
+            its left and to its right
+        2. It is greater than at least one of the points to its left,
+            and one of the points to its right (out of total 'wing_length'
+            points)
+        3. A point closer to the edge of 'ia' than 'wing_length' cannot
+            be a local maximum
+
+    @param ia: An numpy object. Ion chromatogram intensity array
+    @type ia: numpy.ndarray
+    @param wing_length: An integer. The width measured in number of
+        points to the left and right of a point to be considered
+        for an extreme value
+    @type wing_length: IntType
+    @param peak_threshold: A number. The minimum intensity for a peak,
+        maxima below this value are rejected
+    @type peak_threshold: FloatType
+
+    @return: An array of indices where each index corresponds to a local maximum
+    @rtype: ListType
+
+    --------------------------------------------------------------
+
+    _identify_maxima(ia, wing_length, peak_threshold)
 
     Returns an array of indices where each index corresponds to
     a local maximum. A point is a local maximum if the following
@@ -233,7 +339,30 @@ def _identify_maxima(ia, wing_length, peak_threshold):
 
 def _peak_boundaries(ia, maxima_indices, wing_length):
 
-    """_peak_boundaries(ia, maxima_indices, wing_length)
+    """
+    @summary: Determines the left and right boundary for each of the maxima.
+        Returns a list of maxima points and their corresponding left and
+        right boundaries.  Each maxima is modelled using a list of three
+        elements: the left boundary, maxium point, and right boundary
+
+    @param ia: An numpy object. Ion chromatogram intensity array
+    @type ia: numpy.ndarray
+
+    @param maxima_indices: A list contains numpy objects. The list indices of
+        the maxima points
+    @type maxima_indices: ListType
+    @param wing_length: An integer. The width measured in number of
+        points to the left and right of a point to be considered
+        for an extreme value
+    @type wing_length: IntType
+
+    @return: A list of triplets. Giving indices for [left_bound, maximum,
+        right_bound]
+    @rtype: ListType
+
+    --------------------------------------------------------------------
+
+    _peak_boundaries(ia, maxima_indices, wing_length)
 
     Determines the left and right boundary for each of the maxima.
     Returns a list of maxima points and their corresponding left and
@@ -294,7 +423,26 @@ def _peak_boundaries(ia, maxima_indices, wing_length):
 
 def _get_next_minimum(ia_slice, wing_length):
 
-    """_get_next_minimum(ia_slice, wing_length)
+    """
+    @summary: Determines the first next minimum in 'ia_slice' based on 'wing_length',
+        'ia_slice' is processed as index increases until the first minimum
+        is found. If no minimum is found, the minimum is set to the first
+        point after 'wing_length' counting from the end of the slice
+
+    @param ia_slice: An numpy object. Ion chromatogram intensity
+        array slice
+    @type ia_slice: numpy.ndarray
+    @param wing_length: An integer. The width measured in number of
+        points to the left and right of a point to be considered
+        for an extreme value
+    @type wing_length: IntType
+
+    @return: An integer. The index of the minimum value
+    @rtype: IntType
+
+    -----------------------------------------------------------------------
+
+    _get_next_minimum(ia_slice, wing_length)
 
     Determines the first next minimum in 'ia_slice' based on 'wing_length'.
     'ia_slice' is processed as index increases until the first minimum
@@ -332,7 +480,7 @@ def _get_next_minimum(ia_slice, wing_length):
     return boundary_index
 
 ##
-# Returns True if the point is a local maximum or False otherwise. 
+# Returns True if the point is a local maximum or False otherwise.
 # A point is a local maximum if the following are satisfied:
 #    1. It is equal or greater than any of 'wing_length' points to
 #       its left and to its right.
@@ -350,17 +498,43 @@ def _get_next_minimum(ia_slice, wing_length):
 
 def _is_local_maximum(ia, index, wing_length):
 
-    """_is_local_maximum(ia, index, wing_length)
+    """
+    @summary: Returns True if the point is a local maximum or False otherwise
+        A point is a local maximum if the following are satisfied:
+        1. It is equal or greater than any of 'wing_length' points to
+            its left and to its right
+        2. It is greater than at least one of the points to its left,
+            and one of the points to its right (out of total 'wing_length'
+            points)
+        3. A point closer to the edge of 'ia' than 'wing_length' cannot
+            be a local maximum
 
-    Returns True if the point is a local maximum or False otherwise. 
+    @param ia: An numpy object. Ion chromatogram intensity array
+        slice
+    @type ia: numpy.ndarray
+    @param index: An integer.Index
+    @type index: IntType
+    @param wing_length: An integer. The width measured in number of
+        points to the left and right of a point to be considered
+        for an extreme value
+    @type wing_length: IntType
+
+    @return: If the point is a local maximum
+    @rtype: BooleanType
+
+    --------------------------------------------------------------------
+
+    _is_local_maximum(ia, index, wing_length)
+
+    Returns True if the point is a local maximum or False otherwise.
     A point is a local maximum if the following are satisfied:
        1. It is equal or greater than any of 'wing_length' points to
-          its left and to its right.
+           its left and to its right.
        2. It is greater than at least one of the points to its left,
-          and one of the points to its right (out of total 'wing_length'
-          points).
+           and one of the points to its right (out of total 'wing_length'
+           points).
        3. A point closer to the edge of 'ia' than 'wing_length' cannot
-          be a local maximum.
+           be a local maximum.
 
     @param ia An numpy object. Ion chromatogram intensity array 
         slice.
@@ -403,14 +577,29 @@ def _is_local_maximum(ia, index, wing_length):
 
 def _is_greater_than(ia, intensity):
 
-    """_is_greater_than(ia, intensity)
+    """
+    @summary: Returns True if 'intensity' is greater than or equal to every
+        element in 'ia' _and_ is greater than at least one element
+
+    @param ia: An numpy object. Ion chromatogram intensity array
+        slice
+    @type ia: numpy.ndarray
+    @param intensity: A number. Intensity to which slice is compared
+    @type intensity: FloatType
+
+    @return: If it is greater
+    @rtype: BooleanType
+
+    --------------------------------------------------------------
+
+    _is_greater_than(ia, intensity)
 
     Returns True if 'intensity' is greater than or equal to every
     element in 'ia' _and_ is greater than at least one element.
 
-    @param ia An numpy object. Ion chromatogram intensity array 
+    @param ia An numpy object. Ion chromatogram intensity array
         slice.
-    @param intensity A number. Intensity to which slice is compared. 
+    @param intensity A number. Intensity to which slice is compared.
     """
 
     if ia.size < 1:
@@ -429,7 +618,34 @@ def _is_greater_than(ia, intensity):
 
 def _is_local_minimum(ia, index, wing_length):
 
-    """_is_local_minimum(ia, index, wing_length)
+    """
+    @summary: Returns True if the point is a local minimum or False otherwise
+        A point is a local maximum if the following are satisfied:
+
+        1. It is equal or smaller than any of 'wing_length' points to
+            its left and to its right
+        2. It is smllaer than at least one of the points to its left,
+            and one of the points to its right (out of total 'wing_length'
+            points)
+        3. A point closer to the edge of 'ia' than 'wing_length' cannot
+            be a local minimum
+
+    @param ia: An numpy object. Ion chromatogram intensity array
+        slice
+    @type ia: numpy.ndarray
+    @param index: An integer. Index at which to evaluate if local maximum
+    @type index: IntType
+    @param wing_length: An integer. The width measured in number of
+        points to the left and right of a point to be considered
+        for an extreme value
+    @type wing_length: IntType
+
+    @return: A boolean value
+    @rtype: BooleanType
+
+    --------------------------------------------------------------------
+
+    _is_local_minimum(ia, index, wing_length)
 
     Returns True if the point is a local minimum or False otherwise. 
     A point is a local maximum if the following are satisfied:
@@ -457,7 +673,7 @@ def _is_local_minimum(ia, index, wing_length):
     left_index = index - wing_length
     if left_index < 0: left_index = 0
     left_slice = ia[left_index:index]
-    
+
     right_index = index + wing_length + 1
     if right_index > ia.size: right_index = ia.size
     right_slice = ia[index+1:right_index]
@@ -482,14 +698,29 @@ def _is_local_minimum(ia, index, wing_length):
 
 def _is_less_than(ia, intensity):
 
-    """_is_less_than(ia, intensity)
+    """
+    @summary: Returns True if 'intensity' is less than or equal to every
+        element in 'ia' _and_ is less than at least one element
+
+    @param ia: An numpy object. Ion chromatogram intensity array
+        slice
+    @type ia: numpy.ndarray
+    @param intensity: A number. Intensity to which slice is compared
+    @type intensity: FloatType
+
+    @return: a boolean value
+    @rtype: BooleanType
+
+    -----------------------------------------------------------------------
+
+    _is_less_than(ia, intensity)
 
     Returns True if 'intensity' is less than or equal to every
     element in 'ia' _and_ is less than at least one element.
 
-    @param ia An numpy object. Ion chromatogram intensity array 
+    @param ia An numpy object. Ion chromatogram intensity array
         slice.
-    @param intensity A number. Intensity to which slice is compared. 
+    @param intensity A number. Intensity to which slice is compared.
     """
 
     if ia.size < 1:
@@ -509,7 +740,27 @@ def _is_less_than(ia, intensity):
 def _adjust_boundaries(ia, peak_list, angle_width=_DEFAULT_ANGLE_PTS, \
         angle_threshold=_DEFAULT_ANGLE_THRESHOLD):
 
-    """ _adjust_boundaries(ia, peak_list, angle_width, angle_threshold)
+    """
+    @summary: Adjusts peak boundaries by fitting the straight line through the
+        edge points, and trimming point for which the line formes an angle
+        with the time axis which is less than the threshold
+
+    @param ia: An numpy object. Ion chromatogram intensity array
+    @type ia: numpy.ndarray
+    @param angle_width: An integer. The number of point for the best fit
+    @type angle_width: IntType
+    @param angle_threshold: A number. The angle threshold for peak boundary
+        points.  A line of best fit drawn through an arbitrary number of
+        points at the peak boundaries must form an angle greater than
+        the angle threshold. If not, the boundary point will be trimmed
+    @type angle_threshold: FloatType
+
+    @return: No return value
+    @rtype: NoneType
+
+    ----------------------------------------------------------------------
+
+    _adjust_boundaries(ia, peak_list, angle_width, angle_threshold)
 
     Adjusts peak boundaries by fitting the straight line through the
     edge points, and trimming point for which the line formes an angle
@@ -517,12 +768,12 @@ def _adjust_boundaries(ia, peak_list, angle_width=_DEFAULT_ANGLE_PTS, \
 
     @param ia An numpy object. Ion chromatogram intensity array.
     @param peak_list A list of pre-peaks.
-    @param angle_width An integer. The number of point for the best fit. 
+    @param angle_width An integer. The number of point for the best fit.
     @param angle_threshold A number. The angle threshold for peak boundary
         points.  A line of best fit drawn through an arbitrary number of
         points at the peak boundaries must form an angle greater than
         the angle threshold.  If not, the boundary point will be trimmed.
-    @return No return value. 
+    @return No return value.
     """
 
     for peak_item in peak_list:
@@ -548,14 +799,35 @@ def _adjust_boundaries(ia, peak_list, angle_width=_DEFAULT_ANGLE_PTS, \
 
 def _trim_boundary(ia_slice, apex, angle_width, angle_threshold):
 
-    """_trim_boundary(ia_slice, apex, angle_width, angle_threshold)
+    """
+    @summary: Performs peak boundary trimming
+
+    @param ia_slice: An numpy object. Ion chromatogram intensity
+        array slice representing initial peak boundary
+    @type ia_slice: numpy.ndarray
+    @param apex: A number. Intensity at peak apex
+    @type apex: FloatType
+    @param angle_width: An integer. The number of point for the best fit
+    @type angle_width: IntType
+    @param angle_threshold: A number. The angle threshold for peak boundary
+        points.  A line of best fit drawn through an arbitrary number of
+        points at the peak boundaries must form an angle greater than
+        the angle threshold.  If not, the boundary point will be trimmed
+    @type angle_threshold: FloatType
+
+    @return: A numpy object. Trimmed peak boundary
+    @rtype: FloatType
+
+    -----------------------------------------------------------------------
+
+    _trim_boundary(ia_slice, apex, angle_width, angle_threshold)
 
     Performs peak boundary trimming. 
 
     @param ia_slice An numpy object. Ion chromatogram intensity
         array slice representing initial peak boundary.
     @param apex A number. Intensity at peak apex .
-     @param angle_width An integer. The number of point for the best fit. 
+     @param angle_width An integer. The number of point for the best fit.
     @param angle_threshold A number. The angle threshold for peak boundary
         points.  A line of best fit drawn through an arbitrary number of
         points at the peak boundaries must form an angle greater than
@@ -583,12 +855,25 @@ def _trim_boundary(ia_slice, apex, angle_width, angle_threshold):
         index = index + 1
 
         if angle > angle_threshold: break
-
     return ia_slice[index-1:]
 
 def _best_fit_line(y_values, x_values=None):
 
-    """_best_fit_line(y_values, x_values=None)
+    """
+    @summary: Calculates the coefficients to a linear line of best fit
+
+    @param y_values: A numpy object representing the y-values
+    @type y_values: numpy.ndarray
+    @param x_values: A numpy object representing the x-values
+    @type x_values: numpy.ndarray
+
+    @return: A tuple. Best fit coefficients where the first element is
+        the gradient, and the second is the y-intercept
+    @rtype: numpy.float64, numpy.float64
+
+    -----------------------------------------------------------------
+
+    _best_fit_line(y_values, x_values=None)
 
     Calculates the coefficients to a linear line of best fit.  The
 
@@ -613,4 +898,3 @@ def _best_fit_line(y_values, x_values=None):
     coefficients = numpy.dot(ialphaA, beta)
 
     return coefficients[0], coefficients[1]
-

@@ -22,20 +22,33 @@ Functions common to all peak integrators
  #                                                                           #
  #############################################################################
 
- 
 from pyms.Peak.Class import Peak 
 
 from Constants import *
 
 def generate_peaks(ic, peak_list):
 
-    """generate_peaks(ic, peak_list)
+    """
+    @summary: Generates a list of peak objects from the list of pre-peaks,
+        and integrates peak areas
+
+    @param ic: An IonChromatogram object
+    @type ic: numpy.ndarray
+    @param peak_list: A list of pre-peaks
+    @type peak_list: ListType
+
+    @return: A list of peak objects
+    @rtype: ListType
+
+    -----------------------------------------------------------
+
+    generate_peaks(ic, peak_list)
 
     Generates a list of peak objects from the list of pre-peaks,
     and integrates peak areas.
 
     @param ic An IonChromatogram object.
-    @param peak_list A list of pre-peaks. 
+    @param peak_list A list of pre-peaks.
     @return A list of peak objects
     """
 
@@ -61,4 +74,3 @@ def generate_peaks(ic, peak_list):
         peaks.append(peak)
 
     return peaks
-
