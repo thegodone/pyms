@@ -7,9 +7,6 @@ Savitzky-Golay noise filter
  #    PyMS software for processing of metabolomic mass-spectrometry data     #
  #    Copyright (C) 2005-8 Vladimir Likic                                    #
  #                                                                           #
- #    The functions __calc_coeff(), __resub(),  __smooth() Copyright (C)     #
- #    Uwe Schmitt                                                            #
- #                                                                           #
  #    This program is free software; you can redistribute it and/or modify   #
  #    it under the terms of the GNU General Public License version 2 as      #
  #    published by the Free Software Foundation.                             #
@@ -24,8 +21,6 @@ Savitzky-Golay noise filter
  #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.              #
  #                                                                           #
  #############################################################################
-
-
 
 import numpy
 import copy
@@ -99,6 +94,7 @@ def __calc_coeff(num_points, pol_degree, diff_order=0):
     @rtype: numpy.ndarray
 
     @author: Uwe Schmitt
+    @copyright: Uwe Schmitt
     """
 
     # setup normal matrix
@@ -132,6 +128,7 @@ def __resub(D, rhs):
     D is lower triangle-matrix from cholesky-decomposition
 
     @author: Uwe Schmitt
+    @copyright: Uwe Schmitt
     """
 
     M = D.shape[0]
@@ -161,6 +158,7 @@ def __smooth(signal, coeff):
     to signal
 
     @author: Uwe Schmitt
+    @copyright: Uwe Schmitt
     """
     
     N = numpy.size(coeff-1)/2
