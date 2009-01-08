@@ -1,3 +1,27 @@
+"""
+Functions for peak alignment by dynamic programming
+"""
+
+ #############################################################################
+ #                                                                           #
+ #    PyMS software for processing of metabolomic mass-spectrometry data     #
+ #    Copyright (C) 2005-8 Vladimir Likic                                    #
+ #                                                                           #
+ #    This program is free software; you can redistribute it and/or modify   #
+ #    it under the terms of the GNU General Public License version 2 as      #
+ #    published by the Free Software Foundation.                             #
+ #                                                                           #
+ #    This program is distributed in the hope that it will be useful,        #
+ #    but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+ #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          #
+ #    GNU General Public License for more details.                           #
+ #                                                                           #
+ #    You should have received a copy of the GNU General Public License      #
+ #    along with this program; if not, write to the Free Software            #
+ #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.              #
+ #                                                                           #
+ #############################################################################
+
 import copy
 import numpy
 from pyms.Utils.Error import error, stop
@@ -18,6 +42,7 @@ def exprl2alignment(exprl):
     @rtype: ListType
 
     @author: Qiao Wang
+    @author: Vladimir Likic
     """
 
     if not is_list(exprl):
@@ -45,6 +70,7 @@ def align(a1, a2, gap):
     @rtype: pyms.Alignment.Class.Alignment
 
     @author: Qiao Wang
+    @author: Vladimir Likic
     """
 
     # calculate score matrix for two alignments
@@ -71,6 +97,7 @@ def score_matrix(a1, a2):
     @rtype: numpy.ndarray
 
     @author: Qiao Wang
+    @author: Vladimir Likic
     """
 
     score_matrix = numpy.zeros((len(a1.masspos), len(a2.masspos)))
@@ -102,6 +129,7 @@ def position_similarity(pos1, pos2):
     @rtype: FloatType
 
     @author: Qiao Wang
+    @author: Vladimir Likic
     """
 
     score=0.
@@ -131,6 +159,7 @@ def merge_alignments(A1, A2, traces):
     @rtype: pyms.Alignment.Class.Alignment
 
     @author: Qiao Wang
+    @author: Vladimir Likic
     """
 
     # Create object to hold new merged alignment and fill in its expr_codes
