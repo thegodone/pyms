@@ -1,5 +1,5 @@
- """
-Classes for peak alignment by dynamic programming
+"""
+Classes for full matrix alignment by dynamic programming
 """
 
  #############################################################################
@@ -23,10 +23,13 @@ Classes for peak alignment by dynamic programming
  #############################################################################
 
 import copy
+
 import numpy
+
 import Pycluster
 from pyms.Utils.Error import error
 from pyms.Experiment.Class import Experiment
+
 import Function
 
 class Alignment(object):
@@ -44,7 +47,7 @@ class Alignment(object):
     def __init__(self, expr):
 
         """
-        @summary: Initiate the alignment object
+        @summary: Initialize the alignment object
 
         @param expr: The experiment to be converted into an alignment object
         @type expr: pyms.Experiment.Class.Experiment
@@ -91,7 +94,8 @@ class PairwiseAlignment(object):
     @author: Vladimir Likic
     """
 
-    print "Start Pairwising"
+    print "Pairwise alignment started"
+
     def __init__(self, algts, gap):
 
         """
@@ -108,7 +112,6 @@ class PairwiseAlignment(object):
         self.gap = gap
         self.sim_matrix = self._sim_matrix(algts, gap)
         self.dist_matrix = self._dist_matrix(self.sim_matrix)
-        #self.tree = self._guide_tree(self.dist_matrix)
 
     def _sim_matrix(self, algts, gap):
 
@@ -128,12 +131,9 @@ class PairwiseAlignment(object):
         """
 
         sim_matrix = numpy.zeros((2,2), dtype='f')
-        #for i in range(n - 1):
-            #for j in range(i + 1, n):
         ma = Function.align(algts[0], algts[1], gap)
         sim_matrix[0,1] = sim_matrix[1,0] = ma.similarity
-        #total_n = total_n - 1
-        #print " -> %d pairs remaining" % total_n
+
         return sim_matrix
 
     def _dist_matrix(self, sim_matrix):
@@ -153,9 +153,11 @@ class PairwiseAlignment(object):
         # change similarity matrix entries (i,j) to max{matrix}-(i,j)
         sim_max = numpy.max(numpy.ravel(sim_matrix))
         dist_matrix = sim_max - sim_matrix
+
         # set diagonal elements of the similarity matrix to zero
         for i in range(len(dist_matrix)):
             dist_matrix[i,i] = 0
+
         return dist_matrix
 
     def _guide_tree(self, dist_matrix):
@@ -173,7 +175,10 @@ class PairwiseAlignment(object):
         """
 
         n = len(dist_matrix)
+
         print " -> Clustering %d pairwise alignments." % (n*(n-1)),
         tree = Pycluster.treecluster(distancematrix=dist_matrix, method='a')
         print "Done"
+
         return tree
+

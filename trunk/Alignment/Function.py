@@ -1,5 +1,5 @@
 """
-Functions for peak alignment by dynamic programming
+Functions for full matrix alignment by dynamic programming
 """
 
  #############################################################################
@@ -23,11 +23,14 @@ Functions for peak alignment by dynamic programming
  #############################################################################
 
 import copy
+
 import numpy
+
 from pyms.Utils.Error import error, stop
 from pyms.Utils.Utils import is_list
 from pyms.Utils.DP import dp
 from pyms.Experiment.Class import Experiment
+
 import Class
 
 def exprl2alignment(exprl):
@@ -47,11 +50,14 @@ def exprl2alignment(exprl):
 
     if not is_list(exprl):
         error("the argument is not a list")
+
     algts = []
     for item in exprl:
         algt = Class.Alignment(item)
         algts.append(algt)
+
     print "Alignment objects created"
+
     return algts
 
 def align(a1, a2, gap):
@@ -101,18 +107,23 @@ def score_matrix(a1, a2):
     """
 
     score_matrix = numpy.zeros((len(a1.masspos), len(a2.masspos)))
-    print "Initialling the score matrix size of:",score_matrix.shape
-    print "Processing the score_matrix..."
+    print "Initializing the score matrix of size:",score_matrix.shape
+    print "Processing the score matrix..."
+
     row = 0
     col = 0
+
     sim_score=0
+
     for pos1 in a1.masspos:
         for pos2 in a2.masspos:
             score_matrix[row][col] = position_similarity(pos1, pos2)
-            col=col+1
-        row=row+1
-        col=0
+            col = col+1
+        row = row+1
+        col = 0
+
     print "Score matrix finished"
+
     return score_matrix
 
 def position_similarity(pos1, pos2):
@@ -132,15 +143,16 @@ def position_similarity(pos1, pos2):
     @author: Vladimir Likic
     """
 
-    score=0.
-    mass_spect1=numpy.array(pos1[0],dtype='d')
-    mass_spect2=numpy.array(pos2[0],dtype='d')
-    mass_spect1_sum=numpy.sum(mass_spect1 ** 2, axis=0)
-    mass_spect2_sum=numpy.sum(mass_spect2 ** 2, axis=0)
+    score = 0.0
+    mass_spect1 = numpy.array(pos1[0],dtype='d')
+    mass_spect2 = numpy.array(pos2[0],dtype='d')
+    mass_spect1_sum = numpy.sum(mass_spect1 ** 2, axis=0)
+    mass_spect2_sum = numpy.sum(mass_spect2 ** 2, axis=0)
     top = numpy.dot(mass_spect1,mass_spect2)
     bot = numpy.sqrt(mass_spect1_sum*mass_spect2_sum)
-    cos = (top/bot)
-    score=score + (1.-(cos))
+    cos = top/bot
+    score=score + (1.0 - cos)
+
     return score
 
 def merge_alignments(A1, A2, traces):
@@ -163,10 +175,12 @@ def merge_alignments(A1, A2, traces):
     """
 
     # Create object to hold new merged alignment and fill in its expr_codes
-    print "Start merging the alignment"
+    print "Merging the alignments started"
     ma = Class.Alignment(None)
+
     # create empty lists of dimension |A1| + |A2|
     idx1 = idx2 = 0
+
     # trace can either be 0, 1, or 2
     # if it is 0, there are no gaps. otherwise, if it is 1 or 2,
     # there is a gap in A2 or A1 respectively.
@@ -345,3 +359,4 @@ def align_with_tree(T):
     final_algt = As[index]
     print len(final_algt), "x", len(final_algt)
     return final_algt
+
