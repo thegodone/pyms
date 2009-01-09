@@ -2,35 +2,31 @@
 Classes for full matrix alignment by dynamic programming
 """
 
- #############################################################################
- #                                                                           #
- #    PyMS software for processing of metabolomic mass-spectrometry data     #
- #    Copyright (C) 2005-8 Vladimir Likic                                    #
- #                                                                           #
- #    This program is free software; you can redistribute it and/or modify   #
- #    it under the terms of the GNU General Public License version 2 as      #
- #    published by the Free Software Foundation.                             #
- #                                                                           #
- #    This program is distributed in the hope that it will be useful,        #
- #    but WITHOUT ANY WARRANTY; without even the implied warranty of         #
- #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          #
- #    GNU General Public License for more details.                           #
- #                                                                           #
- #    You should have received a copy of the GNU General Public License      #
- #    along with this program; if not, write to the Free Software            #
- #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.              #
- #                                                                           #
- #############################################################################
-
-import copy
-
-import numpy
-
-import Pycluster
-from pyms.Utils.Error import error
-from pyms.Experiment.Class import Experiment
+    #############################################################################
+    #                                                                           #
+    #    PyMS software for processing of metabolomic mass-spectrometry data     #
+    #    Copyright (C) 2005-8 Vladimir Likic                                    #
+    #                                                                           #
+    #    This program is free software; you can redistribute it and/or modify   #
+    #    it under the terms of the GNU General Public License version 2 as      #
+    #    published by the Free Software Foundation.                             #
+    #                                                                           #
+    #    This program is distributed in the hope that it will be useful,        #
+    #    but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+    #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          #
+    #    GNU General Public License for more details.                           #
+    #                                                                           #
+    #    You should have received a copy of the GNU General Public License      #
+    #    along with this program; if not, write to the Free Software            #
+    #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.              #
+    #                                                                           #
+    #############################################################################
 
 import Function
+
+import Pycluster
+
+import numpy
 
 class Alignment(object):
 
@@ -57,17 +53,17 @@ class Alignment(object):
         """
 
         if expr == None:
-            self.masspos = []
-            self.massgap = []
+            self.scanpos = []
+            self.scangap = []
             self.similarity = None
         else:
-            self.masspos = []
-            self.massgap = []
+            self.scanpos = []
+            self.scangap = []
             for i in range(len(expr)):
-                self.masspos.append([])
-                self.masspos[i].append((numpy.array(expr[i],dtype='d')).tolist())
-                self.massgap.append([])
-                self.massgap[i].append(1)
+                self.scanpos.append([])
+                self.scanpos[i].append((numpy.array(expr[i], dtype='d')).tolist())
+                self.scangap.append([])
+                self.scangap[i].append(1)
             self.similarity = None
 
     def __len__(self):
@@ -83,7 +79,7 @@ class Alignment(object):
         @author: Vladimir Likic
         """
 
-        return len(self.masspos)
+        return len(self.scanpos)
 
 class PairwiseAlignment(object):
 
@@ -130,9 +126,9 @@ class PairwiseAlignment(object):
         @author: Vladimir Likic
         """
 
-        sim_matrix = numpy.zeros((2,2), dtype='f')
+        sim_matrix = numpy.zeros((2, 2), dtype='f')
         ma = Function.align(algts[0], algts[1], gap)
-        sim_matrix[0,1] = sim_matrix[1,0] = ma.similarity
+        sim_matrix[0, 1] = sim_matrix[1, 0] = ma.similarity
 
         return sim_matrix
 
@@ -156,7 +152,7 @@ class PairwiseAlignment(object):
 
         # set diagonal elements of the similarity matrix to zero
         for i in range(len(dist_matrix)):
-            dist_matrix[i,i] = 0
+            dist_matrix[i, i] = 0
 
         return dist_matrix
 
@@ -176,9 +172,8 @@ class PairwiseAlignment(object):
 
         n = len(dist_matrix)
 
-        print " -> Clustering %d pairwise alignments." % (n*(n-1)),
+        print " -> Clustering %d pairwise alignments." % (n * (n-1)),
         tree = Pycluster.treecluster(distancematrix=dist_matrix, method='a')
         print "Done"
 
         return tree
-

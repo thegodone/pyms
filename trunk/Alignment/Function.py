@@ -2,36 +2,34 @@
 Functions for full matrix alignment by dynamic programming
 """
 
- #############################################################################
- #                                                                           #
- #    PyMS software for processing of metabolomic mass-spectrometry data     #
- #    Copyright (C) 2005-8 Vladimir Likic                                    #
- #                                                                           #
- #    This program is free software; you can redistribute it and/or modify   #
- #    it under the terms of the GNU General Public License version 2 as      #
- #    published by the Free Software Foundation.                             #
- #                                                                           #
- #    This program is distributed in the hope that it will be useful,        #
- #    but WITHOUT ANY WARRANTY; without even the implied warranty of         #
- #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          #
- #    GNU General Public License for more details.                           #
- #                                                                           #
- #    You should have received a copy of the GNU General Public License      #
- #    along with this program; if not, write to the Free Software            #
- #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.              #
- #                                                                           #
- #############################################################################
+    #############################################################################
+    #                                                                           #
+    #    PyMS software for processing of metabolomic mass-spectrometry data     #
+    #    Copyright (C) 2005-8 Vladimir Likic                                    #
+    #                                                                           #
+    #    This program is free software; you can redistribute it and/or modify   #
+    #    it under the terms of the GNU General Public License version 2 as      #
+    #    published by the Free Software Foundation.                             #
+    #                                                                           #
+    #    This program is distributed in the hope that it will be useful,        #
+    #    but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+    #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          #
+    #    GNU General Public License for more details.                           #
+    #                                                                           #
+    #    You should have received a copy of the GNU General Public License      #
+    #    along with this program; if not, write to the Free Software            #
+    #    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.              #
+    #                                                                           #
+    #############################################################################
+
+import Class
 
 import copy
 
 import numpy
 
-from pyms.Utils.Error import error, stop
-from pyms.Utils.Utils import is_list
 from pyms.Utils.DP import dp
-from pyms.Experiment.Class import Experiment
-
-import Class
+from pyms.Utils.Utils import is_list
 
 def exprl2alignment(exprl):
 
@@ -106,20 +104,18 @@ def score_matrix(a1, a2):
     @author: Vladimir Likic
     """
 
-    score_matrix = numpy.zeros((len(a1.masspos), len(a2.masspos)))
-    print "Initializing the score matrix of size:",score_matrix.shape
+    score_matrix = numpy.zeros((len(a1.scanpos), len(a2.scanpos)))
+    print "Initializing the score matrix of size:", score_matrix.shape
     print "Processing the score matrix..."
 
     row = 0
     col = 0
 
-    sim_score=0
-
-    for pos1 in a1.masspos:
-        for pos2 in a2.masspos:
+    for pos1 in a1.scanpos:
+        for pos2 in a2.scanpos:
             score_matrix[row][col] = position_similarity(pos1, pos2)
-            col = col+1
-        row = row+1
+            col = col + 1
+        row = row + 1
         col = 0
 
     print "Score matrix finished"
@@ -144,14 +140,14 @@ def position_similarity(pos1, pos2):
     """
 
     score = 0.0
-    mass_spect1 = numpy.array(pos1[0],dtype='d')
-    mass_spect2 = numpy.array(pos2[0],dtype='d')
+    mass_spect1 = numpy.array(pos1[0], dtype='d')
+    mass_spect2 = numpy.array(pos2[0], dtype='d')
     mass_spect1_sum = numpy.sum(mass_spect1 ** 2, axis=0)
     mass_spect2_sum = numpy.sum(mass_spect2 ** 2, axis=0)
-    top = numpy.dot(mass_spect1,mass_spect2)
-    bot = numpy.sqrt(mass_spect1_sum*mass_spect2_sum)
-    cos = top/bot
-    score=score + (1.0 - cos)
+    top = numpy.dot(mass_spect1, mass_spect2)
+    bot = numpy.sqrt(mass_spect1_sum * mass_spect2_sum)
+    cos = top / bot
+    score = score + (1.0 - cos)
 
     return score
 
@@ -188,108 +184,97 @@ def merge_alignments(A1, A2, traces):
     for trace in traces:
 
         if trace == 0:
-            ma.masspos.append([])
-            ma.massgap.append([])
-            for i in range(len(A1.masspos[idx1])):
-                ma.masspos[count].append(A1.masspos[idx1][i])
-                ma.massgap[count].append(1)
-            for j in range(len(A2.masspos[idx2])):
-                ma.masspos[count].append(A2.masspos[idx2][j])
-                ma.massgap[count].append(1)
+            ma.scanpos.append([])
+            ma.scangap.append([])
+            for i in range(len(A1.scanpos[idx1])):
+                ma.scanpos[count].append(A1.scanpos[idx1][i])
+                ma.scangap[count].append(1)
+            for j in range(len(A2.scanpos[idx2])):
+                ma.scanpos[count].append(A2.scanpos[idx2][j])
+                ma.scangap[count].append(1)
             idx1 = idx1 + 1
             idx2 = idx2 + 1
 
         elif trace == 1:
-            ma.masspos.append([])
-            ma.massgap.append([])
-            for i in range(len(A1.masspos[idx1])):
-                ma.masspos[count].append(A1.masspos[idx1][i])
-                ma.massgap[count].append(1)
-            for j in range(len(A2.masspos[idx2])):
-                ma.masspos[count].append([])
-                ma.massgap[count].append(0)
+            ma.scanpos.append([])
+            ma.scangap.append([])
+            for i in range(len(A1.scanpos[idx1])):
+                ma.scanpos[count].append(A1.scanpos[idx1][i])
+                ma.scangap[count].append(1)
+            for j in range(len(A2.scanpos[idx2])):
+                ma.scanpos[count].append([])
+                ma.scangap[count].append(0)
             idx1 = idx1 + 1
 
         elif trace == 2:
-            ma.masspos.append([])
-            ma.massgap.append([])
-            for i in range(len(A1.masspos[idx1])):
-                ma.masspos[count].append([])
-                ma.massgap[count].append(0)
-            for j in range(len(A2.masspos[idx2])):
-                ma.masspos[count].append(A2.masspos[idx2][j])
-                ma.massgap[count].append(1)
+            ma.scanpos.append([])
+            ma.scangap.append([])
+            for i in range(len(A1.scanpos[idx1])):
+                ma.scanpos[count].append([])
+                ma.scangap[count].append(0)
+            for j in range(len(A2.scanpos[idx2])):
+                ma.scanpos[count].append(A2.scanpos[idx2][j])
+                ma.scangap[count].append(1)
             idx2 = idx2 + 1
 
         count = count + 1
 
     print "Start processing artificial time points"
-    artificial_value_writer=open('Artificial_value.txt','w')
-    for i in range(len(ma.masspos[0])):
-        for j in range(len(ma.masspos)):
-            if len(ma.masspos[j][i])==0:
+    fp = open('Artificial_value.txt', 'w')
+    for i in range(len(ma.scanpos[0])):
+        for j in range(len(ma.scanpos)):
+            if len(ma.scanpos[j][i]) == 0:
                 start = j
-                artificial_value_writer.write("----------------------------------------------------------------\n")
-                artificial_value_writer.write("Gaps founded, Start at: ")
-                artificial_value_writer.write(str(start))
-                artificial_value_writer.write(" , ")
+                fp.write("-----------------------------------------------\n")
+                fp.write("Gaps founded, Start at: " + str(start) + " , ")
                 end = start
-                while len(ma.masspos[end+1][i])==0:
-                    end = end+1
-                artificial_value_writer.write("End at: ")
-                artificial_value_writer.write(str(end))
-                artificial_value_writer.write(" .\n")
-                artificial_value_writer.write("The details of artificial values of masspectrum for each gap time point in the gaps:\n")
-                if j==0:
-                    for l in range(len(ma.masspos[0][i])):
-                        slope = (ma.masspos[end+1][i][l]-0)/(end-start+1)
-                        ma.masspos[0][i].append(0.)
+                while len(ma.scanpos[end + 1][i]) == 0:
+                    end = end + 1
+                fp.write("End at: " + str(end) + " .\n")
+                fp.write("The details of artificial values of masspectrum:\n")
+                if j == 0:
+                    for l in range(len(ma.scanpos[0][i])):
+                        slope = (ma.scanpos[end + 1][i][l]-0) / (end-start + 1)
+                        ma.scanpos[0][i].append(0.0)
                         for k in range(end-start):
-                            ma.masspos[k+1][i].append(0. + slope*(k+1))
-                elif end==len(ma.masspos)-1:
-                    for l in range(len(ma.masspos[0][i])):
-                        slope = (ma.masspos[start-1][i][l]-0)/(end-start+1)
-                        for k in range(end-start+1):
-                            ma.masspos[start+k].append(ma.masspos[start-1] - slope*(k+1))
+                            ma.scanpos[k + 1][i].append(0.0 + slope * (k + 1))
+                elif end == len(ma.scanpos)-1:
+                    for l in range(len(ma.scanpos[0][i])):
+                        slope = (ma.scanpos[start-1][i][l]-0.0) / (end-start + 1)
+                        for k in range(end-start + 1):
+                            ma.scanpos[start + k].append(ma.scanpos[start-1] - slope * (k + 1))
                 else:
-                    for l in range(len(ma.masspos[0][i])):
-                        slope = (ma.masspos[end+1][i][l]-ma.masspos[start-1][i][l])/(end-start+2)
-                        artificial_value_writer.write("Gap point:  Slope: ")
-                        artificial_value_writer.write(str(slope))
-                        artificial_value_writer.write(" Left: ")
-                        artificial_value_writer.write(str(ma.masspos[start-1][i][l]))
-                        for k in range(end-start+1):
-                            ma.masspos[start+k][i].append(ma.masspos[start-1][i][l] + slope*(k+1))
-                            artificial_value_writer.write(" Inter: ")
-                            artificial_value_writer.write(str(ma.masspos[start+k][i][l]))
-                        artificial_value_writer.write(" Right: ")
-                        artificial_value_writer.write(str(ma.masspos[end+1][i][l]))
-                        artificial_value_writer.write("\n")
-                    artificial_value_writer.write("----------------------------------------------------------------\n")
-    artificial_value_writer.close()
+                    for l in range(len(ma.scanpos[0][i])):
+                        slope = (ma.scanpos[end + 1][i][l]-ma.scanpos[start-1][i][l]) / (end-start + 2)
+                        fp.write("Gap point:  Slope: " + str(slope))
+                        fp.write(" Left: " + str(ma.scanpos[start-1][i][l]))
+                        for k in range(end-start + 1):
+                            ma.scanpos[start + k][i].append(ma.scanpos[start-1][i][l] + slope * (k + 1))
+                            fp.write(" Inter: " + str(ma.scanpos[start + k][i][l]))
+                        fp.write(" Right: " + str(ma.scanpos[end + 1][i][l]) + "\n")
+                    fp.write("-----------------------------------------------\n")
+    fp.close()
 
     print "Artificial time points filled with interpolated mass spectrum value"
     print "Generating the final 2-alignment..."
-    final2alignment_writer=open('Final_2-alignment.txt','w')
-    for i in range(len(ma.masspos)):
-        for j in range(len(ma.masspos[0])):
-            a=0
-            for k in range(len(ma.masspos[i][j])):
-                a=a+ma.masspos[i][j][k]
-            final2alignment_writer.write(str(a))
-            final2alignment_writer.write(" ")
-        final2alignment_writer.write("\n")
+    fp = open('Final_2-alignment.txt', 'w')
+    for i in range(len(ma.scanpos)):
+        for j in range(len(ma.scanpos[0])):
+            a = 0
+            for k in range(len(ma.scanpos[i][j])):
+                a = a + ma.scanpos[i][j][k]
+            fp.write(str(a) + " ")
+        fp.write("\n")
     print "Done"
-    final2alignment_writer.close()
+    fp.close()
     print "Generating the gap indicator matrix..."
-    indicator_writer=open('Gaps_indicator.txt','w')
-    for i in range(len(ma.massgap)):
-        for j in range(len(ma.massgap[0])):
-            indicator_writer.write(str(ma.massgap[i][j]))
-            indicator_writer.write(" ")
-        indicator_writer.write("\n")
+    fp = open('Gaps_indicator.txt', 'w')
+    for i in range(len(ma.scangap)):
+        for j in range(len(ma.scangap[0])):
+            fp.write(str(ma.scangap[i][j]) + " ")
+        fp.write("\n")
     print "Done"
-    indicator_writer.close()
+    fp.close()
     print "Merging complete"
     return ma
 
@@ -311,8 +296,8 @@ def alignment_similarity(traces, score_matrix, gap):
     @author: Vladimir Likic
     """
 
-    score_matrix = 1. - score_matrix
-    similarity = 0.
+    score_matrix = 1.0 - score_matrix
+    similarity = 0.0
     idx1 = idx2 = 0
     for trace in traces:
         if trace == 0:
@@ -343,9 +328,9 @@ def align_with_tree(T):
     """
 
     print " Aligning %d items with guide tree (D=%.2f, gap=%.2f)" % \
-            (len(T.algts), T.gap)#####################################
+        (len(T.algts), T.gap)#####################################
     # extend As to length 2n to hold the n items, n-1 nodes, and 1 root
-    As = copy.deepcopy(T.algts) + [ None for _ in range(len(T.algts)) ]
+    As = copy.deepcopy(T.algts) + [None for _ in range(len(T.algts))]
     # align the alignments into positions -1, ... ,-(n-1)
     total = len(T.tree)
     index = 0
@@ -359,4 +344,3 @@ def align_with_tree(T):
     final_algt = As[index]
     print len(final_algt), "x", len(final_algt)
     return final_algt
-
