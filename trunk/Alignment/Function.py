@@ -24,12 +24,37 @@ Functions for full matrix alignment by dynamic programming
 
 import Class
 
-import copy
-
 import numpy
 
+from Class import PairwiseAlignment
 from pyms.Utils.DP import dp
 from pyms.Utils.Utils import is_list
+
+def fma(data1, data2, Gw):
+
+    """
+    @summary: Align 2 data sets with full matrix
+
+    @param data1: First input of GC-MS data
+    @type data1: pyms.IO.ANDI.Class.ChemStation
+    @param data2: Second input of GC-MS data
+    @type data2: pyms.IO.ANDI.Class.ChemStation
+
+    @author: Qiao Wang
+    @author: Vladimir Likic
+    """
+
+    print "ANDI-MS data 1 filename:", data1.get_filename()
+    print "ANDI-MS data 2 filename:", data2.get_filename()
+    # print the name of the ANDI-MS file
+    im1 = data1.get_intensity_matrix()
+    im2 = data2.get_intensity_matrix()
+    # get the entire intensity matrix
+    print "Dimensions of the intensity matrix 1 are:", len(im1), "x", len(im1[0])
+    print "Dimensions of the intensity matrix 2 are:", len(im2), "x", len(im2[0])
+    E1 = [im1, im2]
+    F1 = exprl2alignment(E1)
+    PairwiseAlignment(F1, Gw)
 
 def exprl2alignment(exprl):
 
@@ -311,36 +336,3 @@ def alignment_similarity(traces, score_matrix, gap):
             similarity = similarity - gap
             idx2 = idx2 + 1
     return similarity
-
-def align_with_tree(T):
-
-    """
-    @summary: Aligns a list of alignments using the supplied guide tree
-
-    @param T: The pairwise alignment object
-    @type T: pyms.Alignment.Class.PairwiseAlignment
-
-    @return: The final alignment consisting of aligned input alignments
-    @rtype: pyms.Alignment.Class.Alignment
-
-    @author: Woon Wai Keen
-    @author: Vladimir Likic
-    """
-
-    print " Aligning %d items with guide tree (D=%.2f, gap=%.2f)" % \
-        (len(T.algts), T.gap)#####################################
-    # extend As to length 2n to hold the n items, n-1 nodes, and 1 root
-    As = copy.deepcopy(T.algts) + [None for _ in range(len(T.algts))]
-    # align the alignments into positions -1, ... ,-(n-1)
-    total = len(T.tree)
-    index = 0
-    for node in T.tree:
-        index = index - 1
-        As[index] = align(As[node.left], As[node.right], T.gap)
-        total = total - 1
-        print " -> %d item(s) remaining" % total
-
-    # the final alignment is in the root. Filter min peaks and return
-    final_algt = As[index]
-    print len(final_algt), "x", len(final_algt)
-    return final_algt

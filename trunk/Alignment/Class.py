@@ -24,8 +24,6 @@ Classes for full matrix alignment by dynamic programming
 
 import Function
 
-import Pycluster
-
 import numpy
 
 class Alignment(object):
@@ -155,25 +153,3 @@ class PairwiseAlignment(object):
             dist_matrix[i, i] = 0
 
         return dist_matrix
-
-    def _guide_tree(self, dist_matrix):
-
-        """
-        @summary: Build a guide tree from the distance matrix
-
-        @param dist_matrix: The distance matrix
-        @type dist_matrix: numpy.ndarray
-        @return: Pycluster similarity tree
-        @rtype: Pycluster.cluster.Tree
-
-        @author: Woon Wai Keen
-        @author: Vladimir Likic
-        """
-
-        n = len(dist_matrix)
-
-        print " -> Clustering %d pairwise alignments." % (n * (n-1)),
-        tree = Pycluster.treecluster(distancematrix=dist_matrix, method='a')
-        print "Done"
-
-        return tree
