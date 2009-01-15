@@ -55,14 +55,29 @@ class Alignment(object):
             self.scangap = []
             self.similarity = None
         else:
+            # convert the intensity matrix into 'scanpos' format,
+            # scangap indicates where gaps were introduced
+
             self.scanpos = []
             self.scangap = []
-            data = expr.get_intensity_matrix()
-            for i in range(len(data)):
+
+            im = expr.get_intensity_matrix()
+
+            for i in range(len(im)):
                 self.scanpos.append([])
-                self.scanpos[i].append((numpy.array(data[i], dtype='d')).tolist())
+                self.scanpos[i].append((numpy.array(im[i], dtype='d')).tolist())
                 self.scangap.append([])
                 self.scangap[i].append(1)
+
+            time_list = expr.get_time_list()
+            self.time_expr = [ time_list ]
+
+            mass_list = expr.get_mass_list()
+            self.mass_expr = [ mass_list ]
+
+            self.mass_algt = mass_list
+            self.time_algt = time_list
+
             self.similarity = None
 
     def __len__(self):
