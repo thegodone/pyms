@@ -43,7 +43,9 @@ def fma(data1, data2, Gw):
     @author: Vladimir Likic
     """
 
-    PairwiseAlignment(data1, data2, Gw)
+    T = PairwiseAlignment(data1, data2, Gw)
+
+    return T
 
 def align(a1, a2, gap):
 
