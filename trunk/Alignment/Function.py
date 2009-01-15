@@ -208,8 +208,7 @@ def merge_alignments(A1, A2, traces):
 
         count = count + 1
 
-    print "Start processing artificial time points"
-    fp = open('Artificial_value.txt', 'w')
+    print "Start processing gap time points"
     for i in range(len(ma.scanpos[0])):
         for j in range(len(ma.scanpos)):
             if len(ma.scanpos[j][i]) == 0:
@@ -234,16 +233,21 @@ def merge_alignments(A1, A2, traces):
                         for k in range(end-start + 1):
                             ma.scanpos[start + k][i].append(ma.scanpos[start-1][i][l] + slope * (k + 1))
 
-    print "Artificial time points filled with interpolated mass spectrum value"
+    print "Gap time points filled with interpolated mass spectrum value"
+
     print "Generating the final 2-alignment..."
     for i in range(len(ma.scanpos)):
         for j in range(len(ma.scanpos[0])):
             a = 0
             for k in range(len(ma.scanpos[i][j])):
                 a = a + ma.scanpos[i][j][k]
+
     print "Done"
+
     print "Merging complete"
-    write_output('Final_alignment.txt', 'Gap_indicator.txt', ma)
+
+    write_debug_output('Final_alignment.txt', 'Gap_indicator.txt', ma)
+
     return ma
 
 def alignment_similarity(traces, score_matrix, gap):
@@ -280,10 +284,10 @@ def alignment_similarity(traces, score_matrix, gap):
             idx2 = idx2 + 1
     return similarity
 
-def write_output(alignment, indicator, data):
+def write_debug_output(alignment, indicator, data):
 
     """
-    @summary: Writes the alignment to output files
+    @summary: Writes the debug alignment to output files
 
     @param alignment: The output file name of the final alignment
     @type alignment: StringType
@@ -296,8 +300,9 @@ def write_output(alignment, indicator, data):
     @author: Vladimir Likic
     """
 
-    fp = open(alignment, 'w')
     print "Generating the final 2-alignment..."
+
+    fp = open(alignment, 'w')
     for i in range(len(data.scanpos)):
         for j in range(len(data.scanpos[0])):
             a = 0
@@ -306,12 +311,18 @@ def write_output(alignment, indicator, data):
             fp.write(str(a) + " ")
         fp.write("\n")
     fp.close()
+
     print "Done"
+
     print "Generating the final Gap indicator matrix..."
+
     fp = open(indicator, 'w')
     for i in range(len(data.scangap)):
         for j in range(len(data.scangap[0])):
             fp.write(str(data.scangap[i][j]) + " ")
         fp.write("\n")
+
     print "Done"
+
     fp.close()
+
