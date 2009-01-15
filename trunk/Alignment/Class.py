@@ -57,9 +57,10 @@ class Alignment(object):
         else:
             self.scanpos = []
             self.scangap = []
-            for i in range(len(expr)):
+            data = expr.get_intensity_matrix()
+            for i in range(len(data)):
                 self.scanpos.append([])
-                self.scanpos[i].append((numpy.array(expr[i], dtype='d')).tolist())
+                self.scanpos[i].append((numpy.array(data[i], dtype='d')).tolist())
                 self.scangap.append([])
                 self.scangap[i].append(1)
             self.similarity = None
@@ -90,11 +91,13 @@ class PairwiseAlignment(object):
 
     print "Pairwise alignment started"
 
-    def __init__(self, algts, gap):
+    def __init__(self, data1, data2, gap):
 
         """
-        @param algts: A list of alignments
-        @type algts: ListType
+        @param data1: First Alignment
+        @type data1: pyms.Alignment.Class.Alignment
+        @param data2: Second Alignment
+        @type data2: pyms.Alignment.Class.Alignment
         @param gap: Gap parameter for pairwise alignments
         @type gap: FloatType
 
@@ -102,12 +105,12 @@ class PairwiseAlignment(object):
         @author: Vladimir Likic
         """
 
-        self.algts = algts
+        self.algt1 = data1
+        self.algt2 = data2
         self.gap = gap
-        self.sim_matrix = self._sim_matrix(algts, gap)
-        self.dist_matrix = self._dist_matrix(self.sim_matrix)
+        self.sim_matrix = self._sim_matrix(self.algt1, self.algt2, self.gap)
 
-    def _sim_matrix(self, algts, gap):
+    def _sim_matrix(self, algt1, algt2, gap):
 
         """
         @summary: Calculates the similarity matrix for the set of alignments
@@ -125,31 +128,7 @@ class PairwiseAlignment(object):
         """
 
         sim_matrix = numpy.zeros((2, 2), dtype='f')
-        ma = Function.align(algts[0], algts[1], gap)
+        ma = Function.align(algt1, algt2, gap)
         sim_matrix[0, 1] = sim_matrix[1, 0] = ma.similarity
 
         return sim_matrix
-
-    def _dist_matrix(self, sim_matrix):
-
-        """
-        @summary: Converts similarity matrix into a distance matrix
-
-        @param sim_matrix: The similarity matrix
-        @type sim_matrix: numpy.ndarray
-        @return: Distance matrix
-        @rtype: numpy.ndarray
-
-        @author: Woon Wai Keen
-        @author: Vladimir Likic
-        """
-
-        # change similarity matrix entries (i,j) to max{matrix}-(i,j)
-        sim_max = numpy.max(numpy.ravel(sim_matrix))
-        dist_matrix = sim_max - sim_matrix
-
-        # set diagonal elements of the similarity matrix to zero
-        for i in range(len(dist_matrix)):
-            dist_matrix[i, i] = 0
-
-        return dist_matrix

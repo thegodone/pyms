@@ -28,7 +28,6 @@ import numpy
 
 from Class import PairwiseAlignment
 from pyms.Utils.DP import dp
-from pyms.Utils.Utils import is_list
 
 def fma(data1, data2, Gw):
 
@@ -44,44 +43,7 @@ def fma(data1, data2, Gw):
     @author: Vladimir Likic
     """
 
-    print "ANDI-MS data 1 filename:", data1.get_filename()
-    print "ANDI-MS data 2 filename:", data2.get_filename()
-    # print the name of the ANDI-MS file
-    im1 = data1.get_intensity_matrix()
-    im2 = data2.get_intensity_matrix()
-    # get the entire intensity matrix
-    print "Dimensions of the intensity matrix 1 are:", len(im1), "x", len(im1[0])
-    print "Dimensions of the intensity matrix 2 are:", len(im2), "x", len(im2[0])
-    E1 = [im1, im2]
-    F1 = exprl2alignment(E1)
-    PairwiseAlignment(F1, Gw)
-
-def exprl2alignment(exprl):
-
-    """
-    @summary: Converts the experiments into alignment objects
-
-    @param exprl: An experiments list
-    @type exprl: ListType
-
-    @return: A list of alignments objects
-    @rtype: ListType
-
-    @author: Qiao Wang
-    @author: Vladimir Likic
-    """
-
-    if not is_list(exprl):
-        error("the argument is not a list")
-
-    algts = []
-    for item in exprl:
-        algt = Class.Alignment(item)
-        algts.append(algt)
-
-    print "Alignment objects created"
-
-    return algts
+    PairwiseAlignment(data1, data2, Gw)
 
 def align(a1, a2, gap):
 
@@ -250,13 +212,9 @@ def merge_alignments(A1, A2, traces):
         for j in range(len(ma.scanpos)):
             if len(ma.scanpos[j][i]) == 0:
                 start = j
-                fp.write("-----------------------------------------------\n")
-                fp.write("Gaps founded, Start at: " + str(start) + " , ")
                 end = start
                 while len(ma.scanpos[end + 1][i]) == 0:
                     end = end + 1
-                fp.write("End at: " + str(end) + " .\n")
-                fp.write("The details of artificial values of masspectrum:\n")
                 if j == 0:
                     for l in range(len(ma.scanpos[0][i])):
                         slope = (ma.scanpos[end + 1][i][l]-0) / (end-start + 1)
@@ -271,36 +229,19 @@ def merge_alignments(A1, A2, traces):
                 else:
                     for l in range(len(ma.scanpos[0][i])):
                         slope = (ma.scanpos[end + 1][i][l]-ma.scanpos[start-1][i][l]) / (end-start + 2)
-                        fp.write("Gap point:  Slope: " + str(slope))
-                        fp.write(" Left: " + str(ma.scanpos[start-1][i][l]))
                         for k in range(end-start + 1):
                             ma.scanpos[start + k][i].append(ma.scanpos[start-1][i][l] + slope * (k + 1))
-                            fp.write(" Inter: " + str(ma.scanpos[start + k][i][l]))
-                        fp.write(" Right: " + str(ma.scanpos[end + 1][i][l]) + "\n")
-                    fp.write("-----------------------------------------------\n")
-    fp.close()
 
     print "Artificial time points filled with interpolated mass spectrum value"
     print "Generating the final 2-alignment..."
-    fp = open('Final_2-alignment.txt', 'w')
     for i in range(len(ma.scanpos)):
         for j in range(len(ma.scanpos[0])):
             a = 0
             for k in range(len(ma.scanpos[i][j])):
                 a = a + ma.scanpos[i][j][k]
-            fp.write(str(a) + " ")
-        fp.write("\n")
     print "Done"
-    fp.close()
-    print "Generating the gap indicator matrix..."
-    fp = open('Gaps_indicator.txt', 'w')
-    for i in range(len(ma.scangap)):
-        for j in range(len(ma.scangap[0])):
-            fp.write(str(ma.scangap[i][j]) + " ")
-        fp.write("\n")
-    print "Done"
-    fp.close()
     print "Merging complete"
+    write_output('Final_alignment.txt', 'Gap_indicator.txt', ma)
     return ma
 
 def alignment_similarity(traces, score_matrix, gap):
@@ -336,3 +277,39 @@ def alignment_similarity(traces, score_matrix, gap):
             similarity = similarity - gap
             idx2 = idx2 + 1
     return similarity
+
+def write_output(alignment, indicator, data):
+
+    """
+    @summary: Writes the alignment to output files
+
+    @param alignment: The output file name of the final alignment
+    @type alignment: StringType
+    @param indicator: The output file name of the indicator
+    @type indicator: StringType
+    @param data: The actual output data
+    @type data: pyms.Alignment.Class.PairwiseAlignment
+
+    @author: Qiao Wang
+    @author: Vladimir Likic
+    """
+
+    fp = open(alignment, 'w')
+    print "Generating the final 2-alignment..."
+    for i in range(len(data.scanpos)):
+        for j in range(len(data.scanpos[0])):
+            a = 0
+            for k in range(len(data.scanpos[i][j])):
+                a = a + data.scanpos[i][j][k]
+            fp.write(str(a) + " ")
+        fp.write("\n")
+    fp.close()
+    print "Done"
+    print "Generating the final Gap indicator matrix..."
+    fp = open(indicator, 'w')
+    for i in range(len(data.scangap)):
+        for j in range(len(data.scangap[0])):
+            fp.write(str(data.scangap[i][j]) + " ")
+        fp.write("\n")
+    print "Done"
+    fp.close()
