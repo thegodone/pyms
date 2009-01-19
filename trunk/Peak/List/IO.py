@@ -28,9 +28,8 @@ import numpy
 
 from pyms.Utils.Error import error
 from pyms.Utils.Utils import is_str, is_int
-from pyms.Utils.IO import file_lines
 from pyms.Peak.Class import Peak
-from pyms.Utils.IO import open_for_writing, close_for_writing
+from pyms.Utils.IO import open_for_writing, close_for_writing, file_lines
 
 from Utils import is_peak_list
 
