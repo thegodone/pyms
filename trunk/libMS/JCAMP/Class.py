@@ -26,9 +26,25 @@ Classes used for the manipulation of mass spectral libraries in JCAMP format
 class MSLibRecord(object):
 
     """
+    @summary: Models a MS libarary Record
+
+    @author: Qiao Wang
+    @author: Vladimir Likic
     """
 
     def __init__(self, name, mass_spectrum):
+
+        """
+        @summary: Initialize the record
+
+        @para name: The compound name
+        @type name: StringType
+        @para mass_spectrum: The list mass spectrum values
+        @type mass_spectrum: ListType
+
+        @author: Qiao Wang
+        @author: Vladimir Likic
+        """
 
         self.name = name
         self.mass_spectrum = mass_spectrum
