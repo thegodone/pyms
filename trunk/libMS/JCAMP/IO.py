@@ -26,6 +26,9 @@ from Class import MSLibRecord
 from pyms.Utils.IO import file_lines
 from pyms.Utils.Utils import is_str
 
+__CASNAME_KEYWORD = "##CAS NAME"
+__XYDATA_KEYWORD = "##XYDATA"
+
 def load_jcamp(file_name):
 
     """
@@ -49,11 +52,6 @@ def load_jcamp(file_name):
     lines_list = file_lines(file_name)
     records = []
 
-    #
-    # Parse 'lines_list' to produce a list of MSLibRecord objects.
-    # This is a mock-up parser that reads the compound name and
-    # leaves the mass spectrum blank
-    #
     idx1 = 0
     idx2 = 0
     fields = ''
@@ -63,7 +61,7 @@ def load_jcamp(file_name):
         prefix = line.find('#')
         if prefix == 0:
             fields = line.split('=')
-            if fields[0] == '##CAS NAME':
+            if fields[0] == __CASNAME_KEYWORD:
                 idx1 = idx1 + 1
                 if idx1 == 1:
                     name_value = fields[1].strip()
@@ -74,7 +72,7 @@ def load_jcamp(file_name):
                     xydata = []
                     idx1 = 1
                     idx2 = 0
-            elif fields[0] == '##XYDATA':
+            elif fields[0] == __XYDATA_KEYWORD:
                 idx2 = idx2 + 1
         else:
             if prefix == -1 and line != '\n':
