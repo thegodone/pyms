@@ -23,9 +23,13 @@ IO for mass spectral libraries in JCAMP format
     #############################################################################
 
 from Class import MSLibRecord
+
 from pyms.Utils.IO import file_lines
 from pyms.Utils.Utils import is_str
 from pyms.Utils.Error import error
+
+__CASNAME_KEYWORD = "##CAS NAME"
+__XYDATA_KEYWORD = "##XYDATA"
 
 def load_jcamp(file_name):
 
@@ -67,7 +71,7 @@ def load_jcamp(file_name):
         prefix = line.find('#')
         if prefix == 0:
             fields = line.split('=')
-            if fields[0] == '##CAS NAME':
+            if fields[0] == __CASNAME_KEYWORD:
                 # empty name value detected, abort !
                 if len(fields[1].strip()) == 0:
                     error('Error (line ' + str(line_num) + '): The current CAS NAME has no value.')
@@ -89,7 +93,7 @@ def load_jcamp(file_name):
                     xydata = []
                     idx1 = 1
                     idx2 = 0
-            elif fields[0] == '##XYDATA':
+            elif fields[0] == __XYDATA_KEYWORD:
                 extra_name = 0
                 extra_xydata = extra_xydata + 1
                 if extra_xydata == 2:
