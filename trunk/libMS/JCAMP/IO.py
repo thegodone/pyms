@@ -105,6 +105,9 @@ def load_jcamp(file_name):
         else:
             if prefix == -1 and line != '\n':
                 data = line.split()
+                if len(data) == 1:
+                    message = ' The XYDATA is not in pair, wrong data format.'
+                    prompt_error(line_num, message)
                 data = map(int, data)
                 xydata.append(data)
         line_num = line_num + 1
