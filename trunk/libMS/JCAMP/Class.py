@@ -27,11 +27,22 @@ import IO
 class MSLib(object):
 
     """
+    @summary: Models a MS library
+
+    @author: Qiao Wang
+    @author: Vladimir Likic
     """
 
     def __init__(self, file_name):
 
         """
+        @summary: Initialize the library
+
+        @para file_name: The input jcamp file name
+        @type file_name: StringType
+
+        @author: Qiao Wang
+        @author: Vladimir Likic
         """
 
         self.records = IO.load_jcamp(file_name)
@@ -40,6 +51,13 @@ class MSLib(object):
     def set_for_search(self, mass_list):
 
         """
+        @summary: Sets the mass spectrum value for each record
+
+        @para mass_list: The mass list values along the m/z
+        @type mass_list: ListType
+
+        @author: Qiao Wang
+        @author: Vladimir Likic
         """
 
         self.mass_list = mass_list
@@ -73,16 +91,25 @@ class MSLibRecord(object):
 
         self.name = name
         self.mass_record = mass_record
-        self.mass_spectrum = None
+        self.mass_spectrum = []
 
     def _set_mass_spectrum(self, mass_list):
 
         """
+        @summary: Sets mass spectrum value for each compound
+
+        @para mass_list: The mass list values along the m/z
+        @type mass_list: ListType
+
+        @author: Qiao Wang
+        @author: Vladimir Likic
         """
 
         #
         # set the value of record.mass_spectrum here
         #
-        pass
-
-
+        for item in self.mass_record:
+            if item[0] >= mass_list[0] and item[0] <= mass_list[len(mass_list) - 1]:
+                self.mass_spectrum.append(item[1])
+            else:
+                self.mass_spectrum.append(0)

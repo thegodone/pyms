@@ -69,19 +69,22 @@ def load_jcamp(file_name):
             if fields[0] == __CASNAME_KEYWORD:
                 # empty name value detected, abort !
                 if len(fields[1].strip()) == 0:
-                    error('Error (line ' + str(line_num) + '): The current CAS NAME has no value.')
+                    message = ' The current CAS NAME has no value.'
+                    prompt_error(line_num, message)
                 extra_xydata = 0
                 extra_name = extra_name + 1
                 if extra_name == 2:
                     # duplicate name detected, abort !
-                    error('Error (line ' + str(line_num) + '): An extra CAS NAME founded in the same record.')
+                    message = ' An extra CAS NAME founded in the same record.'
+                    prompt_error(line_num, message)
                 idx1 = idx1 + 1
                 if idx1 == 1:
                     name_value = fields[1].strip()
                 elif idx1 == 2:
                     if len(xydata) == 0:
                         # empty xydata detected, abort !
-                        error('Error (line ' + str(line_num) + '): The empty XYDATA record founded.')
+                        message = ' The empty XYDATA record founded.'
+                        prompt_error(line_num, message)
                     r = Class.MSLibRecord(name_value, xydata)
                     records.append(r)
                     name_value = fields[1].strip()
@@ -93,7 +96,8 @@ def load_jcamp(file_name):
                 extra_xydata = extra_xydata + 1
                 if extra_xydata == 2:
                     # duplicate xydata detected, abort !
-                    error('Error (line ' + str(line_num) + '): An extra XYDATA founded in the same record.')
+                    message = ' An extra XYDATA founded in the same record.'
+                    prompt_error(line_num, message)
                 idx2 = idx2 + 1
             else:
                 extra_name = 0
@@ -109,3 +113,17 @@ def load_jcamp(file_name):
 
     return records
 
+def prompt_error(line_num, message):
+
+    """
+    @summary: prompt the error
+
+    @param line_num: Indicates which line throws the exception
+    @type line_num: IntType
+    @para message: The error message
+    @type message: StringType
+
+    @author: Qiao Wang
+    @author: Vladimir Likic
+    """
+    error('Error (line ' + str(line_num) + '):' + message)
