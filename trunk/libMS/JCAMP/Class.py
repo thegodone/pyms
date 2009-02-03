@@ -50,7 +50,7 @@ class MSLib(object):
         self.records = IO.load_jcamp(file_name)
         self.mass_list = None
 
-    def printl(self, begin=0, end=None):
+    def printl(self, begin=1, end=None):
 
         """
         """
@@ -58,9 +58,9 @@ class MSLib(object):
         if end == None:
             end = len(self.records)
 
-        for ii in range(begin,end):
+        for ii in range(begin-1,end):
             record = self.records[ii]
-            print "(%d)" % ( ii ),
+            print "(%d)" % ( ii+1 ),
             print record.name
             for item in record.mass_record:
                 print "\t", item
