@@ -227,6 +227,9 @@ class ANDIMS_reader(object):
 
         """
         @summary: Sets the scan size
+
+        This method is public because some readers must be
+        able to overwrite it.
         """ 
 
         intensity_matrix = self.get_intensity_matrix()
@@ -238,12 +241,15 @@ class ANDIMS_reader(object):
         if len(intensity_matrix) > len(time_list):
             scan_size = len(time_list)
 
+        # index of the last scan is scan_size-1
         self.__scan_size = scan_size
 
     def get_scan_size(self):
 
         """
         @summary: Returns the scan size
+
+        The index of the last scan is scan_size-1.
 
         @return: Scan size
         @rtype: IntType
