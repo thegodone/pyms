@@ -50,10 +50,8 @@ def load_jcamp(file_name):
         error("'file_name' not a string")
 
     print " -> Reading JCAMP library '%s'" % (file_name)
-
-    lines_list = file_lines(file_name)
+    lines_list = open(file_name,'r')
     records = []
-
     idx1 = 0
     idx2 = 0
     fields = ''
@@ -103,17 +101,20 @@ def load_jcamp(file_name):
                 extra_name = 0
                 extra_xydata = 0
         else:
-            if prefix == -1 and line != '\n':
+            if prefix == -1 and line != '\n' and line:
                 data = line.split()
-                if len(data) == 1:
+                if len(data) == 1 and data[0].isdigit():
                     message = ' The XYDATA is not in pair, wrong data format.'
                     prompt_error(line_num, message)
-                data = map(int, data)
-                xydata.append(data)
+                elif data[0].isdigit() and data[1].isdigit():
+                    data = map(int, data)
+                    xydata.append(data)
         line_num = line_num + 1
     r = Class.MSLibRecord(name_value, xydata)
     records.append(r)
-
+    lines_list.close()
+    print "Total number of record is: ", len(records)
+    print "Total numer of lines is: ", line_num
     return records
 
 def prompt_error(line_num, message):
