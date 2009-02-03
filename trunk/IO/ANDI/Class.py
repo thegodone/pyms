@@ -381,7 +381,7 @@ class ANDIMS_reader(object):
         
         return self.get_ic_at_index(mass - self.__min_mass)
 
-    def get_mass_spectrum_at_index(self, index):
+    def get_scan_at_index(self, index):
 
         """
         @summary: Returns mass spectrum at given index

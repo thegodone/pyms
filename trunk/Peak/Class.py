@@ -127,7 +127,7 @@ class Peak:
             pt_apex = andi_data.get_index_at_time(self.rt)
 
         # set the mass spectrum
-        self.mass_spectrum = andi_data.get_mass_spectrum_at_index(pt_apex)
+        self.mass_spectrum = andi_data.get_scan_at_index(pt_apex)
 
         # set mass list for this peak
         self.mass_list = andi_data.get_mass_list()
