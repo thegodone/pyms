@@ -23,7 +23,7 @@ Classes used for the manipulation of mass spectral libraries in JCAMP format
  #############################################################################
 
 import IO
-import numpy
+
 from time import time
 
 class MSLib(object):
@@ -53,59 +53,29 @@ class MSLib(object):
     def printl(self, begin=1, end=None):
 
         """
-        """
+        @summary: Print the records in memmory
 
-        if end == None:
-            end = len(self.records)
-
-        for ii in range(begin-1,end):
-            record = self.records[ii]
-            print "(%d)" % ( ii+1 ),
-            print record.name
-            for item in record.mass_record:
-                print "\t", item
-
-    def match(self, mass_list, im):
-
-        """
-        @summary: Matches a scan point against all the records
-
-        @para mass_list: The mass list values along the m/z
-        @type mass_list: ListType
-        @para im: The mass spectrum of the scan point
-        @type im: ListType
-
-        @return: The compound name and the similarity value
-        @rtype: StringType, FloatType
+        @para begin: The start record
+        @type begin: IntType
+        @para end: The end record
+        @type end: IntType
 
         @author: Qiao Wang
         @author: Vladimir Likic
         """
 
-        # for each record, set the attribute 'mass_spectrum'
-        max = 0.0
-        compound = ''
-        for record in self.records:
-            score = 0.0
-            if len(record.mass_record) > 0:
-                array1 = []
-                array2 = []
+        if end == None:
+            end = len(self.records)
+
+        if end <= len(self.records):
+            for ii in range(begin-1,end):
+                record = self.records[ii]
+                print "(%d)" % ( ii+1 ),
+                print record.name
                 for item in record.mass_record:
-                    if item[0] >= mass_list[0] and item[0] <= mass_list[len(mass_list) - 1]:
-                        array1.append(item[1])
-                        array2.append(im[mass_list.index(item[0])])
-                mass_spect1 = numpy.array(array1, dtype='d')
-                mass_spect2 = numpy.array(array2, dtype='d')
-                mass_spect1_sum = numpy.sum(mass_spect1 ** 2, axis=0)
-                mass_spect2_sum = numpy.sum(mass_spect2 ** 2, axis=0)
-                top = numpy.dot(mass_spect1, mass_spect2)
-                bot = numpy.sqrt(mass_spect1_sum * mass_spect2_sum)
-                cos = top / bot
-                score = 1.0 - cos
-            if score > max:
-                max = score
-                compound = record.name
-        return compound, max
+                    print "\t", item
+        else:
+            print "Out of the boundary, retry"
 
 class MSLibRecord(object):
 
@@ -132,3 +102,28 @@ class MSLibRecord(object):
 
         self.name = name
         self.mass_record = mass_record
+
+class MatchedObj(object):
+
+    """
+    @summary: Build a matched record
+
+    @author: Qiao Wang
+    @author: Vladimir Likic
+    """
+
+    def __init__(self, result):
+
+        """
+        @summary: Initialize matched record
+
+        @para result: Information about matched record
+        @type name: ListType
+
+        @author: Qiao Wang
+        @author: Vladimir Likic
+        """
+
+        self.compound = result[0]
+        self.score = result[1]
+        self.mass_spec = result[2]
