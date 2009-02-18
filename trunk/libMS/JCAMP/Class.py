@@ -127,3 +127,4 @@ class MatchedObj(object):
         self.compound = result[0]
         self.score = result[1]
         self.mass_spec = result[2]
+
