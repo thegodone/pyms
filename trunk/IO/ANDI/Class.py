@@ -28,7 +28,7 @@ import numpy
 
 from pycdf import CDF, CDFError
 
-from pyms.IO import Class
+from pyms.IO.Class import IonChromatogram, MassSpectrum
 from pyms.Utils.Error import error, stop
 from pyms.Utils.Utils import is_str, is_int, is_float, is_number, is_list
 from pyms.Utils.IO import save_data
@@ -324,7 +324,7 @@ class ANDIMS_reader(object):
 
         ia = numpy.sum(self.__intensity_matrix, 1)
         rt = copy.deepcopy(self.__time_list)
-        tic = Class.IonChromatogram(ia, rt)
+        tic = IonChromatogram(ia, rt)
 
         return tic
 
@@ -360,7 +360,7 @@ class ANDIMS_reader(object):
             error("index out of bounds.")
 
         rt = copy.deepcopy(self.__time_list)
-        ic = Class.IonChromatogram(ia, rt, index + self.__min_mass)
+        ic = IonChromatogram(ia, rt, index + self.__min_mass)
 
         return ic
 
@@ -390,12 +390,12 @@ class ANDIMS_reader(object):
     def get_scan_at_index(self, index):
 
         """
-        @summary: Returns mass spectrum at given index
+        @summary: Returns the scan at given index
 
         @param index: Index of an ion chromatogram
         @type index: IntType
 
-        @return: Mass spectrum at given index
+        @return: Scan at given index
         @rtype: numpy.ndarray
         """
 
@@ -405,11 +405,39 @@ class ANDIMS_reader(object):
         im = self.get_intensity_matrix()
 
         try:
-            mass_spectrum = im[index]
+            mass_intensity = im[index]
         except IndexError:
             error("index out of bounds")
 
-        return mass_spectrum 
+        return mass_intensity 
+
+    def get_ms_at_index(self, index):
+
+        """
+        @summary: Returns mass spectrum at given index
+
+        @param index: Index of an ion chromatogram
+        @type index: IntType
+
+        @return: Mass spectrum at given index
+        @rtype: pyms.IO.Class.MassSpectrum
+        """
+
+        if not is_int(index):
+            error("'index' must be an integer")
+
+        im = self.get_intensity_matrix()
+
+        try:
+            mass_intensity = im[index]
+        except IndexError:
+            error("index out of bounds")
+
+        mass_list = self.get_mass_list()
+
+        ms = MassSpectrum(mass_intensity, mass_list)
+
+        return ms 
 
     def get_mass_list(self):
 

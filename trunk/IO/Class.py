@@ -30,7 +30,7 @@ from pyms.Utils.Error import error
 from pyms.Utils.Utils import is_str, is_int, is_array, is_list
 from pyms.Utils.IO import open_for_writing, close_for_writing 
 
-class IonChromatogram:
+class IonChromatogram(object):
 
     """
     @summary: Models ion chromatogram
@@ -243,4 +243,25 @@ class IonChromatogram:
             fp.write("%8.4f %16.4f\n" % (time_list[ii], self.__ia[ii]))
 
         close_for_writing(fp)
+
+class MassSpectrum(object):
+
+    """
+    @summary: Models mass spectrum
+
+    @author: Vladimir Likic
+    """
+
+    def __init__(self, mass_intensity, mass_list):
+
+        """
+        @param mass_intensity: The list intensities corresponding
+            to 'mass_list'
+        @type mass_intensity: ListType
+        @param mass_list: The list of m/z values
+        @type mass_intensity: ListType
+        """
+
+        self.intensity = mass_intensity
+        self.mz = mass_list
 
