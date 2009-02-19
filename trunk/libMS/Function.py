@@ -72,7 +72,7 @@ def ms_lib_match(ms_lib, ms):
         for i in range(len(ms.mass_list)):
             record_mass_spec.append(0)
 
-        # fill in record mass spectrum
+        # fill in the record mass spectrum
         for item in record.mass_record:
 
             mz_value = item[0]
