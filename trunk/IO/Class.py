@@ -244,24 +244,28 @@ class IonChromatogram(object):
 
         close_for_writing(fp)
 
+
 class MassSpectrum(object):
 
     """
     @summary: Models mass spectrum
 
+    @author: Qiao Wang
     @author: Vladimir Likic
     """
 
-    def __init__(self, mass_intensity, mass_list):
+    def __init__(self, data, scan_point):
 
         """
-        @param mass_intensity: The list intensities corresponding
-            to 'mass_list'
-        @type mass_intensity: ListType
-        @param mass_list: The list of m/z values
-        @type mass_intensity: ListType
+        @para data: data
+        @type data: pyms.IO.ANDI.Class.ANDIMS_reader (or derivative classes)
+        @para scan_point: the scan point
+        @type scan_point: IntType
+
+        @author: Qiao Wang
+        @author: Vladimir Likic
         """
 
-        self.intensity = mass_intensity
-        self.mz = mass_list
+        self.mass_list = data.get_mass_list()
+        self.mass_spec = data.get_scan_at_index(scan_point)
 

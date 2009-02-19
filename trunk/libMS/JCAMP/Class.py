@@ -128,21 +128,3 @@ class MatchedObj(object):
         self.score = result[1]
         self.mass_spec = result[2]
 
-class MassSpectrum(object):
-
-    def __init__(self, chem_data, scan_point):
-
-        """
-        @summary: Set the mass spectrum for a scan point
-
-        @para chem_data: Chem_Station data
-        @type chem_data: pyms.IO.ANDI.Class.ChemStation
-        @para scan_point: the scan point
-        @type scan_point: IntType
-
-        @author: Qiao Wang
-        @author: Vladimir Likic
-        """
-
-        self.mass_list = chem_data.get_mass_list()
-        self.mass_spec = chem_data.get_scan_at_index(scan_point)
