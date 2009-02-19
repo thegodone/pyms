@@ -26,7 +26,7 @@ import numpy
 
 from pyms.Utils.Error import error
 
-def ms_lib_match2(ms_lib, ms):
+def ms_lib_match(ms_lib, ms):
 
     """
     @summary: Matches mass spectrum 'ms' against all the records
