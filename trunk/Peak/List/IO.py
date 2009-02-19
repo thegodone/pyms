@@ -160,10 +160,12 @@ def read_xcalibur_peaks(file_name):
 def read_amdis_peaks(file_name,uncertain_masses=False):
 
     """
-    @summary: Reads Xcalibur peak report, and returns the list of peak objects
+    @summary: Reads AMDIS ELU file, and returns the list of peak objects
 
-    @param file_name: Peak list file name
+    @param file_name: AMDIS .ELU file name
     @type file_name: StringType
+    @param uncertain_masses: Use uncertain masses in mass spectra
+    @type file_name: BoolType
 
     @return: Returns the list of pyms.Peak.Class.Peak objects
     @rtype: ListType
@@ -177,10 +179,12 @@ def read_amdis_peaks(file_name,uncertain_masses=False):
 
     #Initialise list to store peaks
     peak_list=[]
+    peaks={}
+    unique_peaks={}
     retention_time=0
     area = 0
-    peak_name = None
-    peak_percentage = None    
+    new_peak_name = None
+    new_peak_percentage = None    
 
     for line in lines:
     
@@ -188,35 +192,44 @@ def read_amdis_peaks(file_name,uncertain_masses=False):
         rt_match = re.search(r'RT(\d+\.\d*)',line)
         if rt_match:
 
-            prev_peak_name = peak_name
-            prev_peak_percentage = peak_percentage
+            peak_name = new_peak_name
+            peak_percentage = new_peak_percentage
 
             #Get peak name and percentage match
-            name_match = re.search(r'SC(\d+)',line)
+            #name_match = re.search(r'SC(\d+)',line)
             percentage_match = re.search(r'%(\d+\.\d*)',line)
 
-            if not (name_match and percentage_match):
+            #if not (name_match and percentage_match):
+            if not (percentage_match):
                 error("ELU is not of expected format")
             else:
-                peak_name = name_match.group(1)
-                peak_percentage = percentage_match.group(1)
+                #new_peak_name = name_match.group(1)
+                new_peak_percentage = percentage_match.group(1)
 
-            #Store previous peak only if best match (there may be multiple models of
-            #a single peak)
+            #Store previous peak only if best match
+            #there may be multiple models of a single peak
             if (retention_time):
-                if (prev_peak_name == peak_name) and \
-                        (prev_peak_percentage < peak_percentage):
-                    peak = Peak(retention_time, area) 
-                    mass_list,mass_spectrum = create_mass_spec(mass_intensity_list)
-                    peak.mass_list = mass_list
-                    peak.mass_spectrum = mass_spectrum
-                    peak_list.append(peak)
+
+                peak = Peak(retention_time, area)
+                mass_list,mass_spectrum = create_mass_spec(mass_intensity_list)
+                peak.mass_list = mass_list
+                peak.mass_spectrum = mass_spectrum
+
+                if peaks.has_key(peak_name):
+                    #Store best peak
+                    if(peak_percentage > peaks[peak_name]):
+                        unique_peaks[peak_name] = peak
+                        peaks[peak_name] = peak_percentage
+                else:
+                    unique_peaks[peak_name] = peak
+                    peaks[peak_name] = peak_percentage
 
             #initalise variables for peak
             retention_time = rt_match.group(1)
             retention_time=float(retention_time)*60.0
+            new_peak_name = retention_time
             mass_intensity_list={}
-
+     
             #Area
             area_match = re.search(r'IS(\d+)',line)
             if area_match: area = float(area_match.group(1))
@@ -241,11 +254,54 @@ def read_amdis_peaks(file_name,uncertain_masses=False):
                 mass_intensity_list[mass]=intensity
 
     #Create last peak
-    if(prev_peak_name == peak_name) and (prev_peak_percentage < peak_percentage):
-        peak = Peak(retention_time, area)
-        mass_list,mass_spectrum = create_mass_spec(mass_intensity_list)
-        peak.mass_list = mass_list
-        peak.mass_spectrum = mass_spectrum
+    peak = Peak(retention_time, area)
+    mass_list,mass_spectrum = create_mass_spec(mass_intensity_list)
+    peak.mass_list = mass_list
+    peak.mass_spectrum = mass_spectrum
+
+    if peaks.has_key(peak_name):
+        #Store best peak
+        if(peak_percentage > peaks[peak_name]):
+            unique_peaks[peak_name] = peak
+            peaks[peak_name] = peak_percentage
+    else:
+        #print "Storing Peak ",retention_time
+        unique_peaks[peak_name] = peak
+        peaks[peak_name] = peak_percentage
+
+    return unique_peaks.values()
+
+def read_analyzerpro_peaks(file_name):
+
+    """
+    @summary: Reads Xcalibur peak report, and returns the list of peak objects
+
+    @param file_name: Peak list file name
+    @type file_name: StringType
+
+    @return: Returns the list of pyms.Peak.Class.Peak objects
+    @rtype: ListType
+
+    @author: Tim Erwin
+    """
+
+    lines = file_lines(file_name)
+    print " -> Reading AnalyzerPro peak file '%s'" % (file_name)
+    del lines[0:3] # get rid of the title line
+
+    #Initialise list to store peaks
+    peak_list=[]
+
+    for line in lines:
+
+        fields = string.split(line," ")
+
+        #initalise variables for peak
+        retention_time = float(fields[1])*60.0
+        peak_area = float(fields[5])
+
+        #Create peak
+        peak = Peak(retention_time, peak_area)
         peak_list.append(peak)
 
     return peak_list

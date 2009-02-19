@@ -405,7 +405,7 @@ class ANDIMS_reader(object):
         im = self.get_intensity_matrix()
 
         try:
-            mass_intensity = im[index]
+            mass_intensity = copy.deepcopy(im[index])
         except IndexError:
             error("index out of bounds")
 
@@ -429,7 +429,7 @@ class ANDIMS_reader(object):
         im = self.get_intensity_matrix()
 
         try:
-            mass_intensity = im[index]
+            mass_intensity = copy.deepcopy(im[index])
         except IndexError:
             error("index out of bounds")
 

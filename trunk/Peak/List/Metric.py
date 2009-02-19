@@ -27,9 +27,11 @@ import numpy
 from pyms.Peak.Class import Peak
 
 from pyms.Utils.DP import dp
-from pyms.Peak.List.DPA.Function import score_matrix_pair
+from pyms.Peak.List.DPA.Function import score_matrix
 from pyms.Utils.Error import error
 from pyms.Utils.Utils import is_list
+from pyms.Experiment.Class import Experiment
+from pyms.Peak.List.DPA.Class import Alignment
 
 def metric(peaks1, peaks2, verbose=False, Dw=2.5, Gw=0.30):
 
@@ -54,6 +56,10 @@ def metric(peaks1, peaks2, verbose=False, Dw=2.5, Gw=0.30):
     if not is_list(peaks2):
         error("Second argument of metric() is not a list")
 
+    #Check that peaks are sorted by retention time
+    peaks1.sort(lambda x, y: cmp(x.rt,y.rt))
+    peaks2.sort(lambda x, y: cmp(x.rt,y.rt))
+
     min_mass,max_mass = get_min_max_mass(peaks1)
     min_mass_exp2,max_mass_exp2 = get_min_max_mass(peaks2)
 
@@ -63,8 +69,14 @@ def metric(peaks1, peaks2, verbose=False, Dw=2.5, Gw=0.30):
     check_mass_spectrum(peaks1,min_mass,max_mass)
     check_mass_spectrum(peaks2,min_mass,max_mass)
 
+    #Create Alignment objects to utilise DPA code
+    exp1 = Experiment("A",peaks1)
+    exp2 = Experiment("B",peaks2)
+    alignment1 = Alignment(exp1)
+    alignment2 = Alignment(exp2)
     # calculate score matrix for these two runs
-    M,B = score_matrix_pair(peaks1, peaks2, Dw)
+    M = score_matrix(alignmen1,alignment2,Dw)
+
     # run dp algorithm on this matrix
     result = dp(M, Gw)
 

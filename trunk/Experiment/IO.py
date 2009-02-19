@@ -24,8 +24,8 @@ Functions related to experiment input/output
 
 import string, cPickle
 
-from pyms.IO.ANDI.Class import Xcalibur
-from pyms.Peak.List.IO import read_xcalibur_peaks, read_amdis_peaks
+from pyms.IO.ANDI.Class import Xcalibur, ChemStation
+from pyms.Peak.List.IO import read_xcalibur_peaks, read_amdis_peaks, read_analyzerpro_peaks
 from pyms.Utils.Error import error 
 from pyms.Experiment.Class import Experiment 
 from pyms.Utils.Utils import is_str
@@ -171,8 +171,8 @@ def read_xcalibur_expr_list(file_name):
 
         #Assumes file contains Xcalibur export file followed by corresponding netCDF file
         files = string.split(line," ")
-	if(len(files) != 2):
-	    error("line must contain Xcalibur file followed by corresponding netCDF file")
+        if(len(files) != 2):
+            error("line must contain Xcalibur file followed by corresponding netCDF file")
         xcalibur_peak_file = string.strip(files[0])
         netcdf_file = string.strip(files[1])
         experiment = load_xcalibur_expr(xcalibur_peak_file,netcdf_file)
@@ -203,6 +203,34 @@ def load_amdis_expr(file_name, andi_data=None):
     if(andi_data):
         for peak in peak_list:
             peak.set_mass_spectrum(andi_data)
+
+    #Create Experiment object
+    experiment = Experiment(file_name, peak_list)
+
+    return experiment
+
+def load_analyzerpro_expr(file_name, netcdf_file):
+
+    """ 
+    @summary: Loads a peak list exported from AnalyzerPro
+
+    @param file_name: The name of the txt file exported from AnalyzerPro
+    @type file_name: StringType
+    @param netcdf_file: Corresponding netCDF file for the AnalyzerPro results
+    @type netcdf_file: StringType
+    @return: A Experiment object
+    @rtype: pyms.Experiment.Class.Experiment
+
+    @author: Tim Erwin
+    @author: Vladimir Likic
+    """
+    print " -> Processing AnalyzerPro experiment"
+
+    peak_list = read_analyzerpro_peaks(file_name)
+    andi_data = ChemStation(netcdf_file)
+
+    for peak in peak_list:
+        peak.set_mass_spectrum(andi_data)
 
     #Create Experiment object
     experiment = Experiment(file_name, peak_list)
