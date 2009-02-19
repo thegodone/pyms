@@ -258,7 +258,7 @@ class MassSpectrum(object):
 
         """
         @para data: data
-        @type data: pyms.IO.ANDI.Class.ANDIMS_reader (or derivative classes)
+        @type data: pyms.IO.ANDI.Class.ANDIMS_reader (or derivative)
         @para scan_point: the scan point
         @type scan_point: IntType
 
