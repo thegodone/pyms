@@ -133,4 +133,3 @@ def prompt_error(line_num, message):
     @author: Vladimir Likic
     """
     error('Error (line ' + str(line_num) + '):' + message)
-
