@@ -31,10 +31,8 @@ def ms_lib_match(ms_lib, ms):
     """
     @summary: Matches a scan point against all the records
 
-    @para mass_list: The mass list values along the m/z
-    @type mass_list: ListType
-    @para im: The mass spectrum of the scan point
-    @type im: ListType
+    @para ms: The mass spectrum object of a scan point
+    @type ms: pyms.libMS.JCAMP.Class.MassSpectrum
 
     @return: The compound name, similarity value and mass spectrum
     @rtype: ListType
