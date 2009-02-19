@@ -22,6 +22,93 @@ Classes used for the manipulation of mass spectral libraries
  #                                                                           #
  #############################################################################
 
+from pyms.Utils.Error import error
+
+from pyms.libMS.JCAMP.IO import load_jcamp
+
+class MSLib(object):
+
+    """
+    @summary: Models a MS library
+
+    @author: Qiao Wang
+    @author: Vladimir Likic
+    """
+
+    def __init__(self, file_name, format="JCAMP"):
+
+        """
+        @summary: Initialize the library
+
+        @para file_name: The input jcamp file name
+        @type file_name: StringType
+        @para format: Format of the input library file. Currently
+            only "JCAMP" allowed
+        @type format: String
+
+        @author: Qiao Wang
+        @author: Vladimir Likic
+        """
+
+        if format == "JCAMP":
+            self.records = load_jcamp(file_name)
+        else:
+            error("unknown mass spec library format")
+
+    def printl(self, begin=1, end=None):
+
+        """
+        @summary: Print the records in memmory
+
+        @para begin: The start record
+        @type begin: IntType
+        @para end: The end record
+        @type end: IntType
+
+        @author: Qiao Wang
+        @author: Vladimir Likic
+        """
+
+        if end == None:
+            end = len(self.records)
+
+        if end <= len(self.records):
+            for ii in range(begin-1,end):
+                record = self.records[ii]
+                print "(%d)" % ( ii+1 ),
+                print record.name
+                for item in record.mass_record:
+                    print "\t", item
+        else:
+            print "Out of the boundary, retry"
+
+class MSLibRecord(object):
+
+    """
+    @summary: Models a MS libarary Record
+
+    @author: Qiao Wang
+    @author: Vladimir Likic
+    """
+
+    def __init__(self, name, mass_record):
+
+        """
+        @summary: Initialize the record
+
+        @para name: The compound name
+        @type name: StringType
+        @para mass_record: The list mass spectrum values
+        @type mass_record: ListType
+
+        @author: Qiao Wang
+        @author: Vladimir Likic
+        """
+
+        self.name = name
+        self.mass_record = mass_record
+
+
 class MatchObj(object):
 
     """
