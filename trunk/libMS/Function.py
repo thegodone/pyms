@@ -1,5 +1,5 @@
 """
-General functions for library matching 
+General functions for mass spectral libraries matching 
 """
 
  #############################################################################
@@ -26,6 +26,8 @@ import numpy
 
 from pyms.Utils.Error import error
 
+import Class
+
 def ms_lib_match(ms_lib, ms):
 
     """
@@ -43,9 +45,7 @@ def ms_lib_match(ms_lib, ms):
     """
 
     # initialise best match attributes
-    best_score = 0.0
-    compound = None
-    mass = []
+    best_match = Class.MatchObj(None, None, 0.0)
 
     # find min/max mz in the query mass spectrum
     min_mz = min(ms.mass_list)
@@ -75,32 +75,31 @@ def ms_lib_match(ms_lib, ms):
         # fill in record mass spectrum
         for item in record.mass_record:
 
-            record_mz = item[0]
+            mz_value = item[0]
             intensity = item[1]
 
-            # consider only record mz values that are in the range
+            # consider only record's mz values that are in the range
             # of the query mass spectrum
-            if (record_mz >= min_mz) and (record_mz <= max_mz):
+            if (mz_value >= min_mz) and (mz_value <= max_mz):
 
                 # query mass spectrum must have this mz
-                if not record_mz in mz_index.keys():
-                    error("mz value missing in the library record")
+                if not mz_value in mz_index.keys():
+                    print "Library record:", record.name
+                    print "Record mass spectrum", record.mass_record
+                    print "Problem with mz value:", mz_value
+                    error("query mass spectrum does not have mz value")
                 else: # assign intensity to the record mz value
-                    ii = mz_index[record_mz]
+                    ii = mz_index[mz_value]
                     record_mass_spec[ii] = intensity
 
         # get the mass spectral similarity score
         record_score = costheta(ms.mass_spec, record_mass_spec)
 
         # consider if the best hit
-        if record_score > best_score:
-            best_score = record_score
-            compound = record.name
-            mass = record.mass_record
+        if record_score > best_match.score:
+            best_match = Class.MatchObj(record.name, record.mass_record, record_score)
 
-    result = [compound, best_score, mass]
-
-    return result
+    return best_match
 
 def costheta(v1, v2):
 

@@ -103,28 +103,3 @@ class MSLibRecord(object):
         self.name = name
         self.mass_record = mass_record
 
-class MatchedObj(object):
-
-    """
-    @summary: Build a matched record
-
-    @author: Qiao Wang
-    @author: Vladimir Likic
-    """
-
-    def __init__(self, result):
-
-        """
-        @summary: Initialize matched record
-
-        @para result: Information about matched record
-        @type name: ListType
-
-        @author: Qiao Wang
-        @author: Vladimir Likic
-        """
-
-        self.compound = result[0]
-        self.score = result[1]
-        self.mass_spec = result[2]
-
