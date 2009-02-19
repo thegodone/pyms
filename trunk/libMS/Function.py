@@ -29,12 +29,13 @@ from pyms.Utils.Error import error
 def ms_lib_match(ms_lib, ms):
 
     """
-    @summary: Matches a scan point against all the records
+    @summary: Matches mass spectrum 'ms' against all the records
+        in the mass spectral library 'ms_lib'
 
-    @para ms: The mass spectrum object of a scan point
-    @type ms: pyms.libMS.JCAMP.Class.MassSpectrum
+    @para ms: The mass spectrum object
+    @type ms: pyms.IO.Class.MassSpectrum
 
-    @return: The compound name, similarity value and mass spectrum
+    @return: The compound name, similarity value, and mass spectrum
     @rtype: ListType
 
     @author: Qiao Wang
