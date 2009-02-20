@@ -46,51 +46,46 @@ def export_csv(data, root_name):
     @author: Milica Ng
     """
 
+    if not is_str(root_name):
+        error("'root_name' is not a string")
+
     # export 2D matrix of intensities into CSV format
-    i_matrix = data.get_intensity_matrix()
-    save_data(root_name+'.im.csv', i_matrix, sep=",")
+    im = data.get_intensity_matrix()
+    save_data(root_name+'.im.csv', im, sep=",")
 
     # export 1D vector of m/z's, corresponding to rows of
     # the intensity matrix, into CSV format
-    mz_vector = data.get_mass_list()
-    save_data(root_name+'.mz.csv', mz_vector, sep=",")
+    mass_list = data.get_mass_list()
+    save_data(root_name+'.mz.csv', mass_list, sep=",")
 
     # export 1D vector of retention times, corresponding to
     # columns of the intensity matrix, into CSV format
-    rt_vector = data.get_time_list()
-    save_data(root_name+'.rt.csv', rt_vector, sep=",")
+    time_list = data.get_time_list()
+    save_data(root_name+'.rt.csv', time_list, sep=",")
 
-def export_leco_csv(file_name, time_list, mass_list, data):
+def export_leco_csv(data, file_name):
 
     """
     @summary: Exports data in LECO CSV format
 
-    @param file_name: File name
-    @type file_name: StringType
-    @param time_list: List of chromatogram time points
-    @type time_list: ListType
-    @param mass_list: List of m/z channels
-    @type mass_list: ListType
     @param data: Intensity matrix
     @type data: numpy.ndarray
+    @param file_name: File name
+    @type file_name: StringType
 
     @return: none
     @rtype: NoneType
 
     @author: Andrew Isaac
+    @author: Vladimir Likic
     """
 
     if not is_str(file_name):
         error("'file_name' is not a string")
 
-    if not is_list(time_list):
-        error("'time_list' is not a list")
-
-    if not is_list(mass_list):
-        error("'mass_list' is not a list")
-
-    if not is_array(data):
-        error("'data' is not a numpy ndarray")
+    im = data.get_intensity_matrix()
+    mass_list = data.get_mass_list()
+    time_list = data.get_time_list()
 
     fp = open_for_writing(file_name)
 
@@ -114,9 +109,9 @@ def export_leco_csv(file_name, time_list, mass_list, data):
     # write lines
     for ii in range(len(time_list)):
         fp.write("%s,%#.6e" % (ii, time_list[ii]))
-        for jj in range(len(data[ii])):
-            if is_number(data[ii][jj]):
-                fp.write(",%#.6e" % (data[ii][jj]))
+        for jj in range(len(im[ii])):
+            if is_number(im[ii][jj]):
+                fp.write(",%#.6e" % (im[ii][jj]))
             else:
                 error("datum not a number")
         fp.write("\r\n")
