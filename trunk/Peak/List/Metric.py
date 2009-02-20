@@ -75,7 +75,7 @@ def metric(peaks1, peaks2, verbose=False, Dw=2.5, Gw=0.30):
     alignment1 = Alignment(exp1)
     alignment2 = Alignment(exp2)
     # calculate score matrix for these two runs
-    M = score_matrix(alignmen1,alignment2,Dw)
+    M = score_matrix(alignment1,alignment2,Dw)
 
     # run dp algorithm on this matrix
     result = dp(M, Gw)
