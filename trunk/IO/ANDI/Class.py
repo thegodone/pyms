@@ -31,7 +31,6 @@ from pycdf import CDF, CDFError
 from pyms.IO.Class import IonChromatogram, MassSpectrum
 from pyms.Utils.Error import error, stop
 from pyms.Utils.Utils import is_str, is_int, is_float, is_number, is_list
-from pyms.Utils.IO import save_data
 
 class ANDIMS_reader(object):
 
@@ -506,38 +505,6 @@ class ANDIMS_reader(object):
         self.__intensity_matrix[:,index] = numpy.zeros(rowlen)
 
         print " -> nulled mass %d" % (mass)
-
-    def export_csv(self, root_name):
-
-        """
-        @summary: Exports data to the CSV format
-
-        Calling object.export_csv("NAME") will create NAME.im.csv,
-        NAME.rt.csv, and NAME.mz.csv where these are the intensity
-        matrix, retention time vector, and m/z vector.
-
-        @param root_name: Root name for the output files
-        @type root_name: StringType
-
-        @return: none
-        @rtype: NoneType
-
-        @author: Milica Ng
-        """
-
-        # export 2D matrix of intensities into CSV format
-        i_matrix = self.get_intensity_matrix()
-        save_data(root_name+'.im.csv', i_matrix, sep=",")
-
-        # export 1D vector of m/z's, corresponding to rows of
-        # the intensity matrix, into CSV format
-        mz_vector = self.get_mass_list()
-        save_data(root_name+'.mz.csv', mz_vector, sep=",")
-
-        # export 1D vector of retention times, corresponding to
-        # columns of the intensity matrix, into CSV format
-        rt_vector = self.get_time_list()
-        save_data(root_name+'.rt.csv', rt_vector, sep=",")
 
     def is_synthetic(self):
 

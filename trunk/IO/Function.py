@@ -1,5 +1,5 @@
 """
-Functions to save intensity matrix in LECO csv format (ASCII)
+Provides generic IO functions for GC-MS data objects
 """
 
  #############################################################################
@@ -23,8 +23,42 @@ Functions to save intensity matrix in LECO csv format (ASCII)
  #############################################################################
 
 from pyms.Utils.Error import error
+
 from pyms.Utils.Utils import is_number, is_str, is_array, is_list, is_int
 from pyms.Utils.IO import open_for_writing, close_for_writing
+from pyms.Utils.IO import save_data
+
+def export_csv(data, root_name):
+
+    """
+    @summary: Exports data to the CSV format
+
+    Calling export_csv("NAME") will create NAME.im.csv, NAME.rt.csv,
+    and NAME.mz.csv where these are the intensity matrix, retention
+    time vector, and m/z vector.
+
+    @param root_name: Root name for the output files
+    @type root_name: StringType
+
+    @return: none
+    @rtype: NoneType
+
+    @author: Milica Ng
+    """
+
+    # export 2D matrix of intensities into CSV format
+    i_matrix = data.get_intensity_matrix()
+    save_data(root_name+'.im.csv', i_matrix, sep=",")
+
+    # export 1D vector of m/z's, corresponding to rows of
+    # the intensity matrix, into CSV format
+    mz_vector = data.get_mass_list()
+    save_data(root_name+'.mz.csv', mz_vector, sep=",")
+
+    # export 1D vector of retention times, corresponding to
+    # columns of the intensity matrix, into CSV format
+    rt_vector = data.get_time_list()
+    save_data(root_name+'.rt.csv', rt_vector, sep=",")
 
 def export_leco_csv(file_name, time_list, mass_list, data):
 
