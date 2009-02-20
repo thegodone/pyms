@@ -57,7 +57,6 @@ class ANDIMS_reader(object):
 
         if not is_str(file_name):
             error("'file_name' must be a string")
-
         try:
             file = CDF(file_name)
             self.__file_name = file_name
@@ -84,13 +83,13 @@ class ANDIMS_reader(object):
 
         # Check if time array is sorted and raise error if it isn't
         if not (self.__time_list[:scan_size] == sorted(self.__time_list[:scan_size])):
-            error("File input was not sorted in chronological order")
+            error("File input not sorted in the chronological order")
 
         self.__time_list = self.__time_list[:scan_size]
         self.__intensity_matrix = numpy.array(self.__intensity_matrix[:scan_size])
 
         if len(self.__time_list) != len(self.__intensity_matrix):
-            error("data inconsistent in time domain")
+            error("data inconsistent in the time domain")
 
         self.__min_rt = self.__time_list[0]
         self.__max_rt = self.__time_list[-1]
@@ -101,7 +100,7 @@ class ANDIMS_reader(object):
             self.__mass_list.append(mass)
     
         if len(self.__mass_list) != len(self.__intensity_matrix[0]):
-            error("data inconsistent in m/z domain")
+            error("data inconsistent in the m/z domain")
 
         print "    [ %d scans, masses from %d to %d ]" % \
                 (len(self.get_tic()), self.__min_mass, self.__max_mass)

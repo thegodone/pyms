@@ -43,8 +43,8 @@ class GCMS_simulator(object):
         Simulates the data matrix X as a linear mixture of the pure
         component matrix C and pure mass spectra S, X = C'S + [noise]
 
-    @return:  none
-    @rtype:  NoneType
+    @return: none
+    @rtype: NoneType
 
     @author: Andrew Isaac
     """
@@ -298,3 +298,4 @@ class GCMS_simulator(object):
         mass_list = vector_by_step(mz_start, mz_stop, mz_step)
 
         return mass_list
+
