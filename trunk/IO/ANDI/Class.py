@@ -31,11 +31,22 @@ from pycdf import CDF, CDFError
 from pyms.IO.Class import IonChromatogram, MassSpectrum
 from pyms.Utils.Error import error, stop
 from pyms.Utils.Utils import is_str, is_int, is_float, is_number, is_list
+from pyms.Utils.Time import time_str_secs
 
 class ANDIMS_reader(object):
 
     """
-    @summary: Generic reader for ANDI-MS NetCDF files
+    @summary: Generic reader for ANDI-MS NetCDF files, produces
+        GC-MS data object
+
+    A data object is characterized with the following attributes:
+
+      (1) .intensity_matrix, the two dimensional matrix of intensities
+      (accessible with the method get_intensity_matrix()) 
+      (2) .mass_list, the list of mz values (accessible with the method
+      get_mass_list())
+      (3) time_list, the list of retention times (accessible with the
+      methods get_time_list())
 
     @author: Lewis Lee
     @author: Tim Erwin
@@ -505,6 +516,57 @@ class ANDIMS_reader(object):
         self.__intensity_matrix[:,index] = numpy.zeros(rowlen)
 
         print " -> nulled mass %d" % (mass)
+
+    def trim_time_domain(self, rt_lo_str, rt_hi_str):
+
+        """
+        @summary: Trims data in the time domain
+
+        @param rt_lo_str: Low retention time limit, as time string
+        @type rt_lo_str: StringType 
+        @param rt_hi_str: High retention time limit
+        @type rt_hi_str: StringType 
+        
+        @author: Vladimir Likic
+        """
+
+        if not is_str(rt_lo_str) and not is_str(rt_hi_str):
+            error("retention time limits must be time strings")
+
+        rt_lo = time_str_secs(rt_lo_str)
+        rt_hi = time_str_secs(rt_hi_str)
+
+        if not rt_lo < rt_hi:
+            error("retention time limits: low must be less than high")
+
+        if rt_lo < self.__min_rt:
+            print "Minimum data retention time is %.2f s" % ( self.__min_rt )
+            error("retention time low limit below starting retention time")
+
+        if rt_hi > self.__max_rt:
+            print "Maximum data retention time is %.2f s" % ( self.__max_rt )
+            error("retention time high limit greater than ending retention time")
+
+        print " -> Trimming the data to between %.2f s and %.2f s" % ( rt_lo, rt_hi )
+
+        intensity_matrix = self.get_intensity_matrix()
+        time_list = self.get_time_list()
+        mass_list = self.get_mass_list()
+
+        time_list2 = []
+        indx_list2 = []
+        for ii in range(len(time_list)):
+            rt = time_list[ii]
+            if rt > rt_lo and rt < rt_hi:
+                time_list2.append(rt)
+                indx_list2.append(ii)
+
+        intensity_matrix2 = []
+        for ii in indx_list2:
+            intensity_matrix2.append(copy.deepcopy(intensity_matrix[ii]))
+
+        self.__intensity_matrix = numpy.array(intensity_matrix2)
+        self.__time_list = time_list2
 
     def is_synthetic(self):
 
