@@ -80,8 +80,8 @@ class GCMS_simulator(object):
         if not is_number(sigma) or sigma < 0 or sigma > 1:
             error("'sigma' must be a number in the range [0,1]")
 
-        self.__time_list = self.__set_time_list(rt)
-        self.__mass_list = self.__set_mass_list(mz)
+        self.__set_time_list(rt)
+        self.__set_mass_list(mz)
 
         np = len(self.__time_list)
         nm = len(self.__mass_list)
@@ -273,9 +273,7 @@ class GCMS_simulator(object):
         rt_step = float(rt_spec[2])
         rt_stop = time_str_secs(rt_spec[1]) + rt_step    # include last point
 
-        time_list = vector_by_step(rt_start, rt_stop, rt_step)
-
-        return time_list
+        self.__time_list = vector_by_step(rt_start, rt_stop, rt_step)
 
     def  __set_mass_list(self, mz_spec):
 
@@ -295,7 +293,4 @@ class GCMS_simulator(object):
         mz_step = float(mz_spec[2])
         mz_stop = float(mz_spec[1]) + mz_step    # include last point
 
-        mass_list = vector_by_step(mz_start, mz_stop, mz_step)
-
-        return mass_list
-
+        self.__mass_list = vector_by_step(mz_start, mz_stop, mz_step)
